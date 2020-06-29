@@ -1,0 +1,3 @@
+[submodule "2020-rki-archive"]
+	path = 2020-rki-archive
+	url = https://github.com/ard-data/2020-rki-archive
