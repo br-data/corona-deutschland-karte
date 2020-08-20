@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<script type="text/javascript" src="lib/jquery.min.js"></script>
+	<script type="text/javascript" src="lib/topojson.min.js"></script>
+	<script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
+	<link rel="stylesheet" type="text/css" href="lib/leaflet/leaflet.css">
+	<style type="text/css">
+		#map {
+			width: 450px;
+			height: 600px;
+		}
+	</style>
+	<script type="text/javascript">
+		$(function () {
+			let blurWindow = 7;
+			let map = L.map('map', {
+				preferCanvas: true,
+				layers: [
+					L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+						attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+						subdomains: 'abcd',
+						maxZoom: 19
+					})
+				]
+			});
+			map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
+
+			let geo = false, data = false, geoLayer, day = 100;
+			$.getJSON('data/landkreise.topo.json', res => {
+				geo = topojson.feature(res, res.objects.landkreise)
+				checkInitialization();
+			})
+			$.getJSON('data/data.json', res => {
+				data = res;
+				checkInitialization();
+			})
+			function checkInitialization() {
+				if (!geo || !data) return;
+				let lookup = new Map();
+				geo.features.forEach(f => lookup.set(f.properties.RS, f));
+				data.entries.forEach(e => {
+					lookup.get(e.key).data = e;
+					let a = e.fall;
+					e.blurred = e.fall.map((v,i) => {
+						for (let j = Math.max(0,i-blurWindow); j < i; j++) v += a[j];
+						return v;
+					})
+				});
+				geoLayer = L.geoJSON(geo, {
+					style: function (f) {
+						let e = f.properties.EWZ;
+						let a = f.properties.KFL;
+						let d = 0.2+Math.min(0.8, Math.pow(1e-4*e/a, 0.4));
+						let v = 100000*f.data.blurred[day]/e;
+
+						v = Math.max(0, Math.min(1, v/100));
+
+						let color = [
+							-334*v*v + 445*v +  50,
+							-472*v*v + 330*v + 142,
+							 510*v*v - 765*v + 255,
+						]
+
+						//let color = [88,143,252];
+						//if (v > 30) color = [206,175,0];
+						//if (v > 50) color = [190,112,0];
+						//if (v > 100) color = [175,0,0];
+						color = color.map(v => 255-(255-v)*d);
+						color = 'rgb('+color.map(v => Math.round(Math.max(0,Math.min(255,v)))).join(',')+')';
+						return {
+							fillColor:color,
+							fillOpacity:1,
+							smoothFactor:0,
+							stroke:false
+						};
+					}
+				})
+				map.addLayer(geoLayer);
+			}
+		})
+	</script>
+</head>
+<body>
+	<div id="map"></div>
+</body>
+</html>
