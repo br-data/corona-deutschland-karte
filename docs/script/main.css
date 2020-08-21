@@ -33,6 +33,7 @@ body {
 #legend td:first-child {
 	width: auto;
 	text-align: right;
+	padding-right: 3px;
 }
 
 #slider_container {
