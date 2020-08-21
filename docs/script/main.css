@@ -1,0 +1,104 @@
+
+body {
+	font-family: sans-serif;
+}
+#map {
+	width: 450px;
+	height: 600px;
+}
+.leaflet-tooltip {
+	padding: 4px;
+	line-height: 1em;
+}
+.leaflet-tooltip small {
+	color: #888;
+}
+
+#slider_container {
+	width: 450px;
+	text-align: center;
+	z-index: 2000;
+	background: rgba(255,255,255,0.3);
+}
+#slider_container input {
+	width: 60%;
+	background: transparent;
+	height: 1rem;
+}
+
+input[type=range] {
+	-webkit-appearance: none;
+	vertical-align: text-top;
+}
+
+input[type=range]:focus {
+	outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+	outline: none;
+	width: 100%;
+	height: 5px;
+	cursor: pointer;
+	background: #dee1e3;
+	border-radius: .5em;
+}
+
+input[type=range]::-webkit-slider-thumb {
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	background: #434343;
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -8px;
+}
+
+input[type=range]::-moz-range-track {
+	width: 100%;
+	height: 5px;
+	cursor: pointer;
+	background: #dee1e3;
+	border-radius: .5em;
+}
+
+input[type=range]::-moz-range-thumb {
+	border: 0;
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	background: #434343;
+	cursor: pointer;
+}
+
+input[type=range]::-moz-focus-outer {
+	border: 0;
+}
+
+input[type=range]::-ms-track {
+	width: 100%;
+	height: 5px;
+	background: transparent;
+	border-color: transparent;
+	border-width: 12px 0;
+	color: transparent;
+}
+
+input[type=range]::-ms-thumb {
+	border: none;
+	height: 20px;
+	width: 20px;
+	border-radius: 50%;
+	background: #434343;
+}
+
+input[type=range]::-ms-fill-lower,
+input[type=range]::-ms-fill-upper {
+	background: #dee1e3;
+	border-radius: 5px;
+}
+
+input[type=range]:focus::-ms-fill-lower,
+input[type=range]:focus::-ms-fill-upper {
+	background: #dee1e3;
+}
