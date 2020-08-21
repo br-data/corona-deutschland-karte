@@ -5,11 +5,19 @@
 	<script type="text/javascript" src="lib/jquery.min.js"></script>
 	<script type="text/javascript" src="lib/topojson.min.js"></script>
 	<script type="text/javascript" src="lib/leaflet/leaflet.js"></script>
+	<script type="text/javascript" src="lib/delaunator.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="lib/leaflet/leaflet.css">
 	<style type="text/css">
 		#map {
 			width: 450px;
 			height: 600px;
+		}
+		.leaflet-tooltip {
+			padding: 3px;
+			line-height: 1em;
+		}
+		.leaflet-tooltip small {
+
 		}
 	</style>
 	<script type="text/javascript">
@@ -28,8 +36,20 @@
 			map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
 
 			let geo = false, data = false, geoLayer, day = 100;
+			let markerPositions = [];
 			$.getJSON('data/landkreise.topo.json', res => {
 				geo = topojson.feature(res, res.objects.landkreise)
+				geo.features.map(f => {
+					let sx = 0, sy = 0, s = 0;
+					scan(f.geometry.coordinates, (f.geometry.type === 'Polygon') ? 2 : 3);
+					function scan(list, n) {
+						if (n > 1) return list.forEach(s => scan(s, n-1));
+						list.forEach(p => {sx += p[0]; sy += p[1]; s++});
+					}
+					f.x = sx/s;
+					f.y = sy/s;
+					f.r = Math.sqrt(f.properties.EWZ)/100;
+				})
 				checkInitialization();
 			})
 			$.getJSON('data/data.json', res => {
@@ -48,37 +68,124 @@
 						return v;
 					})
 				});
-				geoLayer = L.geoJSON(geo, {
-					style: function (f) {
-						let e = f.properties.EWZ;
-						let a = f.properties.KFL;
-						let d = 0.2+Math.min(0.8, Math.pow(1e-4*e/a, 0.4));
-						let v = 100000*f.data.blurred[day]/e;
-
-						v = Math.max(0, Math.min(1, v/100));
-
-						let color = [
-							-334*v*v + 445*v +  50,
-							-472*v*v + 330*v + 142,
-							 510*v*v - 765*v + 255,
-						]
-
-						//let color = [88,143,252];
-						//if (v > 30) color = [206,175,0];
-						//if (v > 50) color = [190,112,0];
-						//if (v > 100) color = [175,0,0];
-						color = color.map(v => 255-(255-v)*d);
-						color = 'rgb('+color.map(v => Math.round(Math.max(0,Math.min(255,v)))).join(',')+')';
-						return {
-							fillColor:color,
-							fillOpacity:1,
-							smoothFactor:0,
-							stroke:false
-						};
-					}
+				geo.features.forEach(f => {
+					f.marker = L.circleMarker([f.y, f.x], {radius:f.r, stroke:false});
+					f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>')
+					map.addLayer(f.marker);
 				})
-				map.addLayer(geoLayer);
+				update();
+				updateMarkerPositions();
 			}
+
+			function update() {
+				geo.features.forEach(f => {
+					let e = f.properties.EWZ;
+					//let a = f.properties.KFL;
+					//let d = 0.2+Math.min(0.8, Math.pow(1e-4*e/a, 0.4));
+					let v = 100000*f.data.blurred[day]/e;
+
+					v = Math.max(0, Math.min(1, v/100));
+
+					let color = [
+Math.pow(Math.max(0,-195.996*v*v+271.995*v+128.001),1),
+Math.pow(Math.max(0,-396.005*v*v+194.005*v+201.999),1),
+Math.pow(Math.max(0,370.003*v*v+-625.004*v+255),1),
+					]
+
+					color = 'rgb('+color.map(v => Math.round(v)).join(',')+')';
+					f.marker.setStyle({
+						fillColor:color,
+						fillOpacity:1,
+						smoothFactor:0,
+						stroke:false
+					})
+				})
+			}
+
+			function updateMarkerPositions() {
+				var zoomlevel = map.getZoom();
+				var point, size;
+
+				if (markerPositions[zoomlevel]) {
+					point = markerPositions[zoomlevel].point;
+					size = markerPositions[zoomlevel].size;
+				} else {
+					var scale = Math.pow(1.5, (zoomlevel-7)/2);
+					//scale = 1;
+					size = new Array(geo.features.length);
+					var mass = new Array(geo.features.length);
+					point = geo.features.map((f,i) => {
+						size[i] = f.r;
+						mass[i] = Math.pow(f.r, 2);
+						var pixel = map.latLngToLayerPoint([f.y, f.x]);
+						return [
+							pixel.x + 1e-10*Math.cos(i),
+							pixel.y + 1e-10*Math.sin(i),
+						];
+					})
+
+					//console.log(size);
+					//console.log(point);
+
+					var stepCount = 0;
+
+					do {
+						var dPoint = geo.features.map(s => [0,0,0]);
+						var delaunay = Delaunator.from(point);
+						var errorSum = 0;
+						delaunay.halfedges.forEach((v,i) => {
+							if (v > i) return;
+							var p0 = delaunay.triangles[i];
+							var p1 = delaunay.triangles[(i % 3 === 2) ? i-2 : i+1];
+							var dx = point[p0][0] - point[p1][0];
+							var dy = point[p0][1] - point[p1][1];
+							var dIs = Math.sqrt(dx*dx + dy*dy)+1e-6;
+							var dShould = size[p0] + size[p1];
+							if (dIs > dShould) return;
+
+							errorSum += Math.pow(dShould-dIs, 2);
+
+							var m0 = mass[p0];
+							var m1 = mass[p1];
+							var ms = m0+m1;
+
+							var f = 0.6*(dShould-dIs)/dIs/ms;
+
+							dPoint[p0][0] += m1*dx*f;
+							dPoint[p0][1] += m1*dy*f;
+							dPoint[p0][2]++;
+
+							dPoint[p1][0] -= m0*dx*f;
+							dPoint[p1][1] -= m0*dy*f;
+							dPoint[p1][2]++;
+						})
+						point.forEach((p,i) => {
+							var dp = dPoint[i];
+							if (dp[2] === 0) return;
+							//var f = Math.pow(dp[2], 0.5);
+							var f = dp[2];
+							p[0] += dp[0]/f;
+							p[1] += dp[1]/f;
+						})
+
+						//console.log(errorSum);
+						stepCount++
+					} while (errorSum > 1);
+
+					console.log(stepCount);
+
+					point = point.map(p => map.layerPointToLatLng(p));
+					//console.log(point);
+					
+					markerPositions[zoomlevel] = {point:point, size:size};
+				}
+				
+				geo.features.forEach((s,i) => {
+					s.marker.setLatLng(point[i]);
+					s.marker.setRadius(size[i]);
+				})
+			}
+
 		})
 	</script>
 </head>
