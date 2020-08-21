@@ -2,14 +2,17 @@
 body {
 	font-family: sans-serif;
 }
+
 #map {
 	width: 450px;
 	height: 600px;
 }
+
 .leaflet-tooltip {
 	padding: 4px;
 	line-height: 1em;
 }
+
 .leaflet-tooltip small {
 	color: #888;
 }
@@ -20,10 +23,41 @@ body {
 	z-index: 2000;
 	background: rgba(255,255,255,0.3);
 }
+
 #slider_container input {
 	width: 60%;
 	background: transparent;
 	height: 1rem;
+}
+
+#slider_label {
+	display: inline-block;
+	text-align: right;
+	width: 60px;
+}
+
+#button_play {
+	font-family: Open Sans,Helvetica,Arial,sans-serif;
+	font-size: 24px;
+	font-weight: 400;
+	hyphens: auto;
+	line-height: 41px;
+	text-indent: 5px;
+	box-sizing: inherit;
+	display: inline-block;
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	background: #dee1e3;
+	margin-left: 10px;
+	text-align: center;
+	cursor: pointer;
+	color: #434343;
+	transition: color .1s;
+}
+
+#button-play:hover {
+	color: #e64242
 }
 
 input[type=range] {

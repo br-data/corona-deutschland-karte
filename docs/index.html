@@ -14,7 +14,14 @@
 <body>
 	<div id="map"></div>
 	<table id="legend"></table>
-	<div id="slider_container"><input type="range" id="slider" /><label for="slider" id="slider_label" style="font-size: 12px"></label></div>
+	<div id="slider_container">
+		<span id="button_play" title="Animation starten">
+			&#9654;
+		</span>
+
+		<input type="range" id="slider" value="0" />
+		<label for="slider" id="slider_label" style="font-size: 12px"></label>
+	</div>
 	<p style="font-size: 12px; margin: 30px 0px">Ganz grober Prototyp.<br>
 		Nur als Experiment zum Idee-Ausprobieren und um in die Daten zu schauen.<br><br>
 		Die Größe der Kreise entspricht der Anzahl aller Einwohner im jeweiligen Landkreis.<br><br>

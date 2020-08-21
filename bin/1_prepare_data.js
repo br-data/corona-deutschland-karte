@@ -4,15 +4,15 @@ const fs = require('fs');
 const helper = require('./lib/helper.js');
 const {resolve} = require('path');
 
-const dayMin = parseDate('2020-01-01');
-const dayMax = parseDate('2020-08-20');
+const dayMin = parseDate('2020-02-01');
+const dayMax = parseDate('2020-08-19');
 const folder = resolve(__dirname, '../data/');
 
 let file = fs.readdirSync(folder).filter(f => /^data_202.*\.json\.bz2$/.test(f)).sort().pop();
 file = resolve(folder, file);
 
 let zeros = new Array();
-for (let i = 0; i < dayMax-dayMin; i++) zeros[i] = 0;
+for (let i = 0; i <= dayMax-dayMin; i++) zeros[i] = 0;
 
 (async function () {
 	let entries = new Map();

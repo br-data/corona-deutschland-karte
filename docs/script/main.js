@@ -16,6 +16,9 @@ $(function () {
 
 	let geo = false, data = false, geoLayer, day = 100;
 	let markerPositions = [];
+	let slider, sliderLabel;
+	let playInterval = false;
+
 	$.getJSON('data/landkreise.topo.json', res => {
 		geo = topojson.feature(res, res.objects.landkreise)
 		geo.features.map(f => {
@@ -31,10 +34,12 @@ $(function () {
 		})
 		checkInitialization();
 	})
+
 	$.getJSON('data/data.json', res => {
 		data = res;
 		checkInitialization();
 	})
+
 	function checkInitialization() {
 		if (!geo || !data) return;
 		let lookup = new Map();
@@ -48,25 +53,56 @@ $(function () {
 			})
 		});
 		geo.features.forEach(f => {
-			f.marker = L.circleMarker([f.y, f.x], {radius:f.r, stroke:false});
+			f.marker = L.circleMarker([f.y, f.x], {
+				radius:f.r,
+				stroke:true,
+				weight:0.1,
+				color:'#000000',
+				opacity:1,
+				fillOpacity:1,
+				smoothFactor:0,
+			});
 			f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>')
 			map.addLayer(f.marker);
 		})
 		updateMarkerPositions();
 		initSlider();
+		slider.trigger('input');
+
+		$('#button_play').click(playAnimation);
+		setTimeout(playAnimation, 1000);
 	}
 
-	function update() {
+	function playAnimation() {
+		let i0 = parseFloat(slider.attr('min'));
+		let i1 = parseFloat(slider.attr('max'));
+		let i = i0;
+		playInterval = setInterval(() => {
+			slider.val(i);
+			updateMarkerColors();
+			i++;
+			if (i > i1) stopAnimation();
+		}, 20)
+	}
+
+	function stopAnimation() {
+		if (!playInterval) return;
+		clearInterval(playInterval);
+		playInterval = false;
+	}
+
+	function updateMarkerColors() {
+		day = Math.round(slider.val());
+		sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
+		day -= data.dayMin;
+
 		geo.features.forEach(f => {
 			let v = 100000*f.data.blurred[day]/f.properties.EWZ;
 
 			let color = value2color(v)
 
 			f.marker.setStyle({
-				fillColor:color,
-				fillOpacity:1,
-				smoothFactor:0,
-				stroke:false
+				fillColor:color
 			})
 		})
 	}
@@ -119,7 +155,7 @@ $(function () {
 					let m1 = mass[p1];
 					let ms = m0+m1;
 
-					let f = 0.6*(dShould-dIs)/dIs/ms;
+					let f = 0.5*(dShould-dIs)/dIs/ms;
 
 					dPoint[p0][0] += m1*dx*f;
 					dPoint[p0][1] += m1*dy*f;
@@ -140,9 +176,9 @@ $(function () {
 
 				//console.log(errorSum);
 				stepCount++
-			} while (errorSum > 1);
+			} while (errorSum > 0.01);
 
-			console.log(stepCount);
+			//console.log(stepCount);
 
 			point = point.map(p => map.layerPointToLatLng(p));
 			//console.log(point);
@@ -157,26 +193,18 @@ $(function () {
 	}
 
 	function initSlider() {
-		let sliderContainer = $('#slider_container');
-		let slider = sliderContainer.find('input');
-		let sliderLabel = $('#slider_label');
+		slider = $('#slider');
+		sliderLabel = $('#slider_label');
 		slider.attr({
 			min:data.dayMin,
-			max:data.dayMax-1,
+			max:data.dayMax,
 		})
-		slider.val(data.dayMax);
-		'mousedown mousemove touchstart touchmove'.split(' ').forEach(e => {
-			slider.get(0).addEventListener(e, function (event) {
-				event.stopPropagation();
-			})
-		})
+		slider.val(data.dayMin);
+		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
 		slider.on('input', function (event) {
-			day = Math.round(slider.val());
-			sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
-			day -= data.dayMin;
-			update();
+			stopAnimation();
+			updateMarkerColors();
 		})
-		slider.trigger('input');
 	}
 
 
