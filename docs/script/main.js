@@ -40,6 +40,8 @@ $(function () {
 		checkInitialization();
 	})
 
+	initLegend();
+
 	function checkInitialization() {
 		if (!geo || !data) return;
 		let lookup = new Map();
@@ -67,7 +69,7 @@ $(function () {
 		})
 		updateMarkerPositions();
 		initSlider();
-		slider.trigger('input');
+		updateMarkerColors();
 
 		$('#button_play').click(playAnimation);
 		setTimeout(playAnimation, 1000);
@@ -89,6 +91,25 @@ $(function () {
 		if (!playInterval) return;
 		clearInterval(playInterval);
 		playInterval = false;
+	}
+
+	function initLegend() {
+		let html = ['<table id="legend">'];
+		for (let v = 100; v >= 0; v -= 10) {
+			let color = value2color(v);
+			let text = (v % 50 === 0) ? v : '';
+			html.push('<tr><td>'+text+'</td><td style="background:'+color+'"></td></tr>');
+		}
+		html.push('</table>');
+
+		let menu = L.Control.extend({
+			onAdd: function() {
+				return $(html.join('')).get(0);
+			},
+			onRemove: function(map) {}
+		});
+
+		map.addControl(new menu({position:'bottomright'}));
 	}
 
 	function updateMarkerColors() {
@@ -206,7 +227,6 @@ $(function () {
 			updateMarkerColors();
 		})
 	}
-
 
 	function value2color(v) {
 

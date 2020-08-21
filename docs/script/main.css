@@ -17,6 +17,24 @@ body {
 	color: #888;
 }
 
+#legend { 
+	border-spacing: 0px;
+	border-collapse: collapse;
+}
+
+#legend td {
+	margin: 0;
+	width: 10px;
+	height: 10px;
+	font-size: 10px;
+	line-height: 0;
+}
+
+#legend td:first-child {
+	width: auto;
+	text-align: right;
+}
+
 #slider_container {
 	width: 450px;
 	text-align: center;
