@@ -171,20 +171,10 @@
 
 			function update() {
 				geo.features.forEach(f => {
-					let e = f.properties.EWZ;
-					//let a = f.properties.KFL;
-					//let d = 0.2+Math.min(0.8, Math.pow(1e-4*e/a, 0.4));
-					let v = 100000*f.data.blurred[day]/e;
+					let v = 100000*f.data.blurred[day]/f.properties.EWZ;
 
-					v = Math.max(0, Math.min(1, v/60));
+					let color = value2color(v)
 
-					let color = [
-						Math.pow(Math.max(0,-195.996*v*v+271.995*v+128.001),1),
-						Math.pow(Math.max(0,-396.005*v*v+194.005*v+201.999),1),
-						Math.pow(Math.max(0,370.003*v*v+-625.004*v+255),1),
-					]
-
-					color = 'rgb('+color.map(v => Math.round(v)).join(',')+')';
 					f.marker.setStyle({
 						fillColor:color,
 						fillOpacity:1,
@@ -299,6 +289,26 @@
 					update();
 				})
 				slider.trigger('input');
+			}
+			
+
+			function value2color(v) {
+
+				v = Math.max(0, Math.min(1, v/150));
+
+				//let color = [
+				//	Math.pow(Math.max(0,-195.996*v*v+271.995*v+128.001),1),
+				//	Math.pow(Math.max(0,-396.005*v*v+194.005*v+201.999),1),
+				//	Math.pow(Math.max(0,370.003*v*v+-625.004*v+255),1),
+				//]
+
+				let color = [
+					Math.exp(-0.737*v*v-0.0555*v+5.5516)/(1+Math.exp(-v*10-1)),
+					222/(1+Math.exp(v*10-5)),
+					240/(1+Math.exp((v-0.125)*20)),
+				]
+
+				return 'rgb('+color.map(v => Math.round(v)).join(',')+')';
 			}
 		})
 	</script>
