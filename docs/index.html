@@ -8,6 +8,9 @@
 	<script type="text/javascript" src="lib/delaunator.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="lib/leaflet/leaflet.css">
 	<style type="text/css">
+		body {
+			font-family: sans-serif;
+		}
 		#map {
 			width: 450px;
 			height: 600px;
@@ -302,7 +305,13 @@
 </head>
 <body>
 	<div id="map"></div>
-	<div id="datelabel" style="font-family: sans-serif;"></div>
+	<div id="datelabel"></div>
 	<div id="slider_container"><input type="range" id="slider" /><label for="slider" id="slider_label"></label></div>
+	<p style="font-size: 12px; margin: 30px 0px">Ganz grober Prototyp.<br>
+		Nur als Experiment zum Idee-Ausprobieren und um in die Daten zu schauen.<br><br>
+		Die Größe der Kreise entspricht der Anzahl aller Einwohner im jeweiligen Landkreis.<br><br>
+		Farben: blau = 0, gelb = 30, rot >= 60 infizierte Einwohner auf 100.000.<br>
+		"Infizierte Einwohner" ist die Summe aller Fälle, die innerhalb der letzten 7 Tage gemeldeten wurden.
+	</p>
 </body>
 </html>
