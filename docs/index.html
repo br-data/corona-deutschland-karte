@@ -21,11 +21,8 @@
 		}
 
 		#slider_container {
-			left: 0px;
-			right: 0px;
-			bottom: 20px;
+			width: 450px;
 			text-align: center;
-			position: absolute;
 			z-index: 2000;
 			background: rgba(255,255,255,0.3);
 		}
@@ -176,7 +173,7 @@
 					//let d = 0.2+Math.min(0.8, Math.pow(1e-4*e/a, 0.4));
 					let v = 100000*f.data.blurred[day]/e;
 
-					v = Math.max(0, Math.min(1, v/100));
+					v = Math.max(0, Math.min(1, v/60));
 
 					let color = [
 						Math.pow(Math.max(0,-195.996*v*v+271.995*v+128.001),1),
@@ -279,8 +276,7 @@
 			}
 
 			function initSlider() {
-				var sliderContainer = $('<div id="slider_container"><input type="range" id="slider" /><label for="slider" id="slider_label"></label></div>');
-				$('body').append(sliderContainer);
+				var sliderContainer = $('#slider_container');
 				var slider = sliderContainer.find('input');
 				sliderLabel = $('#slider_label');
 				slider.attr({
@@ -294,7 +290,9 @@
 					})
 				})
 				slider.on('input', function (event) {
-					day = Math.round(slider.val() - data.dayMin);
+					day = Math.round(slider.val());
+					$('#datelabel').text((new Date(day*86400000)).toLocaleDateString());
+					day -= data.dayMin;
 					update();
 				})
 				slider.trigger('input');
@@ -304,5 +302,7 @@
 </head>
 <body>
 	<div id="map"></div>
+	<div id="datelabel" style="font-family: sans-serif;"></div>
+	<div id="slider_container"><input type="range" id="slider" /><label for="slider" id="slider_label"></label></div>
 </body>
 </html>
