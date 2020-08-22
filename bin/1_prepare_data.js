@@ -49,7 +49,7 @@ for (let i = 0; i <= dayMax-dayMin; i++) zeros[i] = 0;
 		entries
 	}
 	
-	fs.writeFileSync('../web/data/data.json', JSON.stringify(result), 'utf8');
+	fs.writeFileSync('../docs/data/data.json', JSON.stringify(result), 'utf8');
 })()
 
 function parseDate(text) {
