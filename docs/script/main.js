@@ -14,7 +14,7 @@ $(function () {
 	});
 	map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
 
-	let geo = false, data = false, geoLayer, day = 100;
+	let geo = false, data = false, geoLayer, day, markerDirty;
 	let markerPositions = [];
 	let slider, sliderLabel;
 	let playInterval = false;
@@ -54,6 +54,7 @@ $(function () {
 				return v;
 			})
 		});
+		let colorStart = value2color(0);
 		geo.features.forEach(f => {
 			f.marker = L.circleMarker([f.y, f.x], {
 				radius:f.r,
@@ -62,14 +63,17 @@ $(function () {
 				color:'#000000',
 				opacity:1,
 				fillOpacity:1,
-				smoothFactor:0,
+				fillColor:colorStart,
 			});
 			f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>')
 			map.addLayer(f.marker);
 		})
 		updateMarkerPositions();
 		initSlider();
-		updateMarkerColors();
+
+		day
+		markerDirty = true;
+		setInterval(updateMarkerColors, 20);
 
 		$('#button_play').click(playAnimation);
 		setTimeout(playAnimation, 1000);
@@ -81,7 +85,7 @@ $(function () {
 		let i = i0;
 		playInterval = setInterval(() => {
 			slider.val(i);
-			updateMarkerColors();
+			markerDirty = true;
 			i++;
 			if (i > i1) stopAnimation();
 		}, 20)
@@ -113,6 +117,8 @@ $(function () {
 	}
 
 	function updateMarkerColors() {
+		if (!markerDirty) return;
+		markerDirty = false;
 		day = Math.round(slider.val());
 		sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
 		day -= data.dayMin;
@@ -224,13 +230,13 @@ $(function () {
 		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
 		slider.on('input', function (event) {
 			stopAnimation();
-			updateMarkerColors();
+			markerDirty = true;
 		})
 	}
 
 	function value2color(v) {
 
-		v = Math.max(0, Math.min(1, v/150));
+		v = Math.max(0, v/100);
 
 		//let color = [
 		//	Math.pow(Math.max(0,-195.996*v*v+271.995*v+128.001),1),
