@@ -5,14 +5,11 @@ const helper = require('./lib/helper.js');
 const {resolve} = require('path');
 
 const dayMin = parseDate('2020-02-01');
-const dayMax = parseDate('2020-08-19');
+let dayMax = 0;
 const folder = resolve(__dirname, '../data/');
 
 let file = fs.readdirSync(folder).filter(f => /^data_202.*\.json\.bz2$/.test(f)).sort().pop();
 file = resolve(folder, file);
-
-let zeros = new Array();
-for (let i = 0; i <= dayMax-dayMin; i++) zeros[i] = 0;
 
 (async function () {
 	let entries = new Map();
@@ -22,7 +19,8 @@ for (let i = 0; i <= dayMax-dayMin; i++) zeros[i] = 0;
 	data = JSON.parse(data);
 
 	data.forEach(entry => {
-		let day = Math.round(parseDate(entry.MeldedatumISO) - dayMin);
+		let day = parseDate(entry.MeldedatumISO);
+		let i = day - dayMin;
 
 		//addEntry('de');
 		//addEntry('bl-'+entry.IdBundesland);
@@ -33,15 +31,21 @@ for (let i = 0; i <= dayMax-dayMin; i++) zeros[i] = 0;
 		function addEntry(type, key) {
 			let id = type+'_'+key;
 
-			if (!entries.has(id)) entries.set(id, {type, key, fall:zeros.slice()});
+			if (!entries.has(id)) entries.set(id, {type, key, fall:[]});
 			let obj = entries.get(id);
 
-			if (obj.fall[day] === undefined) throw Error(day+' - '+entry.MeldedatumISO);
-			obj.fall[day] += entry.AnzahlFall;
+			obj.fall[i] = (obj.fall[i] || 0) + entry.AnzahlFall;
+			if (day > dayMax) dayMax = day;
 		}
 	})
 
 	entries = Array.from(entries.values());
+
+	entries.forEach(e => {
+		for (let i = 0; i <= dayMax-dayMin; i++) {
+			if (!e.fall[i]) e.fall[i] = 0;
+		}
+	})
 
 	let result = {
 		dayMin,
