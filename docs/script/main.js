@@ -47,7 +47,7 @@ $(function () {
 		let lookup = new Map();
 		geo.features.forEach(f => lookup.set(f.properties.RS, f));
 		data.entries.forEach(e => {
-			lookup.get(e.key).data = e;
+			lookup.get(e.id).data = e;
 			let a = e.fall;
 			e.blurred = e.fall.map((v,i) => {
 				for (let j = Math.max(0,i-blurWindow); j < i; j++) v += a[j];
