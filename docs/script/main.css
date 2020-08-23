@@ -6,23 +6,49 @@ body {
 
 #wrapper {
 	position: relative;
+	height: 600px;
+}
+
+#map {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 450px;
+	height: 600px;
 }
 
 #chartContainer {
-	width: calc(100% - 470px);
-	height: 600px;
 	overflow: hidden;
+	width: calc(100% - 470px);
+	height: 550px;
 }
 
 #chartCanvas1, #chartCanvas2, #chartContainer {
 	position: absolute;
 	top: 0px;
-	right: 0px;
+	left: 0px;
 }
 
-#map {
-	width: 450px;
-	height: 600px;
+#slider_container {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	width: calc(100% - 470px);
+	text-align: center;
+	z-index: 2000;
+	background: rgba(255,255,255,0.3);
+}
+
+#slider_container input {
+	width: 60%;
+	background: transparent;
+	height: 1rem;
+}
+
+#slider_label {
+	display: inline-block;
+	text-align: right;
+	width: 60px;
 }
 
 .leaflet-tooltip {
@@ -51,25 +77,6 @@ body {
 	width: auto;
 	text-align: right;
 	padding-right: 3px;
-}
-
-#slider_container {
-	width: 450px;
-	text-align: center;
-	z-index: 2000;
-	background: rgba(255,255,255,0.3);
-}
-
-#slider_container input {
-	width: 60%;
-	background: transparent;
-	height: 1rem;
-}
-
-#slider_label {
-	display: inline-block;
-	text-align: right;
-	width: 60px;
 }
 
 #button_play {
