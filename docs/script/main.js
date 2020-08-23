@@ -6,6 +6,7 @@ $(function () {
 	let geo = false, data = false, day, markerDirty, animation, map;
 	let markerPositions = [];
 	let slider, sliderLabel;
+	let chart;
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 
 	initMap();
@@ -21,7 +22,7 @@ $(function () {
 		$('#button_play').click(animation.play);
 		setTimeout(animation.play, 1000);
 
-		initChart();
+		chart = initChart();
 	});
 
 	initLegend();
@@ -53,13 +54,17 @@ $(function () {
 			let lookup = new Map();
 			geo.features.forEach(f => lookup.set(f.properties.RS, f));
 			data.entries.forEach(e => {
-				lookup.get(e.id).data = e;
-				let a = e.fall;
+				let f = lookup.get(e.id);
+				f.data = e;
 				e.blurred = e.fall.map((v,i) => {
-					for (let j = Math.max(0,i-blurWindow); j < i; j++) v += a[j];
+					for (let j = Math.max(0,i-blurWindow); j < i; j++) v += e.fall[j];
 					return v;
 				})
+				e.normalized = e.blurred.map(v => {
+					return 100000*v/f.properties.EWZ;
+				})
 			});
+
 			let colorStart = value2color(0);
 			geo.features.forEach(f => {
 				f.marker = L.circleMarker([f.y, f.x], {
@@ -71,7 +76,9 @@ $(function () {
 					fillOpacity:1,
 					fillColor:colorStart,
 				});
-				f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>')
+				f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>');
+				f.marker.on('tooltipopen',  () => chart.highlight([f.data]));
+				f.marker.on('tooltipclose', () => chart.highlight());
 				map.addLayer(f.marker);
 			})
 
@@ -108,6 +115,10 @@ $(function () {
 		$(window).resize(updateCanvasLayout);
 		updateCanvasLayout();
 
+		return {
+			highlight: highlightCurves,
+		}
+
 		function drawChart1() {
 			ctx1.clearRect(0,0,width,height);
 
@@ -139,6 +150,31 @@ $(function () {
 			}
 
 			ctx1.stroke();
+
+			ctx1.strokeStyle = 'rgba(127,127,127,0.2)';
+			data.entries.forEach(e => {
+				ctx1.beginPath();
+				let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);
+				curve(ctx1, path);
+				ctx1.stroke();
+			});
+
+			//highlightCurves(data.entries.slice(0,3));
+		}
+
+		function highlightCurves(entries) {
+			ctx2.clearRect(0,0,width*retina,height*retina);
+			
+			if (!entries) return;
+
+			ctx2.strokeStyle = 'rgba(170,0,0,0.8)';
+			ctx2.lineWidth = 2*retina;
+			entries.forEach(e => {
+				ctx2.beginPath();
+				let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);
+				curve(ctx2, path);
+				ctx2.stroke();
+			});
 		}
 
 		function v2y(v) {
@@ -175,6 +211,24 @@ $(function () {
 				} else {
 					ctx.lineTo(p[0]*retina, p[1]*retina);
 				}
+			})
+		}
+
+		function curve(ctx, path) {
+			let p0, p1;
+			path.forEach((p2, i) => {
+				if (i === 0) {
+					ctx.moveTo(p2[0]*retina, p2[1]*retina);
+					p1 = p2;
+				} else {
+					let a = p2[0];
+					let b = (p2[1]-p0[1])/(p2[0]-p0[0])*(p2[0]-p1[0])+p1[1];
+					let c = p2[0];
+					let d = p2[1];
+					ctx.quadraticCurveTo(a*retina, b*retina, c*retina, d*retina);
+				}
+				p0 = p1;
+				p1 = p2;
 			})
 		}
 	}
@@ -230,9 +284,7 @@ $(function () {
 		day -= data.dayMin;
 
 		geo.features.forEach(f => {
-			let v = 100000*f.data.blurred[day]/f.properties.EWZ;
-
-			let color = value2color(v)
+			let color = value2color(f.data.normalized[day])
 
 			f.marker.setStyle({
 				fillColor:color
@@ -261,9 +313,6 @@ $(function () {
 					pixel.y + 1e-10*Math.sin(i),
 				];
 			})
-
-			//console.log(size);
-			//console.log(point);
 
 			let stepCount = 0;
 			let errorSum;
