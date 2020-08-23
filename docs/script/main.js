@@ -14,10 +14,9 @@ $(function () {
 	});
 	map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
 
-	let geo = false, data = false, geoLayer, day, markerDirty;
+	let geo = false, data = false, geoLayer, day, markerDirty, animation;
 	let markerPositions = [];
 	let slider, sliderLabel;
-	let playInterval = false;
 
 	$.getJSON('data/landkreise.topo.json', res => {
 		geo = topojson.feature(res, res.objects.landkreise)
@@ -71,30 +70,37 @@ $(function () {
 		updateMarkerPositions();
 		initSlider();
 
-		day
 		markerDirty = true;
 		setInterval(updateMarkerColors, 20);
 
-		$('#button_play').click(playAnimation);
-		setTimeout(playAnimation, 1000);
+		animation = initAnimation();
 	}
 
-	function playAnimation() {
-		let i0 = parseFloat(slider.attr('min'));
-		let i1 = parseFloat(slider.attr('max'));
-		let i = i0;
-		playInterval = setInterval(() => {
-			slider.val(i);
-			markerDirty = true;
-			i++;
-			if (i > i1) stopAnimation();
-		}, 20)
-	}
+	function initAnimation() {
+		let playInterval = false;
 
-	function stopAnimation() {
-		if (!playInterval) return;
-		clearInterval(playInterval);
-		playInterval = false;
+		$('#button_play').click(play);
+		setTimeout(play, 1000);
+
+		return {play, stop}
+
+		function play() {
+			let i0 = parseFloat(slider.attr('min'));
+			let i1 = parseFloat(slider.attr('max'));
+			let i = i0;
+			playInterval = setInterval(() => {
+				slider.val(i);
+				markerDirty = true;
+				i++;
+				if (i > i1) stop();
+			}, 20)
+		}
+
+		function stop() {
+			if (!playInterval) return;
+			clearInterval(playInterval);
+			playInterval = false;
+		}
 	}
 
 	function initLegend() {
@@ -229,7 +235,7 @@ $(function () {
 		slider.val(data.dayMin);
 		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
 		slider.on('input', function (event) {
-			stopAnimation();
+			animation.stop();
 			markerDirty = true;
 		})
 	}
