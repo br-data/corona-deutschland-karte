@@ -6,6 +6,7 @@ $(function () {
 	let geo = false, data = false, day, markerDirty, animation, map;
 	let markerPositions = [];
 	let slider, sliderLabel;
+	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 
 	initMap();
 	initData(() => {
@@ -17,6 +18,10 @@ $(function () {
 		setInterval(updateMarkerColors, 20);
 
 		animation = initAnimation();
+		$('#button_play').click(animation.play);
+		setTimeout(animation.play, 1000);
+
+		initChart();
 	});
 
 	initLegend();
@@ -88,11 +93,94 @@ $(function () {
 		map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
 	}
 
+	function initChart() {
+		const baseColor = '#888';
+		let dayMin = data.dayMin, dayMax = data.dayMax;
+		let width, height, retina;
+		let maxValue = 200, paddingLeft = 20, paddingBottom = 20;
+
+		let container = $('#chartContainer');
+		let canvas1 = $('#chartCanvas1');
+		let canvas2 = $('#chartCanvas2');
+		let ctx1 = canvas1.get(0).getContext('2d');
+		let ctx2 = canvas2.get(0).getContext('2d');
+
+		$(window).resize(updateCanvasLayout);
+		updateCanvasLayout();
+
+		function drawChart1() {
+			ctx1.clearRect(0,0,width,height);
+
+			ctx1.fillStyle = baseColor;
+			ctx1.strokeStyle = baseColor;
+			ctx1.textBaseline = 'top';
+			ctx1.font = 10*retina + 'px sans-serif';
+
+
+			let x0 = v2x(dayMin);
+			let y0 = v2y(0);
+
+			ctx1.beginPath();
+
+			line(ctx1, [[x0,0],[,y0],[width]]);
+			
+			for (let v = 0; v <= maxValue; v += 10) {
+				line(ctx1, [[x0,v2y(v)],[x0-(v % 50 === 0 ? 8 : 3)]]);
+			}
+			
+			for (let v = dayMin; v <= dayMax; v++) {
+				let d = (new Date((v+0.5)*86400000));
+				let monthStart = (d.getDate() === 1);
+				
+				if (monthStart) {
+					line(ctx1, [[v2x(v),y0],[,y0+8]]);	
+					text(ctx1, months[d.getMonth()], [v2x(v)+3, y0+3]);
+				}
+			}
+
+			ctx1.stroke();
+		}
+
+		function v2y(v) {
+			return (1-v/maxValue)*(height-paddingBottom)
+		}
+
+		function v2x(v) {
+			return ((v-dayMin)/(dayMax-dayMin)*(width-paddingLeft)+paddingLeft)
+		}
+
+		function drawChart2() {
+		}
+
+		function updateCanvasLayout() {
+			retina = window.devicePixelRatio;
+			width  = container.innerWidth();
+			height = container.innerHeight();
+			canvas1.attr({width:width*retina, height:height*retina}).css({width,height});
+			canvas2.attr({width:width*retina, height:height*retina}).css({width,height});
+			drawChart1();
+			drawChart2();
+		}
+
+		function text(ctx, text, point) {
+			ctx.fillText(text, point[0]*retina, point[1]*retina);
+		}
+
+		function line(ctx, path) {
+			path.forEach((p, i) => {
+				if (p[0] === undefined) p[0] = path[i-1][0];
+				if (p[1] === undefined) p[1] = path[i-1][1];
+				if (i === 0) {
+					ctx.moveTo(p[0]*retina, p[1]*retina);
+				} else {
+					ctx.lineTo(p[0]*retina, p[1]*retina);
+				}
+			})
+		}
+	}
+
 	function initAnimation() {
 		let playInterval = false;
-
-		$('#button_play').click(play);
-		setTimeout(play, 1000);
 
 		return {play, stop}
 

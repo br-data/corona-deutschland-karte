@@ -8,12 +8,16 @@ body {
 	position: relative;
 }
 
-#chart {
-	top: 0px;
-	right: 0px;
-	position: absolute;
+#chartContainer {
 	width: calc(100% - 470px);
 	height: 600px;
+	overflow: hidden;
+}
+
+#chartCanvas1, #chartCanvas2, #chartContainer {
+	position: absolute;
+	top: 0px;
+	right: 0px;
 }
 
 #map {
