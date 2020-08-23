@@ -2,78 +2,90 @@
 
 $(function () {
 	let blurWindow = 7;
-	let map = L.map('map', {
-		preferCanvas: true,
-		layers: [
-			L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-				attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-				subdomains: 'abcd',
-				maxZoom: 19
-			})
-		]
-	});
-	map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
 
-	let geo = false, data = false, geoLayer, day, markerDirty, animation;
+	let geo = false, data = false, day, markerDirty, animation, map;
 	let markerPositions = [];
 	let slider, sliderLabel;
 
-	$.getJSON('data/landkreise.topo.json', res => {
-		geo = topojson.feature(res, res.objects.landkreise)
-		geo.features.map(f => {
-			let sx = 0, sy = 0, s = 0;
-			scan(f.geometry.coordinates, (f.geometry.type === 'Polygon') ? 2 : 3);
-			function scan(list, n) {
-				if (n > 1) return list.forEach(s => scan(s, n-1));
-				list.forEach(p => {sx += p[0]; sy += p[1]; s++});
-			}
-			f.x = sx/s;
-			f.y = sy/s;
-			f.r = Math.sqrt(f.properties.EWZ)/100;
-		})
-		checkInitialization();
-	})
-
-	$.getJSON('data/data.json', res => {
-		data = res;
-		checkInitialization();
-	})
-
-	initLegend();
-
-	function checkInitialization() {
-		if (!geo || !data) return;
-		let lookup = new Map();
-		geo.features.forEach(f => lookup.set(f.properties.RS, f));
-		data.entries.forEach(e => {
-			lookup.get(e.id).data = e;
-			let a = e.fall;
-			e.blurred = e.fall.map((v,i) => {
-				for (let j = Math.max(0,i-blurWindow); j < i; j++) v += a[j];
-				return v;
-			})
-		});
-		let colorStart = value2color(0);
-		geo.features.forEach(f => {
-			f.marker = L.circleMarker([f.y, f.x], {
-				radius:f.r,
-				stroke:true,
-				weight:0.1,
-				color:'#000000',
-				opacity:1,
-				fillOpacity:1,
-				fillColor:colorStart,
-			});
-			f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>')
-			map.addLayer(f.marker);
-		})
+	initMap();
+	initData(() => {
 		updateMarkerPositions();
+
 		initSlider();
 
 		markerDirty = true;
 		setInterval(updateMarkerColors, 20);
 
 		animation = initAnimation();
+	});
+
+	initLegend();
+
+	function initData(cb) {
+		$.getJSON('data/landkreise.topo.json', res => {
+			geo = topojson.feature(res, res.objects.landkreise)
+			geo.features.map(f => {
+				let sx = 0, sy = 0, s = 0;
+				scan(f.geometry.coordinates, (f.geometry.type === 'Polygon') ? 2 : 3);
+				function scan(list, n) {
+					if (n > 1) return list.forEach(s => scan(s, n-1));
+					list.forEach(p => {sx += p[0]; sy += p[1]; s++});
+				}
+				f.x = sx/s;
+				f.y = sy/s;
+				f.r = Math.sqrt(f.properties.EWZ)/100;
+			})
+			checkInitialization();
+		})
+
+		$.getJSON('data/data.json', res => {
+			data = res;
+			checkInitialization();
+		})
+
+		function checkInitialization() {
+			if (!geo || !data) return;
+			let lookup = new Map();
+			geo.features.forEach(f => lookup.set(f.properties.RS, f));
+			data.entries.forEach(e => {
+				lookup.get(e.id).data = e;
+				let a = e.fall;
+				e.blurred = e.fall.map((v,i) => {
+					for (let j = Math.max(0,i-blurWindow); j < i; j++) v += a[j];
+					return v;
+				})
+			});
+			let colorStart = value2color(0);
+			geo.features.forEach(f => {
+				f.marker = L.circleMarker([f.y, f.x], {
+					radius:f.r,
+					stroke:true,
+					weight:0.1,
+					color:'#000000',
+					opacity:1,
+					fillOpacity:1,
+					fillColor:colorStart,
+				});
+				f.marker.bindTooltip(f.properties.GEN+'<br><small>'+f.properties.BEZ+'</small>')
+				map.addLayer(f.marker);
+			})
+
+			cb();
+		}
+	}
+
+	function initMap() {
+		map = L.map('map', {
+			preferCanvas: true,
+			layers: [
+				L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
+					attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+					subdomains: 'abcd',
+					maxZoom: 19
+				})
+			]
+		});
+		map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
 	}
 
 	function initAnimation() {
