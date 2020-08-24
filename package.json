@@ -1,0 +1,28 @@
+{
+  "name": "2020-second-wave",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "2020-second-wave": "1_prepare_data.js"
+  },
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/br-data/2020-second-wave.git"
+  },
+  "author": "Michael Kreil",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/br-data/2020-second-wave/issues"
+  },
+  "homepage": "https://github.com/br-data/2020-second-wave#readme",
+  "dependencies": {
+    "@turf/distance": "^6.0.1"
+  }
+}

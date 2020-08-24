@@ -3,6 +3,7 @@
 const fs = require('fs');
 const helper = require('./lib/helper.js');
 const {resolve} = require('path');
+const distance = require('@turf/distance').default;
 
 const dayMin = parseDate('2020-02-01');
 let dayMax = 0;
@@ -22,17 +23,82 @@ landkreise = landkreise.features.map(f => {
 		list.forEach(p => {sx += p[0]; sy += p[1]; s++});
 	}
 
-	let n = 10000;
-
-	return {
-		x: Math.round(n*sx/s)/n,
-		y: Math.round(n*sy/s)/n,
-		r: Math.round(Math.sqrt(f.properties.EWZ)*15),
+	f = {
+		x: sx/s,
+		y: sy/s,
+		r: Math.sqrt(f.properties.EWZ)*15,
 		id:  f.properties.RS, 
 		ew: f.properties.EWZ, 
 		type: f.properties.BEZ, 
 		title: f.properties.GEN,
 	}
+	f.m = f.r*f.r;
+	f.x0 = f.x;
+	f.y0 = f.y;
+	return f;
+})
+
+let pairs = [];
+for (let j1 = 0; j1 < landkreise.length; j1++) {
+	let f1 = landkreise[j1];
+	for (let j2 = j1+1; j2 < landkreise.length; j2++) {
+		let f2 = landkreise[j2];
+		let d = distance([f1.x,f1.y], [f2.x,f2.y], {units:'kilometers'});
+		if (d < 30+f1.r+f2.r) pairs.push([f1,f2]);
+	}
+}
+
+console.log('physics')
+let sum;
+do {
+	landkreise.forEach(f => {
+		f.dx = 0.001*(f.x0-f.x);
+		f.dy = 0.001*(f.y0-f.y);
+		f.d  = 1;
+	})
+	pairs.forEach(p => {
+		let f1 = p[0];
+		let f2 = p[1];
+
+		let d = distance([f1.x,f1.y], [f2.x,f2.y], {units:'kilometers'})*1000;
+		if (d > f1.r+f2.r) return;
+		
+		let dx = f1.x - f2.x;
+		let dy = f1.y - f2.y;
+		
+		//let factor = f1.m*f2.m*((f1.r+f2.r)/d-1)/(f1.m+f2.m);
+		let factor = ((f1.r+f2.r)/d-1)/(f1.m+f2.m);
+		
+		f1.dx += f2.m*factor*dx;
+		f1.dy += f2.m*factor*dy;
+		f1.d  += f2.m*factor;
+
+		f2.dx -= f1.m*factor*dx;
+		f2.dy -= f1.m*factor*dy;
+		f2.d  += f1.m*factor;
+	})
+	sum = 0;
+	landkreise.forEach(f => {
+		let d = Math.sqrt(f.dx*f.dx + f.dy*f.dy);
+		sum += d;
+		let factor = 0.3/(f.d);
+		f.x += factor*f.dx;
+		f.y += factor*f.dy;
+	})
+	console.log(sum);
+} while (sum > 1e-2);
+
+landkreise.forEach(f => {
+	let n = 10000;
+	f.x = Math.round(f.x*n)/n;
+	f.y = Math.round(f.y*n)/n;
+	f.r = Math.round(f.r);
+	delete f.d;
+	delete f.dx;
+	delete f.dy;
+	delete f.m;
+	delete f.x0;
+	delete f.y0;
 })
 
 let lookup = new Map();

@@ -297,8 +297,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8411,
 			title:"Pinneberg",
 			type:"Kreis",
-			x:9.531,
-			y:53.7094
+			x:9.5246,
+			y:53.7284
 		},
 		{
 			ew:128647,
@@ -367,8 +367,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:20354,
 			title:"Hamburg",
 			type:"Kreisfreie Stadt",
-			x:9.8743,
-			y:53.5787
+			x:9.8786,
+			y:53.5771
 		},
 		{
 			ew:248292,
@@ -387,8 +387,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4859,
 			title:"Salzgitter",
 			type:"Kreisfreie Stadt",
-			x:10.3696,
-			y:52.105
+			x:10.3676,
+			y:52.1049
 		},
 		{
 			ew:124151,
@@ -457,8 +457,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5195,
 			title:"Wolfenbüttel",
 			type:"Landkreis",
-			x:10.5127,
-			y:52.111
+			x:10.5145,
+			y:52.1111
 		},
 		{
 			ew:328074,
@@ -567,8 +567,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7542,
 			title:"Harburg",
 			type:"Landkreis",
-			x:10.0311,
-			y:53.3449
+			x:10.032,
+			y:53.3435
 		},
 		{
 			ew:48424,
@@ -597,8 +597,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5054,
 			title:"Osterholz",
 			type:"Landkreis",
-			x:8.7683,
-			y:53.233
+			x:8.7636,
+			y:53.2823
 		},
 		{
 			ew:163455,
@@ -627,8 +627,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6760,
 			title:"Stade",
 			type:"Landkreis",
-			x:9.3949,
-			y:53.643
+			x:9.3682,
+			y:53.6283
 		},
 		{
 			ew:92572,
@@ -657,8 +657,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4179,
 			title:"Delmenhorst",
 			type:"Kreisfreie Stadt",
-			x:8.645,
-			y:53.0505
+			x:8.6207,
+			y:53.0342
 		},
 		{
 			ew:50195,
@@ -667,8 +667,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3361,
 			title:"Emden",
 			type:"Kreisfreie Stadt",
-			x:7.1802,
-			y:53.3572
+			x:7.1668,
+			y:53.3583
 		},
 		{
 			ew:168210,
@@ -687,8 +687,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6088,
 			title:"Osnabrück",
 			type:"Kreisfreie Stadt",
-			x:8.0614,
-			y:52.2741
+			x:8.0029,
+			y:52.2283
 		},
 		{
 			ew:76278,
@@ -697,8 +697,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4143,
 			title:"Wilhelmshaven",
 			type:"Kreisfreie Stadt",
-			x:8.0657,
-			y:53.5647
+			x:8.083,
+			y:53.5618
 		},
 		{
 			ew:124071,
@@ -747,8 +747,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4707,
 			title:"Friesland",
 			type:"Landkreis",
-			x:7.9678,
-			y:53.5812
+			x:7.9541,
+			y:53.5835
 		},
 		{
 			ew:136511,
@@ -767,8 +767,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6181,
 			title:"Leer",
 			type:"Landkreis",
-			x:7.3049,
-			y:53.3465
+			x:7.3091,
+			y:53.3462
 		},
 		{
 			ew:130144,
@@ -787,8 +787,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8967,
 			title:"Osnabrück",
 			type:"Landkreis",
-			x:8.1067,
-			y:52.3096
+			x:8.139,
+			y:52.3349
 		},
 		{
 			ew:141598,
@@ -827,8 +827,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11318,
 			title:"Bremen",
 			type:"Kreisfreie Stadt",
-			x:8.7756,
-			y:53.1448
+			x:8.7801,
+			y:53.1354
 		},
 		{
 			ew:113634,
@@ -847,8 +847,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11804,
 			title:"Düsseldorf",
 			type:"Kreisfreie Stadt",
-			x:6.8347,
-			y:51.2301
+			x:6.7089,
+			y:51.2043
 		},
 		{
 			ew:498590,
@@ -857,8 +857,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10592,
 			title:"Duisburg",
 			type:"Kreisfreie Stadt",
-			x:6.7304,
-			y:51.4393
+			x:6.6328,
+			y:51.4639
 		},
 		{
 			ew:583109,
@@ -867,8 +867,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11454,
 			title:"Essen",
 			type:"Kreisfreie Stadt",
-			x:7.0151,
-			y:51.4282
+			x:6.9719,
+			y:51.4581
 		},
 		{
 			ew:227020,
@@ -877,8 +877,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7147,
 			title:"Krefeld",
 			type:"Kreisfreie Stadt",
-			x:6.5745,
-			y:51.3568
+			x:6.5036,
+			y:51.3263
 		},
 		{
 			ew:261454,
@@ -887,8 +887,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7670,
 			title:"Mönchengladbach",
 			type:"Kreisfreie Stadt",
-			x:6.4144,
-			y:51.1668
+			x:6.3493,
+			y:51.1611
 		},
 		{
 			ew:170880,
@@ -897,8 +897,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6201,
 			title:"Mülheim an der Ruhr",
 			type:"Kreisfreie Stadt",
-			x:6.8733,
-			y:51.4132
+			x:6.7915,
+			y:51.3527
 		},
 		{
 			ew:210829,
@@ -907,8 +907,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6887,
 			title:"Oberhausen",
 			type:"Kreisfreie Stadt",
-			x:6.847,
-			y:51.5198
+			x:6.805,
+			y:51.5854
 		},
 		{
 			ew:110994,
@@ -917,8 +917,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4997,
 			title:"Remscheid",
 			type:"Kreisfreie Stadt",
-			x:7.2174,
-			y:51.1751
+			x:7.3518,
+			y:51.1043
 		},
 		{
 			ew:159360,
@@ -927,8 +927,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5988,
 			title:"Solingen",
 			type:"Kreisfreie Stadt",
-			x:7.0843,
-			y:51.1567
+			x:7.1366,
+			y:51.1211
 		},
 		{
 			ew:354382,
@@ -937,8 +937,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8929,
 			title:"Wuppertal",
 			type:"Kreisfreie Stadt",
-			x:7.1705,
-			y:51.2389
+			x:7.2854,
+			y:51.2209
 		},
 		{
 			ew:310974,
@@ -957,8 +957,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10454,
 			title:"Mettmann",
 			type:"Kreis",
-			x:6.9732,
-			y:51.2536
+			x:7.0153,
+			y:51.2611
 		},
 		{
 			ew:451007,
@@ -967,8 +967,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10074,
 			title:"Rhein-Kreis Neuss",
 			type:"Kreis",
-			x:6.6447,
-			y:51.1485
+			x:6.5253,
+			y:51.0465
 		},
 		{
 			ew:298935,
@@ -977,8 +977,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8201,
 			title:"Viersen",
 			type:"Kreis",
-			x:6.341,
-			y:51.2813
+			x:6.2871,
+			y:51.2982
 		},
 		{
 			ew:459809,
@@ -987,8 +987,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10171,
 			title:"Wesel",
 			type:"Kreis",
-			x:6.5981,
-			y:51.6208
+			x:6.5795,
+			y:51.6472
 		},
 		{
 			ew:327258,
@@ -997,8 +997,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8581,
 			title:"Bonn",
 			type:"Kreisfreie Stadt",
-			x:7.1083,
-			y:50.7093
+			x:7.0443,
+			y:50.6821
 		},
 		{
 			ew:1085664,
@@ -1007,8 +1007,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:15629,
 			title:"Köln",
 			type:"Kreisfreie Stadt",
-			x:6.9754,
-			y:50.9577
+			x:6.984,
+			y:50.9266
 		},
 		{
 			ew:163838,
@@ -1017,8 +1017,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6072,
 			title:"Leverkusen",
 			type:"Kreisfreie Stadt",
-			x:7.0291,
-			y:51.0613
+			x:6.9423,
+			y:51.1198
 		},
 		{
 			ew:555465,
@@ -1027,8 +1027,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11179,
 			title:"Städteregion Aachen",
 			type:"Kreis",
-			x:6.2061,
-			y:50.6943
+			x:6.197,
+			y:50.6894
 		},
 		{
 			ew:263722,
@@ -1037,8 +1037,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7703,
 			title:"Düren",
 			type:"Kreis",
-			x:6.4201,
-			y:50.806
+			x:6.3984,
+			y:50.8008
 		},
 		{
 			ew:470089,
@@ -1047,8 +1047,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10284,
 			title:"Rhein-Erft-Kreis",
 			type:"Kreis",
-			x:6.7315,
-			y:50.9115
+			x:6.6245,
+			y:50.8751
 		},
 		{
 			ew:192840,
@@ -1077,8 +1077,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7830,
 			title:"Oberbergischer Kreis",
 			type:"Kreis",
-			x:7.4591,
-			y:51.049
+			x:7.5121,
+			y:51.0495
 		},
 		{
 			ew:283455,
@@ -1087,8 +1087,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7986,
 			title:"Rheinisch-Bergischer Kreis",
 			type:"Kreis",
-			x:7.2061,
-			y:51.0326
+			x:7.3039,
+			y:50.9926
 		},
 		{
 			ew:599780,
@@ -1097,8 +1097,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11617,
 			title:"Rhein-Sieg-Kreis",
 			type:"Kreis",
-			x:7.2406,
-			y:50.7655
+			x:7.2899,
+			y:50.7759
 		},
 		{
 			ew:117383,
@@ -1107,8 +1107,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5139,
 			title:"Bottrop",
 			type:"Kreisfreie Stadt",
-			x:6.9094,
-			y:51.5727
+			x:6.8573,
+			y:51.6883
 		},
 		{
 			ew:260654,
@@ -1117,8 +1117,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7658,
 			title:"Gelsenkirchen",
 			type:"Kreisfreie Stadt",
-			x:7.0655,
-			y:51.5592
+			x:7.0128,
+			y:51.6268
 		},
 		{
 			ew:314319,
@@ -1147,8 +1147,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7034,
 			title:"Coesfeld",
 			type:"Kreis",
-			x:7.3772,
-			y:51.8401
+			x:7.4003,
+			y:51.861
 		},
 		{
 			ew:615261,
@@ -1157,8 +1157,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11766,
 			title:"Recklinghausen",
 			type:"Kreis",
-			x:7.1941,
-			y:51.6538
+			x:7.2488,
+			y:51.7205
 		},
 		{
 			ew:447614,
@@ -1187,8 +1187,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8666,
 			title:"Bielefeld",
 			type:"Kreisfreie Stadt",
-			x:8.5438,
-			y:52.0154
+			x:8.5681,
+			y:52.0227
 		},
 		{
 			ew:364083,
@@ -1197,8 +1197,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9051,
 			title:"Gütersloh",
 			type:"Kreis",
-			x:8.3669,
-			y:51.9513
+			x:8.3441,
+			y:51.9431
 		},
 		{
 			ew:250783,
@@ -1207,8 +1207,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7512,
 			title:"Herford",
 			type:"Kreis",
-			x:8.612,
-			y:52.1635
+			x:8.6127,
+			y:52.1656
 		},
 		{
 			ew:140667,
@@ -1257,8 +1257,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9058,
 			title:"Bochum",
 			type:"Kreisfreie Stadt",
-			x:7.2318,
-			y:51.4694
+			x:7.2602,
+			y:51.426
 		},
 		{
 			ew:587010,
@@ -1267,8 +1267,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11492,
 			title:"Dortmund",
 			type:"Kreisfreie Stadt",
-			x:7.4616,
-			y:51.5132
+			x:7.5223,
+			y:51.5102
 		},
 		{
 			ew:188814,
@@ -1277,8 +1277,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6518,
 			title:"Hagen",
 			type:"Kreisfreie Stadt",
-			x:7.4876,
-			y:51.3375
+			x:7.6665,
+			y:51.3754
 		},
 		{
 			ew:179111,
@@ -1287,8 +1287,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6348,
 			title:"Hamm",
 			type:"Kreisfreie Stadt",
-			x:7.841,
-			y:51.6722
+			x:7.9354,
+			y:51.704
 		},
 		{
 			ew:156374,
@@ -1297,8 +1297,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5932,
 			title:"Herne",
 			type:"Kreisfreie Stadt",
-			x:7.2091,
-			y:51.5352
+			x:7.2026,
+			y:51.5616
 		},
 		{
 			ew:324296,
@@ -1307,8 +1307,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8542,
 			title:"Ennepe-Ruhr-Kreis",
 			type:"Kreis",
-			x:7.3346,
-			y:51.327
+			x:7.4621,
+			y:51.3318
 		},
 		{
 			ew:260475,
@@ -1327,8 +1327,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9629,
 			title:"Märkischer Kreis",
 			type:"Kreis",
-			x:7.701,
-			y:51.2514
+			x:7.7209,
+			y:51.2341
 		},
 		{
 			ew:134775,
@@ -1367,8 +1367,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9425,
 			title:"Unna",
 			type:"Kreis",
-			x:7.6109,
-			y:51.579
+			x:7.7251,
+			y:51.6491
 		},
 		{
 			ew:159207,
@@ -1377,8 +1377,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5985,
 			title:"Darmstadt",
 			type:"Kreisfreie Stadt",
-			x:8.6764,
-			y:49.8905
+			x:8.6455,
+			y:49.9221
 		},
 		{
 			ew:753056,
@@ -1387,8 +1387,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:13017,
 			title:"Frankfurt am Main",
 			type:"Kreisfreie Stadt",
-			x:8.6546,
-			y:50.122
+			x:8.6549,
+			y:50.1359
 		},
 		{
 			ew:128744,
@@ -1397,8 +1397,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5382,
 			title:"Offenbach am Main",
 			type:"Kreisfreie Stadt",
-			x:8.7729,
-			y:50.1017
+			x:8.9106,
+			y:50.114
 		},
 		{
 			ew:278342,
@@ -1407,8 +1407,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7914,
 			title:"Wiesbaden",
 			type:"Kreisfreie Stadt",
-			x:8.2695,
-			y:50.0828
+			x:8.1997,
+			y:50.0698
 		},
 		{
 			ew:269694,
@@ -1417,8 +1417,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7790,
 			title:"Bergstraße",
 			type:"Landkreis",
-			x:8.7248,
-			y:49.582
+			x:8.73,
+			y:49.5866
 		},
 		{
 			ew:297399,
@@ -1427,8 +1427,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8180,
 			title:"Darmstadt-Dieburg",
 			type:"Landkreis",
-			x:8.7523,
-			y:49.8653
+			x:8.7964,
+			y:49.8399
 		},
 		{
 			ew:274526,
@@ -1437,8 +1437,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7859,
 			title:"Groß-Gerau",
 			type:"Landkreis",
-			x:8.4855,
-			y:49.9023
+			x:8.455,
+			y:49.9011
 		},
 		{
 			ew:236564,
@@ -1447,8 +1447,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7296,
 			title:"Hochtaunuskreis",
 			type:"Landkreis",
-			x:8.4939,
-			y:50.2774
+			x:8.4864,
+			y:50.2848
 		},
 		{
 			ew:418950,
@@ -1467,8 +1467,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7314,
 			title:"Main-Taunus-Kreis",
 			type:"Landkreis",
-			x:8.4262,
-			y:50.1221
+			x:8.3708,
+			y:50.1515
 		},
 		{
 			ew:96798,
@@ -1487,8 +1487,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8926,
 			title:"Offenbach",
 			type:"Landkreis",
-			x:8.8139,
-			y:50.0225
+			x:8.859,
+			y:49.9884
 		},
 		{
 			ew:187157,
@@ -1497,8 +1497,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6489,
 			title:"Rheingau-Taunus-Kreis",
 			type:"Landkreis",
-			x:8.0831,
-			y:50.1602
+			x:8.0696,
+			y:50.1688
 		},
 		{
 			ew:306460,
@@ -1567,8 +1567,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6735,
 			title:"Kassel",
 			type:"Kreisfreie Stadt",
-			x:9.4845,
-			y:51.3248
+			x:9.4927,
+			y:51.292
 		},
 		{
 			ew:222584,
@@ -1597,8 +1597,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7297,
 			title:"Kassel",
 			type:"Landkreis",
-			x:9.4687,
-			y:51.3879
+			x:9.4616,
+			y:51.4166
 		},
 		{
 			ew:180222,
@@ -1747,8 +1747,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4989,
 			title:"Trier",
 			type:"Kreisfreie Stadt",
-			x:6.6706,
-			y:49.7755
+			x:6.6599,
+			y:49.8026
 		},
 		{
 			ew:112262,
@@ -1787,8 +1787,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5789,
 			title:"Trier-Saarburg",
 			type:"Landkreis",
-			x:6.6886,
-			y:49.7299
+			x:6.6969,
+			y:49.7087
 		},
 		{
 			ew:48561,
@@ -1797,8 +1797,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3305,
 			title:"Frankenthal (Pfalz)",
 			type:"Kreisfreie Stadt",
-			x:8.3643,
-			y:49.5399
+			x:8.355,
+			y:49.5788
 		},
 		{
 			ew:99845,
@@ -1807,8 +1807,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4740,
 			title:"Kaiserslautern",
 			type:"Kreisfreie Stadt",
-			x:7.7557,
-			y:49.4299
+			x:7.8022,
+			y:49.415
 		},
 		{
 			ew:46677,
@@ -1817,8 +1817,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3241,
 			title:"Landau in der Pfalz",
 			type:"Kreisfreie Stadt",
-			x:8.0157,
-			y:49.232
+			x:8.0093,
+			y:49.2441
 		},
 		{
 			ew:171061,
@@ -1827,8 +1827,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6204,
 			title:"Ludwigshafen am Rhein",
 			type:"Kreisfreie Stadt",
-			x:8.4014,
-			y:49.4697
+			x:8.3525,
+			y:49.4933
 		},
 		{
 			ew:217118,
@@ -1837,8 +1837,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6989,
 			title:"Mainz",
 			type:"Kreisfreie Stadt",
-			x:8.2361,
-			y:49.9631
+			x:8.2439,
+			y:49.9388
 		},
 		{
 			ew:53148,
@@ -1857,8 +1857,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3015,
 			title:"Pirmasens",
 			type:"Kreisfreie Stadt",
-			x:7.5889,
-			y:49.1915
+			x:7.5588,
+			y:49.1838
 		},
 		{
 			ew:50378,
@@ -1927,8 +1927,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5389,
 			title:"Germersheim",
 			type:"Landkreis",
-			x:8.1993,
-			y:49.0909
+			x:8.1989,
+			y:49.0911
 		},
 		{
 			ew:106057,
@@ -1937,8 +1937,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4885,
 			title:"Kaiserslautern",
 			type:"Landkreis",
-			x:7.7274,
-			y:49.439
+			x:7.6829,
+			y:49.4533
 		},
 		{
 			ew:70526,
@@ -1957,8 +1957,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4983,
 			title:"Südliche Weinstraße",
 			type:"Landkreis",
-			x:8.0435,
-			y:49.1796
+			x:8.0464,
+			y:49.1742
 		},
 		{
 			ew:154201,
@@ -1967,8 +1967,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5890,
 			title:"Rhein-Pfalz-Kreis",
 			type:"Landkreis",
-			x:8.3631,
-			y:49.4387
+			x:8.3205,
+			y:49.3867
 		},
 		{
 			ew:210889,
@@ -1977,8 +1977,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6888,
 			title:"Mainz-Bingen",
 			type:"Landkreis",
-			x:8.0601,
-			y:49.9177
+			x:8.0532,
+			y:49.9162
 		},
 		{
 			ew:95113,
@@ -1987,8 +1987,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4626,
 			title:"Südwestpfalz",
 			type:"Landkreis",
-			x:7.6423,
-			y:49.2051
+			x:7.6568,
+			y:49.2088
 		},
 		{
 			ew:634830,
@@ -1997,8 +1997,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11951,
 			title:"Stuttgart",
 			type:"Stadtkreis",
-			x:9.1794,
-			y:48.7756
+			x:9.1747,
+			y:48.7665
 		},
 		{
 			ew:391640,
@@ -2007,8 +2007,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9387,
 			title:"Böblingen",
 			type:"Landkreis",
-			x:8.9601,
-			y:48.6757
+			x:8.9303,
+			y:48.6625
 		},
 		{
 			ew:533859,
@@ -2017,8 +2017,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10960,
 			title:"Esslingen",
 			type:"Landkreis",
-			x:9.3511,
-			y:48.6412
+			x:9.386,
+			y:48.615
 		},
 		{
 			ew:257253,
@@ -2037,8 +2037,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11063,
 			title:"Ludwigsburg",
 			type:"Landkreis",
-			x:9.1513,
-			y:48.9356
+			x:9.1458,
+			y:48.9725
 		},
 		{
 			ew:426158,
@@ -2057,8 +2057,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5324,
 			title:"Heilbronn",
 			type:"Stadtkreis",
-			x:9.1822,
-			y:49.1453
+			x:9.0992,
+			y:49.1167
 		},
 		{
 			ew:343068,
@@ -2067,8 +2067,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8786,
 			title:"Heilbronn",
 			type:"Landkreis",
-			x:9.2107,
-			y:49.1704
+			x:9.2458,
+			y:49.1996
 		},
 		{
 			ew:112010,
@@ -2127,8 +2127,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3522,
 			title:"Baden-Baden",
 			type:"Stadtkreis",
-			x:8.2067,
-			y:48.7564
+			x:8.1379,
+			y:48.7731
 		},
 		{
 			ew:313092,
@@ -2137,8 +2137,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8393,
 			title:"Karlsruhe",
 			type:"Stadtkreis",
-			x:8.4272,
-			y:49.0151
+			x:8.3435,
+			y:49.0112
 		},
 		{
 			ew:444232,
@@ -2147,8 +2147,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9998,
 			title:"Karlsruhe",
 			type:"Landkreis",
-			x:8.5411,
-			y:49.0198
+			x:8.5932,
+			y:49.0338
 		},
 		{
 			ew:231018,
@@ -2157,8 +2157,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7210,
 			title:"Rastatt",
 			type:"Landkreis",
-			x:8.253,
-			y:48.7452
+			x:8.2753,
+			y:48.7399
 		},
 		{
 			ew:160355,
@@ -2167,8 +2167,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6007,
 			title:"Heidelberg",
 			type:"Stadtkreis",
-			x:8.6871,
-			y:49.4028
+			x:8.6175,
+			y:49.3751
 		},
 		{
 			ew:309370,
@@ -2177,8 +2177,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8343,
 			title:"Mannheim",
 			type:"Stadtkreis",
-			x:8.5017,
-			y:49.4864
+			x:8.5537,
+			y:49.4973
 		},
 		{
 			ew:143535,
@@ -2197,8 +2197,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:11100,
 			title:"Rhein-Neckar-Kreis",
 			type:"Landkreis",
-			x:8.8101,
-			y:49.4255
+			x:8.8382,
+			y:49.4301
 		},
 		{
 			ew:125542,
@@ -2207,8 +2207,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5315,
 			title:"Pforzheim",
 			type:"Stadtkreis",
-			x:8.7245,
-			y:48.8687
+			x:8.7627,
+			y:48.8029
 		},
 		{
 			ew:158397,
@@ -2227,8 +2227,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6690,
 			title:"Enzkreis",
 			type:"Landkreis",
-			x:8.7163,
-			y:48.8822
+			x:8.711,
+			y:48.9052
 		},
 		{
 			ew:117935,
@@ -2377,8 +2377,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5331,
 			title:"Ulm",
 			type:"Stadtkreis",
-			x:9.9517,
-			y:48.3887
+			x:9.9901,
+			y:48.3901
 		},
 		{
 			ew:196047,
@@ -2387,8 +2387,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6642,
 			title:"Alb-Donau-Kreis",
 			type:"Landkreis",
-			x:9.8544,
-			y:48.3851
+			x:9.8282,
+			y:48.3841
 		},
 		{
 			ew:199742,
@@ -2447,8 +2447,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:18196,
 			title:"München",
 			type:"Kreisfreie Stadt",
-			x:11.5403,
-			y:48.1594
+			x:11.5135,
+			y:48.1839
 		},
 		{
 			ew:63324,
@@ -2457,8 +2457,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3775,
 			title:"Rosenheim",
 			type:"Kreisfreie Stadt",
-			x:12.1094,
-			y:47.8482
+			x:12.0793,
+			y:47.8239
 		},
 		{
 			ew:111210,
@@ -2497,8 +2497,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5884,
 			title:"Dachau",
 			type:"Landkreis",
-			x:11.326,
-			y:48.3447
+			x:11.3141,
+			y:48.355
 		},
 		{
 			ew:142142,
@@ -2547,8 +2547,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7025,
 			title:"Fürstenfeldbruck",
 			type:"Landkreis",
-			x:11.1785,
-			y:48.1858
+			x:11.1734,
+			y:48.1859
 		},
 		{
 			ew:88467,
@@ -2597,8 +2597,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8860,
 			title:"München",
 			type:"Landkreis",
-			x:11.6366,
-			y:48.0739
+			x:11.7318,
+			y:47.9893
 		},
 		{
 			ew:96680,
@@ -2627,8 +2627,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7663,
 			title:"Rosenheim",
 			type:"Landkreis",
-			x:12.1687,
-			y:47.896
+			x:12.1772,
+			y:47.9029
 		},
 		{
 			ew:136092,
@@ -2667,8 +2667,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4036,
 			title:"Landshut",
 			type:"Kreisfreie Stadt",
-			x:12.1636,
-			y:48.5466
+			x:12.1019,
+			y:48.551
 		},
 		{
 			ew:52469,
@@ -2677,8 +2677,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3436,
 			title:"Passau",
 			type:"Kreisfreie Stadt",
-			x:13.404,
-			y:48.5816
+			x:13.362,
+			y:48.5519
 		},
 		{
 			ew:47794,
@@ -2687,8 +2687,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3279,
 			title:"Straubing",
 			type:"Kreisfreie Stadt",
-			x:12.5748,
-			y:48.8817
+			x:12.6176,
+			y:48.8714
 		},
 		{
 			ew:119326,
@@ -2727,8 +2727,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5976,
 			title:"Landshut",
 			type:"Landkreis",
-			x:12.2028,
-			y:48.5439
+			x:12.2371,
+			y:48.5415
 		},
 		{
 			ew:192043,
@@ -2737,8 +2737,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6573,
 			title:"Passau",
 			type:"Landkreis",
-			x:13.4402,
-			y:48.6072
+			x:13.4549,
+			y:48.6176
 		},
 		{
 			ew:77656,
@@ -2767,8 +2767,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4759,
 			title:"Straubing-Bogen",
 			type:"Landkreis",
-			x:12.5384,
-			y:48.8905
+			x:12.5145,
+			y:48.8963
 		},
 		{
 			ew:96217,
@@ -2787,8 +2787,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3073,
 			title:"Amberg",
 			type:"Kreisfreie Stadt",
-			x:11.8501,
-			y:49.4513
+			x:11.855,
+			y:49.4473
 		},
 		{
 			ew:152610,
@@ -2797,8 +2797,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5860,
 			title:"Regensburg",
 			type:"Kreisfreie Stadt",
-			x:12.1068,
-			y:49.0205
+			x:12.0452,
+			y:48.9903
 		},
 		{
 			ew:42520,
@@ -2807,8 +2807,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3093,
 			title:"Weiden i.d. OPf.",
 			type:"Kreisfreie Stadt",
-			x:12.1698,
-			y:49.6684
+			x:12.2166,
+			y:49.666
 		},
 		{
 			ew:103109,
@@ -2817,8 +2817,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4817,
 			title:"Amberg-Sulzbach",
 			type:"Landkreis",
-			x:11.7887,
-			y:49.501
+			x:11.7866,
+			y:49.5027
 		},
 		{
 			ew:127882,
@@ -2847,8 +2847,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4608,
 			title:"Neustadt a.d. Waldnaab",
 			type:"Landkreis",
-			x:12.1356,
-			y:49.6702
+			x:12.1101,
+			y:49.6716
 		},
 		{
 			ew:193572,
@@ -2857,8 +2857,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6600,
 			title:"Regensburg",
 			type:"Landkreis",
-			x:12.1296,
-			y:49.0317
+			x:12.182,
+			y:49.0574
 		},
 		{
 			ew:147189,
@@ -2887,8 +2887,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4178,
 			title:"Bamberg",
 			type:"Kreisfreie Stadt",
-			x:10.8917,
-			y:49.8845
+			x:10.9524,
+			y:49.8617
 		},
 		{
 			ew:74657,
@@ -2897,8 +2897,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4099,
 			title:"Bayreuth",
 			type:"Kreisfreie Stadt",
-			x:11.568,
-			y:49.939
+			x:11.5742,
+			y:49.9506
 		},
 		{
 			ew:41249,
@@ -2907,8 +2907,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3046,
 			title:"Coburg",
 			type:"Kreisfreie Stadt",
-			x:10.9723,
-			y:50.266
+			x:10.9963,
+			y:50.2891
 		},
 		{
 			ew:45930,
@@ -2917,8 +2917,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3215,
 			title:"Hof",
 			type:"Kreisfreie Stadt",
-			x:11.8953,
-			y:50.3167
+			x:11.9127,
+			y:50.3252
 		},
 		{
 			ew:147086,
@@ -2927,8 +2927,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5753,
 			title:"Bamberg",
 			type:"Landkreis",
-			x:10.8718,
-			y:49.892
+			x:10.8327,
+			y:49.9066
 		},
 		{
 			ew:103656,
@@ -2937,8 +2937,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4829,
 			title:"Bayreuth",
 			type:"Landkreis",
-			x:11.5378,
-			y:49.8833
+			x:11.5332,
+			y:49.8748
 		},
 		{
 			ew:86906,
@@ -2947,8 +2947,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4422,
 			title:"Coburg",
 			type:"Landkreis",
-			x:10.9517,
-			y:50.2461
+			x:10.9383,
+			y:50.2331
 		},
 		{
 			ew:116099,
@@ -2967,8 +2967,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4631,
 			title:"Hof",
 			type:"Landkreis",
-			x:11.8338,
-			y:50.2868
+			x:11.8248,
+			y:50.2825
 		},
 		{
 			ew:67135,
@@ -3017,8 +3017,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3068,
 			title:"Ansbach",
 			type:"Kreisfreie Stadt",
-			x:10.5538,
-			y:49.2864
+			x:10.5904,
+			y:49.301
 		},
 		{
 			ew:111962,
@@ -3027,8 +3027,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5019,
 			title:"Erlangen",
 			type:"Kreisfreie Stadt",
-			x:10.972,
-			y:49.5956
+			x:10.9988,
+			y:49.5813
 		},
 		{
 			ew:127748,
@@ -3037,8 +3037,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5361,
 			title:"Fürth",
 			type:"Kreisfreie Stadt",
-			x:10.9667,
-			y:49.484
+			x:10.924,
+			y:49.5016
 		},
 		{
 			ew:518365,
@@ -3047,8 +3047,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:10800,
 			title:"Nürnberg",
 			type:"Kreisfreie Stadt",
-			x:11.0941,
-			y:49.4255
+			x:11.1098,
+			y:49.4209
 		},
 		{
 			ew:40792,
@@ -3057,8 +3057,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3030,
 			title:"Schwabach",
 			type:"Kreisfreie Stadt",
-			x:11.0311,
-			y:49.3365
+			x:11.0131,
+			y:49.3136
 		},
 		{
 			ew:183949,
@@ -3067,8 +3067,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6433,
 			title:"Ansbach",
 			type:"Landkreis",
-			x:10.4885,
-			y:49.2605
+			x:10.4786,
+			y:49.2565
 		},
 		{
 			ew:136271,
@@ -3077,8 +3077,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5537,
 			title:"Erlangen-Höchstadt",
 			type:"Landkreis",
-			x:10.9579,
-			y:49.6405
+			x:10.947,
+			y:49.6701
 		},
 		{
 			ew:117387,
@@ -3087,8 +3087,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5139,
 			title:"Fürth",
 			type:"Landkreis",
-			x:10.8545,
-			y:49.4432
+			x:10.832,
+			y:49.4286
 		},
 		{
 			ew:170365,
@@ -3137,8 +3137,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3984,
 			title:"Aschaffenburg",
 			type:"Kreisfreie Stadt",
-			x:9.1504,
-			y:49.9669
+			x:9.1153,
+			y:49.9518
 		},
 		{
 			ew:54032,
@@ -3147,8 +3147,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3487,
 			title:"Schweinfurt",
 			type:"Kreisfreie Stadt",
-			x:10.2257,
-			y:50.0559
+			x:10.21,
+			y:50.0661
 		},
 		{
 			ew:127880,
@@ -3157,8 +3157,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5364,
 			title:"Würzburg",
 			type:"Kreisfreie Stadt",
-			x:9.9391,
-			y:49.7831
+			x:9.9462,
+			y:49.8136
 		},
 		{
 			ew:174208,
@@ -3167,8 +3167,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6261,
 			title:"Aschaffenburg",
 			type:"Landkreis",
-			x:9.2182,
-			y:49.9962
+			x:9.2343,
+			y:50.0031
 		},
 		{
 			ew:103218,
@@ -3237,8 +3237,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5089,
 			title:"Schweinfurt",
 			type:"Landkreis",
-			x:10.2865,
-			y:50.0164
+			x:10.2944,
+			y:50.0113
 		},
 		{
 			ew:161834,
@@ -3247,8 +3247,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6034,
 			title:"Würzburg",
 			type:"Landkreis",
-			x:9.9285,
-			y:49.7375
+			x:9.9227,
+			y:49.7123
 		},
 		{
 			ew:295135,
@@ -3257,8 +3257,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8149,
 			title:"Augsburg",
 			type:"Kreisfreie Stadt",
-			x:10.87,
-			y:48.3393
+			x:10.9,
+			y:48.3325
 		},
 		{
 			ew:43893,
@@ -3307,8 +3307,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7523,
 			title:"Augsburg",
 			type:"Landkreis",
-			x:10.7341,
-			y:48.3702
+			x:10.6994,
+			y:48.3781
 		},
 		{
 			ew:96021,
@@ -3457,8 +3457,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9297,
 			title:"Berlin Mitte",
 			type:"Bezirk",
-			x:13.3688,
-			y:52.5302
+			x:13.345,
+			y:52.5918
 		},
 		{
 			ew:289762,
@@ -3467,8 +3467,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8074,
 			title:"Berlin Friedrichshain-Kreuzberg",
 			type:"Bezirk",
-			x:13.4205,
-			y:52.5023
+			x:13.4972,
+			y:52.4663
 		},
 		{
 			ew:407765,
@@ -3477,8 +3477,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:9578,
 			title:"Berlin Pankow",
 			type:"Bezirk",
-			x:13.4353,
-			y:52.5997
+			x:13.487,
+			y:52.7379
 		},
 		{
 			ew:342332,
@@ -3487,8 +3487,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8776,
 			title:"Berlin Charlottenburg-Wilmersdorf",
 			type:"Bezirk",
-			x:13.2885,
-			y:52.51
+			x:13.1516,
+			y:52.48
 		},
 		{
 			ew:243977,
@@ -3497,8 +3497,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7409,
 			title:"Berlin Spandau",
 			type:"Bezirk",
-			x:13.1928,
-			y:52.5331
+			x:13.0088,
+			y:52.5965
 		},
 		{
 			ew:308697,
@@ -3507,8 +3507,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8334,
 			title:"Berlin Steglitz-Zehlendorf",
 			type:"Bezirk",
-			x:13.246,
-			y:52.4271
+			x:13.0698,
+			y:52.3345
 		},
 		{
 			ew:351644,
@@ -3517,8 +3517,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8895,
 			title:"Berlin Tempelhof-Schöneberg",
 			type:"Bezirk",
-			x:13.3751,
-			y:52.4478
+			x:13.3199,
+			y:52.3589
 		},
 		{
 			ew:329691,
@@ -3527,8 +3527,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8613,
 			title:"Berlin Neukölln",
 			type:"Bezirk",
-			x:13.4522,
-			y:52.4426
+			x:13.5706,
+			y:52.3233
 		},
 		{
 			ew:271153,
@@ -3537,8 +3537,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7811,
 			title:"Berlin Treptow-Köpenick",
 			type:"Bezirk",
-			x:13.6107,
-			y:52.4305
+			x:13.7908,
+			y:52.3839
 		},
 		{
 			ew:268548,
@@ -3547,8 +3547,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7773,
 			title:"Berlin Marzahn-Hellersdorf",
 			type:"Bezirk",
-			x:13.5861,
-			y:52.522
+			x:13.8063,
+			y:52.5236
 		},
 		{
 			ew:291452,
@@ -3557,8 +3557,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:8098,
 			title:"Berlin Lichtenberg",
 			type:"Bezirk",
-			x:13.5076,
-			y:52.539
+			x:13.6043,
+			y:52.596
 		},
 		{
 			ew:265225,
@@ -3567,8 +3567,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7725,
 			title:"Berlin Reinickendorf",
 			type:"Bezirk",
-			x:13.3221,
-			y:52.6026
+			x:13.1784,
+			y:52.7066
 		},
 		{
 			ew:72124,
@@ -3577,8 +3577,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4028,
 			title:"Brandenburg an der Havel",
 			type:"Kreisfreie Stadt",
-			x:12.5877,
-			y:52.4652
+			x:12.5874,
+			y:52.4655
 		},
 		{
 			ew:100219,
@@ -3587,8 +3587,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4749,
 			title:"Cottbus",
 			type:"Kreisfreie Stadt",
-			x:14.3726,
-			y:51.7754
+			x:14.3472,
+			y:51.7753
 		},
 		{
 			ew:57873,
@@ -3607,8 +3607,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6330,
 			title:"Potsdam",
 			type:"Kreisfreie Stadt",
-			x:13.0357,
-			y:52.4284
+			x:12.9389,
+			y:52.4393
 		},
 		{
 			ew:182760,
@@ -3707,8 +3707,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6950,
 			title:"Potsdam-Mittelmark",
 			type:"Landkreis",
-			x:12.6651,
-			y:52.379
+			x:12.6652,
+			y:52.3789
 		},
 		{
 			ew:76508,
@@ -3727,8 +3727,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5074,
 			title:"Spree-Neiße",
 			type:"Landkreis",
-			x:14.4675,
-			y:51.7757
+			x:14.49,
+			y:51.7758
 		},
 		{
 			ew:168296,
@@ -3967,8 +3967,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4275,
 			title:"Dessau-Roßlau",
 			type:"Kreisfreie Stadt",
-			x:12.2667,
-			y:51.8506
+			x:12.2829,
+			y:51.8606
 		},
 		{
 			ew:239257,
@@ -3977,8 +3977,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:7337,
 			title:"Halle (Saale)",
 			type:"Kreisfreie Stadt",
-			x:11.9652,
-			y:51.4555
+			x:12.0046,
+			y:51.4631
 		},
 		{
 			ew:238697,
@@ -4007,8 +4007,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5997,
 			title:"Anhalt-Bitterfeld",
 			type:"Landkreis",
-			x:12.1863,
-			y:51.8004
+			x:12.1777,
+			y:51.7951
 		},
 		{
 			ew:171734,
@@ -4067,8 +4067,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:6444,
 			title:"Saalekreis",
 			type:"Landkreis",
-			x:11.8636,
-			y:51.4361
+			x:11.8146,
+			y:51.4266
 		},
 		{
 			ew:190560,
@@ -4127,8 +4127,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:5007,
 			title:"Jena",
 			type:"Kreisfreie Stadt",
-			x:11.5865,
-			y:50.9244
+			x:11.5832,
+			y:50.9246
 		},
 		{
 			ew:34835,
@@ -4147,8 +4147,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:3827,
 			title:"Weimar",
 			type:"Kreisfreie Stadt",
-			x:11.3178,
-			y:50.9782
+			x:11.2922,
+			y:50.9827
 		},
 		{
 			ew:42370,
@@ -4267,8 +4267,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4294,
 			title:"Weimarer Land",
 			type:"Landkreis",
-			x:11.3828,
-			y:50.9667
+			x:11.4038,
+			y:50.963
 		},
 		{
 			ew:56196,
@@ -4297,8 +4297,8 @@ window.fvOZwtTDlpiMFxSV = {
 			r:4323,
 			title:"Saale-Holzland-Kreis",
 			type:"Landkreis",
-			x:11.711,
-			y:50.9146
+			x:11.7153,
+			y:50.9143
 		},
 		{
 			ew:80868,
