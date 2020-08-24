@@ -22,10 +22,12 @@ landkreise = landkreise.features.map(f => {
 		list.forEach(p => {sx += p[0]; sy += p[1]; s++});
 	}
 
+	let n = 10000;
+
 	return {
-		x: sx/s,
-		y: sy/s,
-		r: Math.sqrt(f.properties.EWZ)*15,
+		x: Math.round(n*sx/s)/n,
+		y: Math.round(n*sy/s)/n,
+		r: Math.round(Math.sqrt(f.properties.EWZ)*15),
 		id:  f.properties.RS, 
 		ew: f.properties.EWZ, 
 		type: f.properties.BEZ, 
@@ -92,7 +94,7 @@ landkreise.forEach((l,i) => {
 
 	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => {
 		if ((l > 1) && (Array.isArray(d))) return true;
-		if ((l > 1) && (d.title)) return true;
+		//if ((l > 1) && (d.title)) return true;
 		return false;
 	});
 	//console.log(result);
