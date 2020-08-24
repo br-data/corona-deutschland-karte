@@ -151,12 +151,16 @@ $(function () {
 
 			ctx1.stroke();
 
-			ctx1.strokeStyle = 'rgba(127,127,127,0.2)';
+			//ctx1.strokeStyle = 'rgba(127,127,127,0.2)';
+			ctx1.fillStyle = 'rgba(127,127,127,0.005)';
 			data.entries.forEach(e => {
 				ctx1.beginPath();
 				let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);
-				curve(ctx1, path);
-				ctx1.stroke();
+				line(ctx1, path);
+				ctx1.lineTo(v2x(dayMax)*retina, v2y(0)*retina);
+				ctx1.lineTo(v2x(dayMin)*retina, v2y(0)*retina);
+				ctx1.fill();
+				//ctx1.stroke();
 			});
 
 			//highlightCurves(data.entries.slice(0,3));
@@ -168,11 +172,15 @@ $(function () {
 			if (!entries) return;
 
 			ctx2.strokeStyle = 'rgba(170,0,0,0.8)';
-			ctx2.lineWidth = 2*retina;
+			ctx2.fillStyle = 'rgba(170,0,0,0.2)';
+			ctx2.lineWidth = 1*retina;
 			entries.forEach(e => {
 				ctx2.beginPath();
 				let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);
-				curve(ctx2, path);
+				line(ctx2, path, v2y(0));
+				ctx2.lineTo(v2x(dayMax)*retina, v2y(0)*retina);
+				ctx2.lineTo(v2x(dayMin)*retina, v2y(0)*retina);
+				ctx2.fill();
 				ctx2.stroke();
 			});
 		}
@@ -214,18 +222,16 @@ $(function () {
 			})
 		}
 
-		function curve(ctx, path) {
+		function curve(ctx, path, zero) {
 			let p0, p1;
 			path.forEach((p2, i) => {
 				if (i === 0) {
 					ctx.moveTo(p2[0]*retina, p2[1]*retina);
 					p1 = p2;
 				} else {
-					let a = p2[0];
 					let b = (p2[1]-p0[1])/(p2[0]-p0[0])*(p2[0]-p1[0])+p1[1];
-					let c = p2[0];
-					let d = p2[1];
-					ctx.quadraticCurveTo(a*retina, b*retina, c*retina, d*retina);
+					if (b > zero) b = zero;
+					ctx.quadraticCurveTo(p2[0]*retina, b*retina, p2[0]*retina, p2[1]*retina);
 				}
 				p0 = p1;
 				p1 = p2;
