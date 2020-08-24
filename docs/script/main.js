@@ -39,7 +39,7 @@ $(function () {
 			})
 			l.normalized = l.blurred.map(v => 100000*v/l.ew);
 
-			l.marker = L.circleMarker([l.y, l.x], {
+			l.marker = L.circle([l.y, l.x], {
 				radius:l.r,
 				stroke:true,
 				weight:0.1,

@@ -25,7 +25,7 @@ landkreise = landkreise.features.map(f => {
 	return {
 		x: sx/s,
 		y: sy/s,
-		r: Math.sqrt(f.properties.EWZ)/100,
+		r: Math.sqrt(f.properties.EWZ)*15,
 		id:  f.properties.RS, 
 		ew: f.properties.EWZ, 
 		type: f.properties.BEZ, 
