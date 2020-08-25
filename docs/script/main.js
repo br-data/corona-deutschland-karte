@@ -1,8 +1,6 @@
 
 
 $(function () {
-	let blurWindow = 7;
-
 	let day, markerDirty, animation, map;
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider, sliderLabel;
@@ -31,12 +29,7 @@ $(function () {
 		for (let i = 0; i <= data.dayMax-data.dayMin; i++) days[i] = i;
 
 		data.landkreise.forEach(l => {
-			let index = l.index;
-			l.fall = days.map(d => data.days[d][index]);
-			l.blurred = l.fall.map((v,i) => {
-				for (let j = Math.max(0,i-blurWindow); j < i; j++) v += l.fall[j];
-				return v;
-			})
+			l.blurred = days.map(d => data.days[d][l.index]);
 			l.normalized = l.blurred.map(v => 100000*v/l.ew);
 
 			l.marker = L.circle([l.y, l.x], {
@@ -98,10 +91,10 @@ $(function () {
 			ctx1.textBaseline = 'top';
 			ctx1.font = 10*retina + 'px sans-serif';
 
-
 			let x0 = v2x(dayMin);
 			let y0 = v2y(0);
 
+			// draw axes
 			ctx1.beginPath();
 
 			line(ctx1, [[x0,0],[,y0],[width]]);
@@ -122,7 +115,14 @@ $(function () {
 
 			ctx1.stroke();
 
+			for (let d = 0; d <= dayMax-dayMin; d++) {
+				//let s = 
+			}
+
+			/*
 			ctx1.fillStyle = 'rgba(127,127,127,0.005)';
+
+
 			data.landkreise.forEach(e => {
 				ctx1.beginPath();
 				let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);
@@ -131,6 +131,7 @@ $(function () {
 				ctx1.lineTo(v2x(dayMin)*retina, v2y(0)*retina);
 				ctx1.fill();
 			});
+			*/
 		}
 
 		function highlightCurves(entries) {
@@ -160,9 +161,6 @@ $(function () {
 			return ((v-dayMin)/(dayMax-dayMin)*(width-paddingLeft)+paddingLeft)
 		}
 
-		function drawChart2() {
-		}
-
 		function updateCanvasLayout() {
 			retina = window.devicePixelRatio;
 			width  = container.innerWidth();
@@ -170,7 +168,6 @@ $(function () {
 			canvas1.attr({width:width*retina, height:height*retina}).css({width,height});
 			canvas2.attr({width:width*retina, height:height*retina}).css({width,height});
 			drawChart1();
-			drawChart2();
 		}
 
 		function text(ctx, text, point) {

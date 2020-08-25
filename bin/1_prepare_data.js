@@ -6,8 +6,10 @@ const {resolve} = require('path');
 const distance = require('@turf/distance').default;
 
 const dayMin = parseDate('2020-02-01');
-let dayMax = 0;
+const blurWindow = 7;
 const folder = resolve(__dirname, '../data/');
+
+let dayMax = 0;
 
 console.log('start');
 
@@ -23,7 +25,7 @@ landkreise = landkreise.features.map(f => {
 		list.forEach(p => {sx += p[0]; sy += p[1]; s++});
 	}
 
-	f = {
+	return {
 		x: sx/s,
 		y: sy/s,
 		r: Math.sqrt(f.properties.EWZ)*15,
@@ -32,10 +34,6 @@ landkreise = landkreise.features.map(f => {
 		type: f.properties.BEZ, 
 		title: f.properties.GEN,
 	}
-	f.m = f.r*f.r;
-	f.x0 = f.x;
-	f.y0 = f.y;
-	return f;
 })
 
 let pairs = [];
@@ -48,57 +46,11 @@ for (let j1 = 0; j1 < landkreise.length; j1++) {
 	}
 }
 
-console.log('physics')
-let sum;
-do {
-	landkreise.forEach(f => {
-		f.dx = 0.001*(f.x0-f.x);
-		f.dy = 0.001*(f.y0-f.y);
-		f.d  = 1;
-	})
-	pairs.forEach(p => {
-		let f1 = p[0];
-		let f2 = p[1];
-
-		let d = distance([f1.x,f1.y], [f2.x,f2.y], {units:'kilometers'})*1000;
-		if (d > f1.r+f2.r) return;
-		
-		let dx = f1.x - f2.x;
-		let dy = f1.y - f2.y;
-		
-		//let factor = f1.m*f2.m*((f1.r+f2.r)/d-1)/(f1.m+f2.m);
-		let factor = ((f1.r+f2.r)/d-1)/(f1.m+f2.m);
-		
-		f1.dx += f2.m*factor*dx;
-		f1.dy += f2.m*factor*dy;
-		f1.d  += f2.m*factor;
-
-		f2.dx -= f1.m*factor*dx;
-		f2.dy -= f1.m*factor*dy;
-		f2.d  += f1.m*factor;
-	})
-	sum = 0;
-	landkreise.forEach(f => {
-		let d = Math.sqrt(f.dx*f.dx + f.dy*f.dy);
-		sum += d;
-		let factor = 0.3/(f.d);
-		f.x += factor*f.dx;
-		f.y += factor*f.dy;
-	})
-	console.log(sum);
-} while (sum > 1e-2);
-
 landkreise.forEach(f => {
 	let n = 10000;
 	f.x = Math.round(f.x*n)/n;
 	f.y = Math.round(f.y*n)/n;
 	f.r = Math.round(f.r);
-	delete f.d;
-	delete f.dx;
-	delete f.dy;
-	delete f.m;
-	delete f.x0;
-	delete f.y0;
 })
 
 let lookup = new Map();
@@ -139,21 +91,34 @@ landkreise.forEach((l,i) => {
 
 	console.log('finalize');
 
-	for (let i = dayMin; i <= dayMax; i++) {
-		if (!days[i-dayMin]) days[i-dayMin] = [];
-	}
-	days.forEach(day => {
-		for (let i = 0; i < landkreise.length; i++) {
-			if (!day[i]) day[i] = 0;
-		}
+	for (let i = 0; i <= dayMax-dayMin; i++) if (!days[i]) days[i] = [];
+
+	days = days.map((day,i) => landkreise.map(l => {
+		let s = 0;
+		for (let j = Math.max(0,i-blurWindow); j <= i; j++) s += days[j][l.index] || 0;
+		return s;
+	}))
+
+	let histo = days.map(d => {
+		let values = landkreise.map(l => [d[l.index]/l.ew*100000, l.ew]);
+		values.sort((a,b) => a[0]-b[0]);
+		values.reduce((s,v) => v[1] = (s += v[1]), 0);
+		values.forEach(v => v[1] *= 15/83128805, 0);
+		let i = 0.5;
+		values = values.filter(v => {
+			if (v[1] < i) return false;
+			i += 1;
+			return true;
+		})
+		return values.map(v => Math.round(v[0]*100)/100);
 	})
-	days[dayMax-dayMin+1] = null;
 
 	let result = {
 		dayMin,
 		dayMax,
 		landkreise,
 		days,
+		histo,
 	}
 	
 	console.log('save');
