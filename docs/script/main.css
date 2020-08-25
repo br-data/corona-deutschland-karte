@@ -1,7 +1,9 @@
 
 body {
-	font-family: sans-serif;
-			margin: 0;
+	margin: 0;
+	font-family: Open Sans,Arial,Helvetica,sans-serif;
+	color: #fff;
+	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
 }
 
 #wrapper {
@@ -36,7 +38,6 @@ body {
 	width: calc(100% - 470px);
 	text-align: center;
 	z-index: 2000;
-	background: rgba(255,255,255,0.3);
 }
 
 #slider_container input {
@@ -51,6 +52,9 @@ body {
 	width: 60px;
 }
 
+.leaflet-container {
+	background: none;
+}
 .leaflet-tooltip {
 	padding: 4px;
 	line-height: 1em;
@@ -91,11 +95,11 @@ body {
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
-	background: #dee1e3;
+	background: #fff;
 	margin-left: 10px;
 	text-align: center;
 	cursor: pointer;
-	color: #434343;
+	color: #333541;
 	transition: color .1s;
 }
 
@@ -104,78 +108,70 @@ body {
 }
 
 input[type=range] {
-	-webkit-appearance: none;
-	vertical-align: text-top;
+	-webkit-appearance:none;
+	vertical-align:middle;
+	width:100%;
+	margin:0;
+	padding:0;
+	background:none
 }
-
 input[type=range]:focus {
-	outline: none;
+	outline:none
 }
-
 input[type=range]::-webkit-slider-runnable-track {
-	outline: none;
-	width: 100%;
-	height: 5px;
-	cursor: pointer;
-	background: #dee1e3;
-	border-radius: .5em;
+	outline:none;
+	width:100%;
+	height:5px;
+	cursor:pointer;
+	background:#a1a5b5;
+	border-radius:.5em
 }
-
 input[type=range]::-webkit-slider-thumb {
-	height: 20px;
-	width: 20px;
-	border-radius: 50%;
-	background: #434343;
-	cursor: pointer;
-	-webkit-appearance: none;
-	margin-top: -8px;
+	height:20px;
+	width:20px;
+	border-radius:50%;
+	background:#fff;
+	cursor:pointer;
+	-webkit-appearance:none;
+	margin-top:-8px
 }
-
 input[type=range]::-moz-range-track {
-	width: 100%;
-	height: 5px;
-	cursor: pointer;
-	background: #dee1e3;
-	border-radius: .5em;
+	width:100%;
+	height:5px;
+	cursor:pointer;
+	background:#a1a5b5;
+	border-radius:.5em
 }
-
 input[type=range]::-moz-range-thumb {
-	border: 0;
-	height: 20px;
-	width: 20px;
-	border-radius: 50%;
-	background: #434343;
-	cursor: pointer;
+	border:0;
+	height:20px;
+	width:20px;
+	border-radius:50%;
+	background:#fff;
+	cursor:pointer
 }
-
 input[type=range]::-moz-focus-outer {
-	border: 0;
+	border:0
 }
-
 input[type=range]::-ms-track {
-	width: 100%;
-	height: 5px;
-	background: transparent;
-	border-color: transparent;
-	border-width: 12px 0;
-	color: transparent;
+	width:100%;
+	height:5px;
+	background:transparent;
+	border-color:transparent;
+	border-width:12px 0;
+	color:transparent
 }
-
 input[type=range]::-ms-thumb {
-	border: none;
-	height: 20px;
-	width: 20px;
-	border-radius: 50%;
-	background: #434343;
+	border:none;
+	height:20px;
+	width:20px;
+	border-radius:50%;
+	background:#fff
 }
-
-input[type=range]::-ms-fill-lower,
-input[type=range]::-ms-fill-upper {
-	background: #dee1e3;
-	border-radius: 5px;
+input[type=range]::-ms-fill-lower,input[type=range]::-ms-fill-upper {
+	background:#a1a5b5;
+	border-radius:5px
 }
-
-input[type=range]:focus::-ms-fill-lower,
-input[type=range]:focus::-ms-fill-upper {
-	background: #dee1e3;
+input[type=range]:focus::-ms-fill-lower,input[type=range]:focus::-ms-fill-upper {
+	background:#a1a5b5
 }
