@@ -7,14 +7,6 @@ $(function () {
 	let slider, sliderLabel;
 	let chart;
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
-	const gradient = [
-		[209, 38, 55,0],
-		[209, 38, 55,1],
-		[ 55, 69, 62,1],
-		[ 31,100, 85,1],
-		[  0,100,100,1],
-	].map(hsv2rgb);
-	console.log(gradient);
 
 	map = initMap();
 	initData(() => {
@@ -33,11 +25,8 @@ $(function () {
 		setTimeout(animation.play, 1000);
 	});
 
-	initLegend();
-
 	function initData(cb) {
 		let days = [];
-		let colorStart = value2color(0);
 		for (let i = 0; i <= data.dayMax-data.dayMin; i++) days[i] = i;
 
 		
@@ -66,6 +55,16 @@ $(function () {
 	}
 
 	function initMap() {
+		const maxValue = 150;
+
+		const gradient = [
+			[150, 60, 40,1],
+			//[209, 38, 55,1],
+			[ 60, 80, 70,1],
+			[ 30,100, 80,1],
+			[  0,100,100,1],
+		].map(hsv2rgb);
+
 		let retina, width, height;
 
 		let container = $('#mapContainer');
@@ -74,6 +73,7 @@ $(function () {
 		
 		$(window).resize(updateLayout);
 		updateLayout()
+		initLegend();
 
 		function updateLayout() {
 			retina = window.devicePixelRatio;
@@ -101,7 +101,7 @@ $(function () {
 
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[day])
-				//debugger;
+				
 				ctx.beginPath();
 				ctx.arc(
 					zoom*f.x + offsetX,
@@ -112,7 +112,41 @@ $(function () {
 				);
 				ctx.fill();
 			})
+		}
 
+		function initLegend() {
+			let html = ['<table id="legend">'];
+			for (let v = maxValue; v >= 0; v -= 10) {
+				let color = value2color(v);
+				let text = (v % 50 === 0) ? v : '';
+				html.push('<tr><td>'+text+'</td><td style="background:'+color+'"></td></tr>');
+			}
+			html.push('</table>');
+
+			$('#mapContainer').append($(html.join('')));
+		}
+
+		function value2color(v) {
+			v = Math.max(0, Math.min(1, v/maxValue));
+
+			v *= gradient.length-1;
+
+			//debugger;
+
+			let i = Math.min(Math.floor(v), gradient.length-2);
+			let c0 = gradient[i];
+			let c1 = gradient[i+1];
+			let a = v-i;
+
+			let c = 'rgba('+
+				Math.round(c0[0]*(1-a) + a*c1[0])+','+
+				Math.round(c0[1]*(1-a) + a*c1[1])+','+
+				Math.round(c0[2]*(1-a) + a*c1[2])+','+
+				Math.round((c0[3]*(1-a) + a*c1[3])*100)/100+
+			')';
+
+			//console.log(v,c);
+			return c;
 		}
 
 		return {
@@ -336,18 +370,6 @@ $(function () {
 		}
 	}
 
-	function initLegend() {
-		let html = ['<table id="legend">'];
-		for (let v = 100; v >= 0; v -= 10) {
-			let color = value2color(v);
-			let text = (v % 50 === 0) ? v : '';
-			html.push('<tr><td>'+text+'</td><td style="background:'+color+'"></td></tr>');
-		}
-		html.push('</table>');
-
-		$('#mapContainer').append($(html.join('')));
-	}
-
 	function initSlider() {
 		slider = $('#slider');
 		sliderLabel = $('#slider_label');
@@ -362,28 +384,6 @@ $(function () {
 			mapDirty = true;
 			chartDirty = true;
 		})
-	}
-
-	function value2color(v) {
-		v = Math.max(0, Math.min(1, v/100));
-
-		v *= gradient.length;
-
-		//debugger;
-
-		let i = Math.min(Math.floor(v), gradient.length-2);
-		let c0 = gradient[i];
-		let c1 = gradient[i+1];
-		let a = v-i;
-
-		let c = 'rgba('+
-			Math.round(c0[0]*(1-a) + a*c1[0])+','+
-			Math.round(c0[1]*(1-a) + a*c1[1])+','+
-			Math.round(c0[2]*(1-a) + a*c1[2])+','+
-			Math.round((c0[3]*(1-a) + a*c1[3])*100)/100+
-		')';
-
-		return c;
 	}
 
 	function hsv2rgb(c) {
