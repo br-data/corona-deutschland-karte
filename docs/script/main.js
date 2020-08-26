@@ -1,29 +1,31 @@
 
 
 $(function () {
-	let day, markerDirty, chartDirty, animation, map;
+	let day, mapDirty, chartDirty, animation, map;
 	let highlight = [];
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider, sliderLabel;
 	let chart;
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 	const gradient = [
-		[255,255,255,0],
-		[255,229,102,255],
-		[237,55,37,255],
-		[156,0,16,255],
-	]
+		[209, 38, 55,0],
+		[209, 38, 55,1],
+		[ 55, 69, 62,1],
+		[ 31,100, 85,1],
+		[  0,100,100,1],
+	].map(hsv2rgb);
+	console.log(gradient);
 
-	initMap();
+	map = initMap();
 	initData(() => {
 		initSlider();
 
 		chart = initChart();
 
-		markerDirty = true;
+		mapDirty = true;
 		setInterval(() => {
 			chart.update();
-			updateMarkerColors();
+			map.redraw();
 		}, 20);
 
 		animation = initAnimation();
@@ -38,10 +40,12 @@ $(function () {
 		let colorStart = value2color(0);
 		for (let i = 0; i <= data.dayMax-data.dayMin; i++) days[i] = i;
 
+		
 		data.landkreise.forEach(l => {
 			l.blurred = days.map(d => data.days[d][l.index]);
 			l.normalized = l.blurred.map(v => 100000*v/l.ew);
 
+			/*
 			l.marker = L.circle([l.y, l.x], {
 				radius:l.r,
 				stroke:false,
@@ -55,23 +59,65 @@ $(function () {
 			l.marker.on('tooltipopen',  () => {highlight = [l]; chartDirty = true;});
 			l.marker.on('tooltipclose', () => {highlight = [];  chartDirty = true;});
 			map.addLayer(l.marker);
+			*/
 		});
 
 		cb();
 	}
 
 	function initMap() {
-		map = L.map('map', {
-			preferCanvas: true,
-			//layers: [
-			//	L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png', {
-			//		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-			//		subdomains: 'abcd',
-			//		maxZoom: 19
-			//	})
-			//]
-		});
-		map.fitBounds([[47.2701114, 5.8663153],[55.099161, 15.0419319]]);
+		let retina, width, height;
+
+		let container = $('#mapContainer');
+		let canvas = $('#mapCanvas');
+		let ctx = canvas.get(0).getContext('2d');
+		
+		$(window).resize(updateLayout);
+		updateLayout()
+
+		function updateLayout() {
+			retina = window.devicePixelRatio;
+			width  = retina*container.innerWidth();
+			height = retina*container.innerHeight();
+			canvas
+				.attr({width:width, height:height})
+				.css({width:width/retina,height:height/retina});
+			redraw();
+		}
+
+		function redraw() {
+			if (!mapDirty) return;
+			mapDirty = false;
+
+			ctx.clearRect(0,0,width,height);
+
+			day = Math.round(slider.val());
+			sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
+			day -= data.dayMin;
+
+			let zoom = width/2;
+			let offsetX = width/2;
+			let offsetY = height/2;
+
+			data.landkreise.forEach(f => {
+				ctx.fillStyle = value2color(f.normalized[day])
+				//debugger;
+				ctx.beginPath();
+				ctx.arc(
+					zoom*f.x + offsetX,
+					zoom*f.y + offsetY,
+					zoom*Math.sqrt(f.blurred[day])*0.001,
+					0,
+					2*Math.PI
+				);
+				ctx.fill();
+			})
+
+		}
+
+		return {
+			redraw
+		}
 	}
 
 	function initChart() {
@@ -276,7 +322,7 @@ $(function () {
 			let i = i0;
 			playInterval = setInterval(() => {
 				slider.val(i);
-				markerDirty = true;
+				mapDirty = true;
 				chartDirty = true;
 				i++;
 				if (i > i1) stop();
@@ -299,29 +345,7 @@ $(function () {
 		}
 		html.push('</table>');
 
-		let menu = L.Control.extend({
-			onAdd: function() {
-				return $(html.join('')).get(0);
-			},
-			onRemove: function(map) {}
-		});
-
-		map.addControl(new menu({position:'bottomright'}));
-	}
-
-	function updateMarkerColors() {
-		if (!markerDirty) return;
-		markerDirty = false;
-		day = Math.round(slider.val());
-		sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
-		day -= data.dayMin;
-
-		data.landkreise.forEach(f => {
-			let color = value2color(f.normalized[day])
-
-			f.marker.setStyle({fillColor:color})
-			f.marker.setRadius(Math.sqrt(f.blurred[day])*700)
-		})
+		$('#mapContainer').append($(html.join('')));
 	}
 
 	function initSlider() {
@@ -335,30 +359,54 @@ $(function () {
 		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
 		slider.on('input', function (event) {
 			animation.stop();
-			markerDirty = true;
+			mapDirty = true;
 			chartDirty = true;
 		})
 	}
 
 	function value2color(v) {
+		v = Math.max(0, Math.min(1, v/100));
 
-		//gradient
+		v *= gradient.length;
 
-		v = Math.max(0, v/100);
+		//debugger;
 
-		//let color = [
-		//	Math.pow(Math.max(0,-195.996*v*v+271.995*v+128.001),1),
-		//	Math.pow(Math.max(0,-396.005*v*v+194.005*v+201.999),1),
-		//	Math.pow(Math.max(0,370.003*v*v+-625.004*v+255),1),
-		//]
+		let i = Math.min(Math.floor(v), gradient.length-2);
+		let c0 = gradient[i];
+		let c1 = gradient[i+1];
+		let a = v-i;
 
-		let color = [
-			Math.round(Math.exp(-0.737*v*v-0.0555*v+5.5516)/(1+Math.exp(-v*10-1))),
-			Math.round(222/(1+Math.exp(v*10-5))),
-			Math.round(240/(1+Math.exp((v-0.125)*20))),
-			Math.round(Math.min(1,v*100)*100)/100,
-		]
+		let c = 'rgba('+
+			Math.round(c0[0]*(1-a) + a*c1[0])+','+
+			Math.round(c0[1]*(1-a) + a*c1[1])+','+
+			Math.round(c0[2]*(1-a) + a*c1[2])+','+
+			Math.round((c0[3]*(1-a) + a*c1[3])*100)/100+
+		')';
 
-		return 'rgba('+color.join(',')+')';
+		return c;
+	}
+
+	function hsv2rgb(c) {
+		let h = c[0]/360;
+		let s = c[1]/100;
+		let v = 255*c[2]/100;
+
+		let i = Math.floor(h * 6);
+		let f = h * 6 - i;
+		
+		let p = v * (1 - s);
+		let q = v * (1 - f * s);
+		let t = v * (1 - (1 - f) * s);
+
+		switch (i % 6) {
+			case 0: c[0] = v, c[1] = t, c[2] = p; break;
+			case 1: c[0] = q, c[1] = v, c[2] = p; break;
+			case 2: c[0] = p, c[1] = v, c[2] = t; break;
+			case 3: c[0] = p, c[1] = q, c[2] = v; break;
+			case 4: c[0] = t, c[1] = p, c[2] = v; break;
+			case 5: c[0] = v, c[1] = p, c[2] = q; break;
+		}
+
+		return c;
 	}
 })

@@ -11,10 +11,12 @@ const folder = resolve(__dirname, '../data/');
 
 let dayMax = 0;
 
-console.log('start');
+console.log('start with geo');
 
-let file = fs.readdirSync(folder).filter(f => /^data_202.*\.json\.bz2$/.test(f)).sort().pop();
-file = resolve(folder, file);
+const centerX = 10.4541236;
+const centerY = 51.1846362;
+const scaleY = 2/7;
+const scaleX = scaleY*Math.cos(centerY*Math.PI/180);
 
 let landkreise = JSON.parse(fs.readFileSync(resolve(folder, 'landkreise.geojson')));
 landkreise = landkreise.features.map(f => {
@@ -26,8 +28,8 @@ landkreise = landkreise.features.map(f => {
 	}
 
 	return {
-		x: sx/s,
-		y: sy/s,
+		x:  (sx/s-centerX)*scaleX,
+		y: -(sy/s-centerY)*scaleY,
 		r: Math.sqrt(f.properties.EWZ)*15,
 		id:  f.properties.RS, 
 		ew: f.properties.EWZ, 
@@ -60,19 +62,24 @@ landkreise.forEach((l,i) => {
 	lookup.set(l.id,l);
 });
 
+console.log('start with data');
+
+let file = fs.readdirSync(folder).filter(f => /^data_202.*\.json\.bz2$/.test(f)).sort().pop();
+file = resolve(folder, file);
+
 (async function () {
 	let days = [];
 
-	console.log('load');
+	console.log('   load');
 	let data = fs.readFileSync(file);
 
-	console.log('decompress');
+	console.log('   decompress');
 	data = await helper.bunzip2(data);
 
-	console.log('unpack');
+	console.log('   unpack');
 	data = JSON.parse(data);
 
-	console.log('scan');
+	console.log('   scan');
 	data.forEach(entry => {
 		let dayMelde = parseDate(entry.MeldedatumISO);
 
@@ -89,7 +96,7 @@ landkreise.forEach((l,i) => {
 		if (dayMelde > dayMax) dayMax = dayMelde;
 	})
 
-	console.log('finalize');
+	console.log('   finalize');
 
 	for (let i = 0; i <= dayMax-dayMin; i++) if (!days[i]) days[i] = [];
 
@@ -121,7 +128,7 @@ landkreise.forEach((l,i) => {
 		histo,
 	}
 	
-	console.log('save');
+	console.log('   save');
 
 	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => {
 		if ((l > 1) && (Array.isArray(d))) return true;

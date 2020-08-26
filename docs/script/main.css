@@ -11,12 +11,19 @@ body {
 	height: 600px;
 }
 
-#map {
+#mapContainer {
 	position: absolute;
 	top: 0px;
 	right: 0px;
 	width: 450px;
 	height: 600px;
+	overflow: hidden;
+}
+
+#legend {
+	position: absolute;
+	right: 0px;
+	bottom: 0px;
 }
 
 #chartContainer {
