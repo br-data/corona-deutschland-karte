@@ -150,7 +150,7 @@ $(function () {
 					minF = f;
 				}
 			})
-			highlight((minD < 10) && minF);
+			highlight((minD < 10*e.retina) && minF);
 		})
 
 		container.init();
@@ -433,6 +433,7 @@ $(function () {
 				canvasFg.get(0).addEventListener(eventName, e => {
 					e.px = e.offsetX*retina;
 					e.py = e.offsetY*retina;
+					e.retina = retina;
 					cb(e);
 				})
 			})
