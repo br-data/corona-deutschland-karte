@@ -69,7 +69,22 @@ $(function () {
 		let container = new CanvasContainer('#mapContainer');
 
 		container.drawBg = function drawMapBg (ctx, opt) {
+			ctx.clearRect(0,0,opt.width,opt.height);
+
+			let zoom = opt.width/2;
+			let offsetX = opt.width/2;
+			let offsetY = opt.height/2;
+
+			ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+			ctx.lineWidth = 0.5*opt.retina;
 			
+			ctx.beginPath();
+			data.borders0.forEach(poly => {
+				poly.forEach((p,i) => {
+					(i?ctx.lineTo:ctx.moveTo).call(ctx,zoom*p[0]+offsetX,zoom*p[1]+offsetY)
+				})
+			})
+			ctx.stroke();
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {

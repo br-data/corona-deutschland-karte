@@ -11,7 +11,9 @@ const folder = resolve(__dirname, '../data/');
 
 let dayMax = 0;
 
-console.log('start with geo');
+
+
+console.log('start with landkreise');
 
 const centerX = 10.4541236;
 const centerY = 51.1846362;
@@ -62,6 +64,21 @@ landkreise.forEach((l,i) => {
 	lookup.set(l.id,l);
 });
 
+
+
+console.log('start with deutschland');
+
+let deutschland = JSON.parse(fs.readFileSync(resolve(folder, 'deutschland.geo.json')));
+deutschland = deutschland.features[0].geometry.coordinates;
+deutschland = deutschland.map(p => p[0]).filter(p => p.length > 100);
+
+deutschland = deutschland.map(poly => poly.map(p => ([
+	Math.round( (p[0]-centerX)*scaleX*10000)/10000,
+	Math.round(-(p[1]-centerY)*scaleY*10000)/10000,
+])));
+
+
+
 console.log('start with data');
 
 let file = fs.readdirSync(folder).filter(f => /^data_202.*\.json\.bz2$/.test(f)).sort().pop();
@@ -111,12 +128,17 @@ file = resolve(folder, file);
 		dayMax,
 		landkreise,
 		days,
+		borders0: deutschland,
 	}
 	
 	console.log('   save');
 
 	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => {
-		if ((l > 1) && (Array.isArray(d))) return true;
+		if ((l > 1) && Array.isArray(d) && (d.length < 1000)) {
+			//console.log(d.length);
+			//return false;
+			return true;
+		}
 		//if ((l > 1) && (d.title)) return true;
 		return false;
 	});
