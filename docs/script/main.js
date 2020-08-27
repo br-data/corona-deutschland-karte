@@ -32,11 +32,23 @@ $(function () {
 			l.infected = days.map(d => data.days[d][l.index]);
 			l.normalized = l.infected.map(v => 100000*v/l.ew);
 			l.radius = l.infected.map(v => Math.sqrt(v)*0.002);
+			l.rMax = l.radius.reduce((s,r) => Math.max(s,r));
 			l.x0 = l.x;
 			l.y0 = l.y;
 
 			ewD += l.ew;
 		});
+
+		let pairs = [];
+		data.landkreise.forEach((l0,i0) => {
+			for (let i1 = i0+1; i1 < data.landkreise.length; i1++) {
+				let l1 = data.landkreise[i1];
+				let d = Math.sqrt(sqr(l0.x - l1.x) + sqr(l0.y - l1.y)) - l0.rMax - l1.rMax;
+				if (d < 1) pairs.push([l0,l1]);
+			}
+		})
+		data.pairs = pairs;
+
 		data.deutschland = data.days.map(d => d.reduce((s,v) => s+v, 0)*100000/ewD)
 
 		cb();
@@ -84,12 +96,45 @@ $(function () {
 			let offsetX = opt.width/2;
 			let offsetY = opt.height/2;
 
+			const minStep = 0.005;
+			data.landkreise.forEach(f => {
+				f.r = f.radius[dayIndex];
+				f.m = f.r*f.r;
+
+				let dx = f.x0 - f.x;
+				let dy = f.y0 - f.y;
+				let d0 = Math.sqrt(dx*dx + dy*dy);
+				if (d0 < 1e-5) return;
+				if (d0 < minStep) d0 = minStep;
+				f.x += minStep*dx/d0;
+				f.y += minStep*dy/d0;
+			})
+
+			data.pairs.forEach(p => {
+				let f0 = p[0];
+				let f1 = p[1];
+				let dx = f0.x - f1.x;
+				let dy = f0.y - f1.y;
+				let d0 = Math.sqrt(dx*dx + dy*dy);
+				let d = d0 - f0.r - f1.r;
+				
+				if (d > 0) return;
+
+				let m = f0.m + f1.m;
+				d = d/d0/m;
+
+				f0.x -= f1.m*d*dx;
+				f0.y -= f1.m*d*dy;
+				f1.x += f0.m*d*dx;
+				f1.y += f0.m*d*dy;
+			})
+
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[dayIndex])
 
 				f.px = zoom*f.x + offsetX;
 				f.py = zoom*f.y + offsetY;
-				f.pr = zoom*f.radius[dayIndex];
+				f.pr = zoom*f.r;
 				
 				ctx.beginPath();
 				ctx.arc(f.px, f.py, f.pr, 0, 2*Math.PI);
