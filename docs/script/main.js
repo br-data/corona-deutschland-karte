@@ -352,7 +352,7 @@ $(function () {
 	}
 
 	function CanvasContainer(containerName) {
-		let retina, width, height;
+		let retina, width, height, random;
 
 		let container = $(containerName);
 		let canvasBg = $('<canvas>').appendTo(container);
@@ -374,13 +374,14 @@ $(function () {
 			updateLayout()
 		}
 
-		function redrawBg() { me.drawBg(ctxBg, {width,height,retina}); }
-		function redrawFg() { me.drawFg(ctxFg, {width,height,retina}); }
+		function redrawBg() { me.drawBg(ctxBg, {width,height,retina,random}); }
+		function redrawFg() { me.drawFg(ctxFg, {width,height,retina,random}); }
 
 		function updateLayout() {
 			retina = window.devicePixelRatio;
 			width  = retina*container.innerWidth();
 			height = retina*container.innerHeight();
+			random = Math.random();
 			canvases
 				.attr({width:width, height:height})
 				.css({width:width/retina,height:height/retina});
