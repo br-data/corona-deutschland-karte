@@ -2,7 +2,6 @@
 
 $(function () {
 	let day, mapDirty, chartDirty, animation, map;
-	let highlight = [];
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider, sliderLabel;
 	let chart;
@@ -67,39 +66,25 @@ $(function () {
 			[  0,100,100,1],
 		].map(hsv2rgb);
 
-		let retina, width, height;
+		let container = new CanvasContainer('#mapContainer');
 
-		let container = $('#mapContainer');
-		let canvas = $('#mapCanvas');
-		let ctx = canvas.get(0).getContext('2d');
-		
-		$(window).resize(updateLayout);
-		updateLayout()
-		initLegend();
-
-		function updateLayout() {
-			retina = window.devicePixelRatio;
-			width  = retina*container.innerWidth();
-			height = retina*container.innerHeight();
-			canvas
-				.attr({width:width, height:height})
-				.css({width:width/retina,height:height/retina});
-			redraw();
+		container.drawBg = function drawMapBg (ctx, opt) {
+			
 		}
 
-		function redraw() {
+		container.drawFg = function drawMapFg (ctx, opt) {
 			if (!mapDirty) return;
 			mapDirty = false;
 
-			ctx.clearRect(0,0,width,height);
+			ctx.clearRect(0,0,opt.width,opt.height);
 
 			day = Math.round(slider.val());
 			sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
 			day -= data.dayMin;
 
-			let zoom = width/2;
-			let offsetX = width/2;
-			let offsetY = height/2;
+			let zoom = opt.width/2;
+			let offsetX = opt.width/2;
+			let offsetY = opt.height/2;
 
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[day])
@@ -115,6 +100,9 @@ $(function () {
 				ctx.fill();
 			})
 		}
+
+		container.init();
+		initLegend();
 
 		function initLegend() {
 			let html = ['<table id="legend">'];
@@ -152,64 +140,56 @@ $(function () {
 		}
 
 		return {
-			redraw
+			redraw: container.redrawFg
 		}
 	}
 
 	function initChart() {
 		const baseColor = '#fff';
 		let dayMin = data.dayMin, dayMax = data.dayMax;
-		let width, height, retina;
 		let maxValue = 200, paddingLeft = 20, paddingBottom = 20;
+		let highlightEntries = [];
 
-		let container = $('#chartContainer');
-		let canvas1 = $('#chartCanvas1');
-		let canvas2 = $('#chartCanvas2');
-		let ctx1 = canvas1.get(0).getContext('2d');
-		let ctx2 = canvas2.get(0).getContext('2d');
+		let container = new CanvasContainer('#chartContainer');
 
-		$(window).resize(updateCanvasLayout);
-		updateCanvasLayout();
+		container.drawBg = function drawChartBg (ctx, opt) {
+			ctx.clearRect(0,0,opt.width,opt.height);
 
-		return {
-			update: highlightCurves,
-		}
+			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
+			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, 0);
 
-		function drawChart1() {
-			ctx1.clearRect(0,0,width,height);
-
-			let x0 = v2x(dayMin);
-			let x1 = v2x(dayMax);
-			let y0 = v2y(0);
-			let y1 = v2y(maxValue);
+			let x0 = projX.v2p(0);
+			let x1 = projX.v2p(dayMax-dayMin);
+			let y0 = projY.v2p(0);
+			let y1 = projY.v2p(maxValue);
 
 			// draw chart
 
-			ctx1.lineWidth = 1*retina;
-			ctx1.strokeStyle = 'rgba(11,159,216,0.5)';
-			ctx1.fillStyle = 'rgba(21,159,216,0.1)';
+			ctx.lineWidth = 1*opt.retina;
+			ctx.strokeStyle = 'rgba(11,159,216,0.5)';
+			ctx.fillStyle = 'rgba(21,159,216,0.1)';
 			
-			ctx1.beginPath();
-			let path = data.deutschland.map((v,i) => [v2x(i+dayMin),v2y(v)]);
-			line(ctx1, path, v2y(0));
-			ctx1.lineTo(x1*retina, y0*retina);
-			ctx1.lineTo(x0*retina, y0*retina);
-			ctx1.fill();
-			ctx1.stroke();
+			ctx.beginPath();
+			let path = data.deutschland.map((v,i) => [projX.v2p(i),projY.v2p(v)]);
+			line(ctx, path);
+			ctx.lineTo(x1, y0);
+			ctx.lineTo(x0, y0);
+			ctx.fill();
+			ctx.stroke();
 
 			// draw axes
 
-			ctx1.fillStyle = baseColor;
-			ctx1.strokeStyle = baseColor;
-			ctx1.textBaseline = 'top';
-			ctx1.font = 10*retina + 'px sans-serif';
+			ctx.fillStyle = baseColor;
+			ctx.strokeStyle = baseColor;
+			ctx.textBaseline = 'top';
+			ctx.font = 10*opt.retina + 'px sans-serif';
 
-			ctx1.beginPath();
+			ctx.beginPath();
 
-			line(ctx1, [[x0,0],[,y0],[width]]);
+			line(ctx, [[x0,0],[,y0],[x1]]);
 			
 			for (let v = 0; v <= maxValue; v += 10) {
-				line(ctx1, [[x0,v2y(v)],[x0-(v % 50 === 0 ? 8 : 3)]]);
+				line(ctx, [[x0,projY.v2p(v)],[x0-(v % 50 === 0 ? 8 : 3)]]);
 			}
 			
 			for (let v = dayMin; v <= dayMax; v++) {
@@ -217,70 +197,72 @@ $(function () {
 				let monthStart = (d.getDate() === 1);
 				
 				if (monthStart) {
-					line(ctx1, [[v2x(v),y0],[,y0+8]]);	
-					text(ctx1, months[d.getMonth()], [v2x(v)+3, y0+3]);
+					line(ctx, [[projX.v2p(v-dayMin),y0],[,y0+8]]);	
+					text(ctx, months[d.getMonth()], [projX.v2p(v-dayMin)+3, y0+3]);
 				}
 			}
 
-			ctx1.stroke();
+			ctx.stroke();
+		}
+
+		container.drawFg = function drawChartFg (ctx, opt) {
+			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
+			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, 0);
+
+			ctx.clearRect(0,0,opt.width,opt.height);
+			ctx.lineWidth = 1*opt.retina;
+
+			if (highlightEntries) {
+				ctx.strokeStyle = 'rgba(255,184,0,1.0)';
+				ctx.fillStyle = 'rgba(255,184,0,0.2)';
+				highlightEntries.forEach(e => {
+					ctx.beginPath();
+					let path = e.normalized.map((v,i) => [projX.v2p(i),projY.v2p(v)]);
+					line(ctx, path, projY.v2p(0));
+					ctx.lineTo(projX.v2p(dayMax-dayMin), projY.v2p(0));
+					ctx.lineTo(projX.v2p(0), projY.v2p(0));
+					ctx.fill();
+					ctx.stroke();
+				});
+			}
+
+			ctx.strokeStyle = baseColor;
+			ctx.beginPath();
+			ctx.moveTo(projX.v2p(day), projY.v2p(maxValue));
+			ctx.lineTo(projX.v2p(day), projY.v2p(0));
+			ctx.stroke();
+		}
+
+		container.init();
+
+		return {
+			update: highlightCurves,
 		}
 
 		function highlightCurves() {
 			if (!chartDirty) return;
 			chartDirty = false;
 
-			let entries = highlight;
-			ctx2.clearRect(0,0,width*retina,height*retina);
-			ctx2.lineWidth = 1*retina;
+			container.redrawFg();
+		}
 
-			if (entries) {
-				ctx2.strokeStyle = 'rgba(255,184,0,1.0)';
-				ctx2.fillStyle = 'rgba(255,184,0,0.2)';
-				entries.forEach(e => {
-					ctx2.beginPath();
-					let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);
-					line(ctx2, path, v2y(0));
-					ctx2.lineTo(v2x(dayMax)*retina, v2y(0)*retina);
-					ctx2.lineTo(v2x(dayMin)*retina, v2y(0)*retina);
-					ctx2.fill();
-					ctx2.stroke();
-				});
+		function getProjection(v0,v1,p0,p1) {
+			let s = (p1-p0)/(v1-v0);
+			let offsetP = -v0*s+p0
+			let offsetV = -p0/s+v0
+			return {v2p,p2v};
+
+			function v2p(v) {
+				return v*s + offsetP;
 			}
 
-			ctx2.strokeStyle = baseColor;
-			ctx2.beginPath();
-			ctx2.moveTo(v2x(day+data.dayMin)*retina, retina*v2y(maxValue));
-			ctx2.lineTo(v2x(day+data.dayMin)*retina, retina*v2y(0));
-			ctx2.stroke();
-		}
-
-		function v2y(v) {
-			return (1-v/maxValue)*(height-paddingBottom)
-		}
-
-		function v2x(v) {
-			return (v-dayMin)/(dayMax-dayMin)*(width-paddingLeft)+paddingLeft
-		}
-
-		function y2v(y) {
-			return (1-y/(height-paddingBottom))*maxValue;
-		}
-
-		function x2v(x) {
-			return (x-paddingLeft)/(width-paddingLeft)*(dayMax-dayMin)+dayMin;
-		}
-
-		function updateCanvasLayout() {
-			retina = window.devicePixelRatio;
-			width  = container.innerWidth();
-			height = container.innerHeight();
-			canvas1.attr({width:width*retina, height:height*retina}).css({width,height});
-			canvas2.attr({width:width*retina, height:height*retina}).css({width,height});
-			drawChart1();
+			function p2v(p) {
+				return p/s + offsetV;
+			}
 		}
 
 		function text(ctx, text, point) {
-			ctx.fillText(text, point[0]*retina, point[1]*retina);
+			ctx.fillText(text, point[0], point[1]);
 		}
 
 		function line(ctx, path) {
@@ -288,9 +270,9 @@ $(function () {
 				if (p[0] === undefined) p[0] = path[i-1][0];
 				if (p[1] === undefined) p[1] = path[i-1][1];
 				if (i === 0) {
-					ctx.moveTo(p[0]*retina, p[1]*retina);
+					ctx.moveTo(p[0], p[1]);
 				} else {
-					ctx.lineTo(p[0]*retina, p[1]*retina);
+					ctx.lineTo(p[0], p[1]);
 				}
 			})
 		}
@@ -375,5 +357,43 @@ $(function () {
 		}
 
 		return c;
+	}
+
+	function CanvasContainer(containerName) {
+		let retina, width, height;
+
+		let container = $(containerName);
+		let canvasBg = $('<canvas>').appendTo(container);
+		let canvasFg = $('<canvas>').appendTo(container);
+		let canvases = container.find('canvas');
+		let ctxBg = canvasBg.get(0).getContext('2d');
+		let ctxFg = canvasFg.get(0).getContext('2d');
+		
+		let me = {
+			init,
+			redrawBg,
+			redrawFg
+		}
+
+		return me;
+
+		function init() {
+			$(window).resize(updateLayout);
+			updateLayout()
+		}
+
+		function redrawBg() { me.drawBg(ctxBg, {width,height,retina}); }
+		function redrawFg() { me.drawFg(ctxFg, {width,height,retina}); }
+
+		function updateLayout() {
+			retina = window.devicePixelRatio;
+			width  = retina*container.innerWidth();
+			height = retina*container.innerHeight();
+			canvases
+				.attr({width:width, height:height})
+				.css({width:width/retina,height:height/retina});
+			me.redrawBg();
+			me.redrawFg();
+		}
 	}
 })

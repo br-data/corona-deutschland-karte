@@ -11,31 +11,34 @@ body {
 	height: 600px;
 }
 
+.canvasContainer {
+	position: relative;
+	overflow: hidden;
+}
+
 #mapContainer {
 	position: absolute;
 	top: 0px;
 	right: 0px;
 	width: 450px;
 	height: 600px;
-	overflow: hidden;
+}
+
+#chartContainer {
+	width: calc(100% - 470px);
+	height: 550px;
+}
+
+.canvasContainer canvas {
+	position: absolute;
+	top: 0px;
+	left: 0px;
 }
 
 #legend {
 	position: absolute;
 	right: 0px;
 	bottom: 0px;
-}
-
-#chartContainer {
-	overflow: hidden;
-	width: calc(100% - 470px);
-	height: 550px;
-}
-
-#chartCanvas1, #chartCanvas2, #chartContainer {
-	position: absolute;
-	top: 0px;
-	left: 0px;
 }
 
 #slider_container {
