@@ -1,7 +1,7 @@
 
 
 $(function () {
-	let day, mapDirty, chartDirty, animation, map;
+	let day, animation, map;
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider, sliderLabel;
 	let chart;
@@ -12,12 +12,6 @@ $(function () {
 		initSlider();
 
 		chart = initChart();
-
-		mapDirty = true;
-		setInterval(() => {
-			chart.update();
-			map.redraw();
-		}, 20);
 
 		animation = initAnimation();
 		$('#button_play').click(animation.play);
@@ -88,10 +82,9 @@ $(function () {
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
-			if (!mapDirty) return;
-			mapDirty = false;
-
 			ctx.clearRect(0,0,opt.width,opt.height);
+
+			if (!slider) return;
 
 			day = Math.round(slider.val());
 			sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
@@ -263,14 +256,7 @@ $(function () {
 		container.init();
 
 		return {
-			update: highlightCurves,
-		}
-
-		function highlightCurves() {
-			if (!chartDirty) return;
-			chartDirty = false;
-
-			container.redrawFg();
+			redraw: container.redrawFg,
 		}
 
 		function getProjection(v0,v1,p0,p1) {
@@ -300,8 +286,8 @@ $(function () {
 			let i = i0;
 			playInterval = setInterval(() => {
 				slider.val(i);
-				mapDirty = true;
-				chartDirty = true;
+				chart.redraw();
+				map.redraw();
 				i++;
 				if (i > i1) stop();
 			}, 30)
@@ -325,8 +311,6 @@ $(function () {
 		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
 		slider.on('input', function (event) {
 			animation.stop();
-			mapDirty = true;
-			chartDirty = true;
 		})
 	}
 
@@ -387,8 +371,8 @@ $(function () {
 			canvases
 				.attr({width:width, height:height})
 				.css({width:width/retina,height:height/retina});
-			me.redrawBg();
-			me.redrawFg();
+			redrawBg();
+			redrawFg();
 		}
 	}
 })
