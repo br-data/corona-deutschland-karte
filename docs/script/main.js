@@ -17,6 +17,12 @@ $(function () {
 		setTimeout(animation.play, 1000);
 	});
 
+	function highlight(e) {
+		if (!chart || !map) return;
+		chart.highlight(e);
+		map.highlight(e);
+	}
+
 	function initData(cb) {
 		let days = [];
 		for (let i = 0; i <= data.dayMax-data.dayMin; i++) days[i] = i;
@@ -25,25 +31,11 @@ $(function () {
 		data.landkreise.forEach(l => {
 			l.infected = days.map(d => data.days[d][l.index]);
 			l.normalized = l.infected.map(v => 100000*v/l.ew);
-			l.radius = l.infected.map(v => Math.sqrt(v)*0.002),
+			l.radius = l.infected.map(v => Math.sqrt(v)*0.002);
+			l.x0 = l.x;
+			l.y0 = l.y;
 
 			ewD += l.ew;
-
-			/*
-			l.marker = L.circle([l.y, l.x], {
-				radius:l.r,
-				stroke:false,
-				//weight:0.1,
-				//color:'#000000',
-				//opacity:1,
-				fillOpacity:1,
-				fillColor:colorStart,
-			});
-			l.marker.bindTooltip(l.title+'<br><small>'+l.type+'</small>');
-			l.marker.on('tooltipopen',  () => {highlight = [l]; chartDirty = true;});
-			l.marker.on('tooltipclose', () => {highlight = [];  chartDirty = true;});
-			map.addLayer(l.marker);
-			*/
 		});
 		data.deutschland = data.days.map(d => d.reduce((s,v) => s+v, 0)*100000/ewD)
 
@@ -52,6 +44,7 @@ $(function () {
 
 	function initMap() {
 		const maxValue = 150;
+		let highlightEntry = false;
 
 		const gradient = [
 			[150, 60, 40,1],
@@ -83,7 +76,7 @@ $(function () {
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
-			if (!changeChecker([opt, dayIndex])) return;
+			if (!changeChecker([opt, dayIndex, highlightEntry.index])) return;
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
@@ -93,21 +86,88 @@ $(function () {
 
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[dayIndex])
+
+				f.px = zoom*f.x + offsetX;
+				f.py = zoom*f.y + offsetY;
+				f.pr = zoom*f.radius[dayIndex];
 				
 				ctx.beginPath();
-				ctx.arc(
-					zoom*f.x + offsetX,
-					zoom*f.y + offsetY,
-					zoom*f.radius[dayIndex],
-					0,
-					2*Math.PI
-				);
+				ctx.arc(f.px, f.py, f.pr, 0, 2*Math.PI);
 				ctx.fill();
 			})
+
+			if (highlightEntry) {
+				ctx.strokeStyle = '#fff';
+				
+				ctx.font = 10*opt.retina + 'px sans-serif';
+				ctx.textAlign = 'left';
+
+				ctx.lineWidth = 2*opt.retina;
+				ctx.beginPath();
+				ctx.arc(highlightEntry.px, highlightEntry.py, highlightEntry.pr, 0, 2*Math.PI);
+				ctx.stroke();
+
+				let x = highlightEntry.px + highlightEntry.pr + 5*opt.retina;
+				let y = highlightEntry.py;
+				let m1 = ctx.measureText(highlightEntry.title);
+				let m2 = ctx.measureText(highlightEntry.type);
+				let p = 2*opt.retina;
+				let w = Math.max(m1.width, m2.width)+2*p;
+				let h = 10*opt.retina+p;
+				let r = 2*opt.retina;
+
+				ctx.fillStyle = '#fff';
+				ctx.beginPath();
+				ctx.moveTo(x+r, y-h);
+				ctx.arcTo(x+w, y-h, x+w, y+h, r);
+				ctx.arcTo(x+w, y+h, x, y+h, r);
+				ctx.arcTo(x, y+h, x, y-h, r);
+				ctx.arcTo(x, y-h, x+w, y-h, r);
+				ctx.fill();
+
+
+				ctx.fillStyle = '#000';
+				ctx.textBaseline = 'bottom';
+				ctx.fillText(highlightEntry.title, x+p, y);
+
+				ctx.fillStyle = '#888';
+				ctx.textBaseline = 'top';
+				ctx.fillText(highlightEntry.type, x+p, y);
+
+			/*
+			l.marker = L.circle([l.y, l.x], {
+				radius:l.r,
+				stroke:false,
+				//weight:0.1,
+				//color:'#000000',
+				//opacity:1,
+				fillOpacity:1,
+				fillColor:colorStart,
+			});
+			l.marker.bindTooltip(l.title+'<br><small>'+l.type+'</small>');
+			l.marker.on('tooltipopen',  () => {highlight = [l]; chartDirty = true;});
+			l.marker.on('tooltipclose', () => {highlight = [];  chartDirty = true;});
+			map.addLayer(l.marker);
+			*/
+			}
 		}
+
+		container.on('mousemove', e => {
+			let minD = 1e10, minF;
+			data.landkreise.forEach(f => {
+				let d = Math.sqrt(sqr(f.px - e.px) + sqr(f.py - e.py))-f.pr;
+				if (d < minD) {
+					minD = d;
+					minF = f;
+				}
+			})
+			highlight((minD < 10) && minF);
+		})
 
 		container.init();
 		initLegend();
+
+
 
 		function initLegend() {
 			let html = ['<table id="legend">'];
@@ -140,7 +200,12 @@ $(function () {
 		}
 
 		return {
-			redraw: container.redrawFg
+			redraw: container.redrawFg,
+			highlight: e => {
+				if (e === highlightEntry) return;
+				highlightEntry = e;
+				container.redrawFg()
+			}
 		}
 	}
 
@@ -148,7 +213,7 @@ $(function () {
 		const baseColor = '#fff';
 		let dayMin = data.dayMin, dayMax = data.dayMax;
 		let maxValue = 200, paddingTop = 5, paddingLeft = 25, paddingBottom = 20;
-		let highlightEntries = [];
+		let highlightEntry = false;
 
 		let container = new CanvasContainer('#chartContainer');
 		let changeChecker = new ChangeChecker();
@@ -220,7 +285,7 @@ $(function () {
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
-			if (!changeChecker([opt, dayIndex, highlightEntries.map(e => e.index)])) return;
+			if (!changeChecker([opt, dayIndex, highlightEntry.index])) return;
 
 			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
 			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, paddingTop*opt.retina);
@@ -228,31 +293,36 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
 
-			if (highlightEntries) {
+			if (highlightEntry) {
 				ctx.strokeStyle = 'rgba(255,184,0,1.0)';
 				ctx.fillStyle = 'rgba(255,184,0,0.2)';
-				highlightEntries.forEach(e => {
-					ctx.beginPath();
-					let path = e.normalized.map((v,i) => [projX.v2p(i),projY.v2p(v)]);
-					line(ctx, path, projY.v2p(0));
-					ctx.lineTo(projX.v2p(dayMax-dayMin), projY.v2p(0));
-					ctx.lineTo(projX.v2p(0), projY.v2p(0));
-					ctx.fill();
-					ctx.stroke();
-				});
+
+				ctx.beginPath();
+				highlightEntry.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
+				ctx.stroke();
+				ctx.lineTo(projX.v2p(dayMax-dayMin), projY.v2p(0));
+				ctx.lineTo(projX.v2p(0), projY.v2p(0));
+				ctx.fill();
 			}
 
+			ctx.setLineDash([1*opt.retina, 5*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
 			ctx.moveTo(projX.v2p(dayIndex), projY.v2p(maxValue));
 			ctx.lineTo(projX.v2p(dayIndex), projY.v2p(0));
 			ctx.stroke();
+			ctx.setLineDash([]);
 		}
 
 		container.init();
 
 		return {
 			redraw: container.redrawFg,
+			highlight: e => {
+				if (e === highlightEntry) return;
+				highlightEntry = e;
+				container.redrawFg()
+			}
 		}
 
 		function getProjection(v0,v1,p0,p1) {
@@ -361,11 +431,22 @@ $(function () {
 		let canvases = container.find('canvas');
 		let ctxBg = canvasBg.get(0).getContext('2d');
 		let ctxFg = canvasFg.get(0).getContext('2d');
-		
+
 		let me = {
 			init,
 			redrawBg,
-			redrawFg
+			redrawFg,
+			on,
+		}
+
+		function on(event, cb) {
+			event.split(' ').forEach(eventName => {
+				canvasFg.get(0).addEventListener(eventName, e => {
+					e.px = e.offsetX*retina;
+					e.py = e.offsetY*retina;
+					cb(e);
+				})
+			})
 		}
 
 		return me;
@@ -401,4 +482,7 @@ $(function () {
 		}
 	}
 
+	function sqr(v) {
+		return v*v;
+	}
 })
