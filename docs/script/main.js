@@ -459,6 +459,8 @@ $(function () {
 
 		function init() {
 			$(window).resize(updateLayout);
+			window.matchMedia('(resolution: 1dppx)').addListener(updateLayout);
+			window.matchMedia('(resolution: 2dppx)').addListener(updateLayout);
 			updateLayout()
 		}
 
