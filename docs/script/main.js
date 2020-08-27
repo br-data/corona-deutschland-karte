@@ -107,7 +107,7 @@ $(function () {
 				ctx.arc(highlightEntry.px, highlightEntry.py, highlightEntry.pr+1*opt.retina, 0, 2*Math.PI);
 				ctx.stroke();
 
-				let x = highlightEntry.px + highlightEntry.pr;
+				let x = highlightEntry.px;
 				let y = highlightEntry.py;
 				let m1 = ctx.measureText(highlightEntry.title);
 				let m2 = ctx.measureText(highlightEntry.type);
@@ -116,10 +116,10 @@ $(function () {
 				let h = 10*opt.retina+p;
 				let r = 2*opt.retina;
 
-				if (highlightEntry.px < offsetX) {
-					x += 5*opt.retina;
+				if (x < offsetX) {
+					x += highlightEntry.pr + 5*opt.retina;
 				} else {
-					x -= 5*opt.retina + w;
+					x -= highlightEntry.pr + 5*opt.retina + w;
 				}
 
 				ctx.fillStyle = '#fff';
