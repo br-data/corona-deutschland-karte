@@ -104,7 +104,7 @@ $(function () {
 
 				ctx.lineWidth = 2*opt.retina;
 				ctx.beginPath();
-				ctx.arc(highlightEntry.px, highlightEntry.py, highlightEntry.pr, 0, 2*Math.PI);
+				ctx.arc(highlightEntry.px, highlightEntry.py, highlightEntry.pr+1*opt.retina, 0, 2*Math.PI);
 				ctx.stroke();
 
 				let x = highlightEntry.px + highlightEntry.pr;
