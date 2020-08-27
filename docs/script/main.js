@@ -135,7 +135,6 @@ $(function () {
 				Math.round((c0[3]*(1-a) + a*c1[3])*100)/100+
 			')';
 
-			//console.log(v,c);
 			return c;
 		}
 
@@ -147,7 +146,7 @@ $(function () {
 	function initChart() {
 		const baseColor = '#fff';
 		let dayMin = data.dayMin, dayMax = data.dayMax;
-		let maxValue = 200, paddingLeft = 20, paddingBottom = 20;
+		let maxValue = 200, paddingTop = 5, paddingLeft = 25, paddingBottom = 20;
 		let highlightEntries = [];
 
 		let container = new CanvasContainer('#chartContainer');
@@ -156,7 +155,7 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 
 			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
-			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, 0);
+			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, paddingTop*opt.retina);
 
 			let x0 = projX.v2p(0);
 			let x1 = projX.v2p(dayMax-dayMin);
@@ -170,35 +169,48 @@ $(function () {
 			ctx.fillStyle = 'rgba(21,159,216,0.1)';
 			
 			ctx.beginPath();
-			let path = data.deutschland.map((v,i) => [projX.v2p(i),projY.v2p(v)]);
-			line(ctx, path);
+			data.deutschland.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
+			ctx.stroke();
 			ctx.lineTo(x1, y0);
 			ctx.lineTo(x0, y0);
 			ctx.fill();
-			ctx.stroke();
 
 			// draw axes
 
 			ctx.fillStyle = baseColor;
 			ctx.strokeStyle = baseColor;
-			ctx.textBaseline = 'top';
 			ctx.font = 10*opt.retina + 'px sans-serif';
 
 			ctx.beginPath();
 
-			line(ctx, [[x0,0],[,y0],[x1]]);
+			ctx.moveTo(x0, y1);
+			ctx.lineTo(x0, y0);
+			ctx.lineTo(x1, y0);
+
+			ctx.textBaseline = 'middle';
+			ctx.textAlign = 'right';
 			
 			for (let v = 0; v <= maxValue; v += 10) {
-				line(ctx, [[x0,projY.v2p(v)],[x0-(v % 50 === 0 ? 8 : 3)]]);
+				ctx.moveTo(x0, projY.v2p(v));
+				if (v % 50 === 0) {
+					ctx.lineTo(x0 - 4*opt.retina, projY.v2p(v));
+					ctx.fillText(v, x0 - 5*opt.retina, projY.v2p(v) + 0.5*opt.retina);
+				} else {
+					ctx.lineTo(x0 - 2*opt.retina, projY.v2p(v));
+				}
 			}
+
+			ctx.textBaseline = 'top';
+			ctx.textAlign = 'left';
 			
 			for (let v = dayMin; v <= dayMax; v++) {
 				let d = (new Date((v+0.5)*86400000));
 				let monthStart = (d.getDate() === 1);
 				
 				if (monthStart) {
-					line(ctx, [[projX.v2p(v-dayMin),y0],[,y0+8]]);	
-					text(ctx, months[d.getMonth()], [projX.v2p(v-dayMin)+3, y0+3]);
+					ctx.moveTo(projX.v2p(v-dayMin),y0);
+					ctx.lineTo(projX.v2p(v-dayMin),y0+6*opt.retina);
+					ctx.fillText(months[d.getMonth()], projX.v2p(v-dayMin)+2*opt.retina, y0+2*opt.retina);
 				}
 			}
 
@@ -207,7 +219,7 @@ $(function () {
 
 		container.drawFg = function drawChartFg (ctx, opt) {
 			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
-			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, 0);
+			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, paddingTop*opt.retina);
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
@@ -259,38 +271,6 @@ $(function () {
 			function p2v(p) {
 				return p/s + offsetV;
 			}
-		}
-
-		function text(ctx, text, point) {
-			ctx.fillText(text, point[0], point[1]);
-		}
-
-		function line(ctx, path) {
-			path.forEach((p, i) => {
-				if (p[0] === undefined) p[0] = path[i-1][0];
-				if (p[1] === undefined) p[1] = path[i-1][1];
-				if (i === 0) {
-					ctx.moveTo(p[0], p[1]);
-				} else {
-					ctx.lineTo(p[0], p[1]);
-				}
-			})
-		}
-
-		function curve(ctx, path, zero) {
-			let p0, p1;
-			path.forEach((p2, i) => {
-				if (i === 0) {
-					ctx.moveTo(p2[0]*retina, p2[1]*retina);
-					p1 = p2;
-				} else {
-					let b = (p2[1]-p0[1])/(p2[0]-p0[0])*(p2[0]-p1[0])+p1[1];
-					if (b > zero) b = zero;
-					ctx.quadraticCurveTo(p2[0]*retina, b*retina, p2[0]*retina, p2[1]*retina);
-				}
-				p0 = p1;
-				p1 = p2;
-			})
 		}
 	}
 
