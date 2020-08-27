@@ -6,6 +6,10 @@ body {
 	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
 }
 
+a {
+	color: #fff;
+}
+
 #wrapper {
 	position: relative;
 	height: 600px;
