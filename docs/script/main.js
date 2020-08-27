@@ -199,7 +199,7 @@ $(function () {
 	}
 
 	function initChart() {
-		const baseColor = '#fff';
+		const baseColor = 'rgba(255,255,255,0.5)';
 		let dayMin = data.dayMin, dayMax = data.dayMax;
 		let maxValue = 200, paddingTop = 5, paddingLeft = 25, paddingBottom = 20;
 		let highlightEntry = false;
