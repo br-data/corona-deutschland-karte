@@ -131,7 +131,6 @@ $(function () {
 				ctx.arcTo(x, y-h, x+w, y-h, r);
 				ctx.fill();
 
-
 				ctx.fillStyle = '#000';
 				ctx.textBaseline = 'bottom';
 				ctx.fillText(highlightEntry.title, x+p, y);
@@ -139,22 +138,6 @@ $(function () {
 				ctx.fillStyle = '#888';
 				ctx.textBaseline = 'top';
 				ctx.fillText(highlightEntry.type, x+p, y);
-
-			/*
-			l.marker = L.circle([l.y, l.x], {
-				radius:l.r,
-				stroke:false,
-				//weight:0.1,
-				//color:'#000000',
-				//opacity:1,
-				fillOpacity:1,
-				fillColor:colorStart,
-			});
-			l.marker.bindTooltip(l.title+'<br><small>'+l.type+'</small>');
-			l.marker.on('tooltipopen',  () => {highlight = [l]; chartDirty = true;});
-			l.marker.on('tooltipclose', () => {highlight = [];  chartDirty = true;});
-			map.addLayer(l.marker);
-			*/
 			}
 		}
 
