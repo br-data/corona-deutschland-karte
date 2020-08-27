@@ -29,10 +29,12 @@ $(function () {
 		let days = [];
 		for (let i = 0; i <= data.dayMax-data.dayMin; i++) days[i] = i;
 
-		
+		let ewD = 0;
 		data.landkreise.forEach(l => {
 			l.blurred = days.map(d => data.days[d][l.index]);
 			l.normalized = l.blurred.map(v => 100000*v/l.ew);
+
+			ewD += l.ew;
 
 			/*
 			l.marker = L.circle([l.y, l.x], {
@@ -50,6 +52,7 @@ $(function () {
 			map.addLayer(l.marker);
 			*/
 		});
+		data.deutschland = data.days.map(d => d.reduce((s,v) => s+v, 0)*100000/ewD)
 
 		cb();
 	}
@@ -59,7 +62,6 @@ $(function () {
 
 		const gradient = [
 			[150, 60, 40,1],
-			//[209, 38, 55,1],
 			[ 60, 80, 70,1],
 			[ 30,100, 80,1],
 			[  0,100,100,1],
@@ -176,11 +178,6 @@ $(function () {
 		function drawChart1() {
 			ctx1.clearRect(0,0,width,height);
 
-			ctx1.fillStyle = baseColor;
-			ctx1.strokeStyle = baseColor;
-			ctx1.textBaseline = 'top';
-			ctx1.font = 10*retina + 'px sans-serif';
-
 			let x0 = v2x(dayMin);
 			let x1 = v2x(dayMax);
 			let y0 = v2y(0);
@@ -188,55 +185,25 @@ $(function () {
 
 			// draw chart
 
-			let histo = [];
-			for (let x = 0; x < (width-paddingLeft)*retina; x++) {
-				let d = x2v(x/retina + paddingLeft) - dayMin;
-				let d0 = Math.floor(d);
-				if (d0 < 0) d0 = 0;
-				if (d0 > dayMax-1) d0 = dayMax-1;
-				let a = Math.min(1,Math.max(0,d-d0));
-				let h0 = data.histo[d0];
-				let h1 = data.histo[d0+1];
-				let p = [0];
-				for (let i = 0; i < 15; i++) p[i+1] = h0[i]*(1-a) + a*h1[i];
-				histo[x] = p;
-			}
-
-			let img = ctx1.getImageData(
-				retina*paddingLeft,
-				0,
-				retina*(width-paddingLeft),
-				retina*(height-paddingBottom)
-			)
-
-			for (let x = 0; x < img.width; x++) {
-				h = histo[x];
-				let i = 15;
-				for (let y = 0; y < img.height; y++) {
-					let v = y2v(y/retina);
-					while (h[i] > v) i--;
-					let color;
-					if (i === 15) {
-						color = 255
-					} else {
-						let v0 = h[i];
-						let v1 = h[i+1];
-						let c0 = i/15;
-						let c1 = (i+1)/15;
-						//color = (c0+c1)/2;
-						color = ((v-v0)/(v1-v0)*(c1-c0)+c0);
-					}
-					let index = (y*img.width+x)*4;
-					img.data[index+0] = 255;
-					img.data[index+1] = 255;
-					img.data[index+2] = 255;
-					img.data[index+3] = 170*(1-color);
-				}
-			}
-
-			ctx1.putImageData(img,x0*retina,y1*retina);
+			ctx1.lineWidth = 1*retina;
+			ctx1.strokeStyle = 'rgba(11,159,216,0.5)';
+			ctx1.fillStyle = 'rgba(21,159,216,0.1)';
+			
+			ctx1.beginPath();
+			let path = data.deutschland.map((v,i) => [v2x(i+dayMin),v2y(v)]);
+			line(ctx1, path, v2y(0));
+			ctx1.lineTo(x1*retina, y0*retina);
+			ctx1.lineTo(x0*retina, y0*retina);
+			ctx1.fill();
+			ctx1.stroke();
 
 			// draw axes
+
+			ctx1.fillStyle = baseColor;
+			ctx1.strokeStyle = baseColor;
+			ctx1.textBaseline = 'top';
+			ctx1.font = 10*retina + 'px sans-serif';
+
 			ctx1.beginPath();
 
 			line(ctx1, [[x0,0],[,y0],[width]]);
@@ -267,8 +234,8 @@ $(function () {
 			ctx2.lineWidth = 1*retina;
 
 			if (entries) {
-				ctx2.strokeStyle = 'rgba(251,184,0,1.0)';
-				ctx2.fillStyle = 'rgba(251,184,0,0.2)';
+				ctx2.strokeStyle = 'rgba(255,184,0,1.0)';
+				ctx2.fillStyle = 'rgba(255,184,0,0.2)';
 				entries.forEach(e => {
 					ctx2.beginPath();
 					let path = e.normalized.map((v,i) => [v2x(i+dayMin),v2y(v)]);

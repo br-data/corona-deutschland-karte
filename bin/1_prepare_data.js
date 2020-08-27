@@ -106,26 +106,11 @@ file = resolve(folder, file);
 		return s;
 	}))
 
-	let histo = days.map(d => {
-		let values = landkreise.map(l => [d[l.index]/l.ew*100000, l.ew]);
-		values.sort((a,b) => a[0]-b[0]);
-		values.reduce((s,v) => v[1] = (s += v[1]), 0);
-		values.forEach(v => v[1] *= 15/83128805, 0);
-		let i = 0.5;
-		values = values.filter(v => {
-			if (v[1] < i) return false;
-			i += 1;
-			return true;
-		})
-		return values.map(v => Math.round(v[0]*100)/100);
-	})
-
 	let result = {
 		dayMin,
 		dayMax,
 		landkreise,
 		days,
-		histo,
 	}
 	
 	console.log('   save');
