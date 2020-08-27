@@ -1,19 +1,18 @@
 
 
 $(function () {
-	let day, animation, map;
+	let dayIndex, animation, map;
 	let data = window.fvOZwtTDlpiMFxSV;
-	let slider, sliderLabel;
+	let slider;
 	let chart;
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 
-	map = initMap();
 	initData(() => {
-		initSlider();
-
+		slider = initSlider();
 		chart = initChart();
-
+		map = initMap();
 		animation = initAnimation();
+
 		$('#button_play').click(animation.play);
 		setTimeout(animation.play, 1000);
 	});
@@ -55,12 +54,13 @@ $(function () {
 
 		const gradient = [
 			[150, 60, 40,1],
-			[ 60, 80, 70,1],
-			[ 30,100, 80,1],
-			[  0,100,100,1],
+			[ 60, 60, 70,1],
+			[ 30, 90, 80,1],
+			[  0, 80,100,1],
 		].map(hsv2rgb);
 
 		let container = new CanvasContainer('#mapContainer');
+		let changeChecker = new ChangeChecker();
 
 		container.drawBg = function drawMapBg (ctx, opt) {
 			ctx.clearRect(0,0,opt.width,opt.height);
@@ -82,26 +82,22 @@ $(function () {
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
+			if (!changeChecker([opt, dayIndex])) return;
+
 			ctx.clearRect(0,0,opt.width,opt.height);
-
-			if (!slider) return;
-
-			day = Math.round(slider.val());
-			sliderLabel.text((new Date(day*86400000)).toLocaleDateString());
-			day -= data.dayMin;
 
 			let zoom = opt.width/2;
 			let offsetX = opt.width/2;
 			let offsetY = opt.height/2;
 
 			data.landkreise.forEach(f => {
-				ctx.fillStyle = value2color(f.normalized[day])
+				ctx.fillStyle = value2color(f.normalized[dayIndex])
 				
 				ctx.beginPath();
 				ctx.arc(
 					zoom*f.x + offsetX,
 					zoom*f.y + offsetY,
-					zoom*Math.sqrt(f.blurred[day])*0.001,
+					zoom*Math.sqrt(f.blurred[dayIndex])*0.001,
 					0,
 					2*Math.PI
 				);
@@ -125,13 +121,9 @@ $(function () {
 		}
 
 		function value2color(v) {
-			v = Math.max(0, Math.min(1, v/maxValue));
+			v = Math.max(0, Math.min(1, v/maxValue))*(gradient.length-1);
 
-			v *= gradient.length-1;
-
-			//debugger;
-
-			let i = Math.min(Math.floor(v), gradient.length-2);
+			let i = Math.max(0,Math.min(Math.floor(v), gradient.length-2));
 			let c0 = gradient[i];
 			let c1 = gradient[i+1];
 			let a = v-i;
@@ -158,6 +150,7 @@ $(function () {
 		let highlightEntries = [];
 
 		let container = new CanvasContainer('#chartContainer');
+		let changeChecker = new ChangeChecker();
 
 		container.drawBg = function drawChartBg (ctx, opt) {
 			ctx.clearRect(0,0,opt.width,opt.height);
@@ -226,6 +219,8 @@ $(function () {
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
+			if (!changeChecker([opt, dayIndex, highlightEntries.map(e => e.index)])) return;
+
 			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
 			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, paddingTop*opt.retina);
 
@@ -248,8 +243,8 @@ $(function () {
 
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
-			ctx.moveTo(projX.v2p(day), projY.v2p(maxValue));
-			ctx.lineTo(projX.v2p(day), projY.v2p(0));
+			ctx.moveTo(projX.v2p(dayIndex), projY.v2p(maxValue));
+			ctx.lineTo(projX.v2p(dayIndex), projY.v2p(0));
 			ctx.stroke();
 		}
 
@@ -281,11 +276,11 @@ $(function () {
 		return {play, stop}
 
 		function play() {
-			let i0 = parseFloat(slider.attr('min'));
-			let i1 = parseFloat(slider.attr('max'));
+			let i0 = 0;
+			let i1 = data.dayMax-data.dayMin;
 			let i = i0;
 			playInterval = setInterval(() => {
-				slider.val(i);
+				slider.setValue(i);
 				chart.redraw();
 				map.redraw();
 				i++;
@@ -301,17 +296,35 @@ $(function () {
 	}
 
 	function initSlider() {
-		slider = $('#slider');
-		sliderLabel = $('#slider_label');
+		let slider = $('#slider');
+		let sliderLabel = $('#slider_label');
 		slider.attr({
-			min:data.dayMin,
-			max:data.dayMax,
+			min:0,
+			max:data.dayMax-data.dayMin,
 		})
-		slider.val(data.dayMin);
 		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
 		slider.on('input', function (event) {
+			dayIndex = Math.round(slider.val());
+			updateLabel();
+			map.redraw();
+			chart.redraw();
 			animation.stop();
 		})
+		setValue(0);
+
+		function setValue(index) {
+			slider.val(index);
+			dayIndex = index
+			updateLabel();
+		}
+
+		function updateLabel() {
+			sliderLabel.text((new Date((dayIndex+data.dayMin)*86400000)).toLocaleDateString());
+		}
+
+		return {
+			setValue
+		}
 	}
 
 	function hsv2rgb(c) {
@@ -375,4 +388,15 @@ $(function () {
 			redrawFg();
 		}
 	}
+
+	function ChangeChecker() {
+		let state;
+		return function check(value) {
+			value = JSON.stringify(value);
+			if (value === state) return false;
+			state = value;
+			return true;
+		}
+	}
+
 })
