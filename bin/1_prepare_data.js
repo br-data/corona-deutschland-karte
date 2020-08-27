@@ -18,7 +18,7 @@ const centerY = 51.1846362;
 const scaleY = 2/7;
 const scaleX = scaleY*Math.cos(centerY*Math.PI/180);
 
-let landkreise = JSON.parse(fs.readFileSync(resolve(folder, 'landkreise.geojson')));
+let landkreise = JSON.parse(fs.readFileSync(resolve(folder, 'landkreise.geo.json')));
 landkreise = landkreise.features.map(f => {
 	let sx = 0, sy = 0, s = 0;
 	scan(f.geometry.coordinates, (f.geometry.type === 'Polygon') ? 2 : 3);
