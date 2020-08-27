@@ -17,7 +17,7 @@ console.log('start with landkreise');
 
 const centerX = 10.4541236;
 const centerY = 51.1846362;
-const scaleY = 2/7;
+const scaleY = 2/6;
 const scaleX = scaleY*Math.cos(centerY*Math.PI/180);
 
 let landkreise = JSON.parse(fs.readFileSync(resolve(folder, 'landkreise.geo.json')));
