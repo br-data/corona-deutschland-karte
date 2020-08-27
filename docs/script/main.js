@@ -23,8 +23,9 @@ $(function () {
 
 		let ewD = 0;
 		data.landkreise.forEach(l => {
-			l.blurred = days.map(d => data.days[d][l.index]);
-			l.normalized = l.blurred.map(v => 100000*v/l.ew);
+			l.infected = days.map(d => data.days[d][l.index]);
+			l.normalized = l.infected.map(v => 100000*v/l.ew);
+			l.radius = l.infected.map(v => Math.sqrt(v)*0.002),
 
 			ewD += l.ew;
 
@@ -97,7 +98,7 @@ $(function () {
 				ctx.arc(
 					zoom*f.x + offsetX,
 					zoom*f.y + offsetY,
-					zoom*Math.sqrt(f.blurred[dayIndex])*0.001,
+					zoom*f.radius[dayIndex],
 					0,
 					2*Math.PI
 				);
