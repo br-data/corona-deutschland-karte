@@ -304,8 +304,8 @@ $(function () {
 		const changeCheckerLayout = new ChangeChecker();
 
 		function relayout(opt) {
-			paddingTop = 5*opt.retina;
-			paddingLeft = 25*opt.retina;
+			paddingTop = 7*opt.retina;
+			paddingLeft = 50*opt.retina;
 			paddingRight = 1*opt.retina;
 			paddingBottom = 20*opt.retina;
 
@@ -378,6 +378,12 @@ $(function () {
 			}
 
 			ctx.stroke();
+
+			ctx.rotate(-Math.PI/2);
+			ctx.textBaseline = 'top';
+			ctx.textAlign = 'center';
+			ctx.fillText('Innerhalb von 7 Tagen gemeldete Infektionen auf 100.000 Einwohner_innen', -(y0+y1)/2, 5*opt.retina);
+			ctx.setTransform(1, 0, 0, 1, 0, 0);
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
