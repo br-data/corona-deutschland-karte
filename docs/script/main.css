@@ -1,13 +1,12 @@
+html {
+	background: #1d2029;
+}
 
 body {
 	margin: 0;
 	font-family: Open Sans,Arial,Helvetica,sans-serif;
 	color: #000;
 	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
-}
-
-a {
-	color: #000;
 }
 
 #wrapper {
@@ -37,120 +36,5 @@ a {
 
 #chartContainer {
 	width: calc(100vw - 75vh);
-	height: calc(100vh - 60px);
+	height: calc(100vh);
 }
-
-/*
-#slider_container {
-	position: absolute;
-	left: 0px;
-	bottom: 0px;
-	width: calc(100vw - 75vh);
-	z-index: 2000;
-}
-
-#slider_container input {
-	position: absolute;
-	background: transparent;
-	height: 1rem;
-}
-
-#slider_label {
-	display: inline-block;
-	text-align: right;
-	width: 60px;
-}
-*/
-#button_play {
-	font-family: Open Sans,Helvetica,Arial,sans-serif;
-	font-size: 24px;
-	font-weight: 400;
-	hyphens: auto;
-	line-height: 41px;
-	text-indent: 5px;
-	box-sizing: inherit;
-	display: inline-block;
-	width: 40px;
-	height: 40px;
-	border-radius: 50%;
-	background: #fff;
-	margin-left: 10px;
-	text-align: center;
-	cursor: pointer;
-	color: #333541;
-	transition: color .1s;
-}
-
-#button-play:hover {
-	color: #e64242
-}
-/*
-input[type=range] {
-	-webkit-appearance:none;
-	vertical-align:middle;
-	width:100%;
-	margin:0;
-	padding:0;
-	background:none
-}
-input[type=range]:focus {
-	outline:none
-}
-input[type=range]::-webkit-slider-runnable-track {
-	outline:none;
-	width:100%;
-	height:3px;
-	cursor:pointer;
-	background:#aaa;
-	border-radius:3px;
-}
-input[type=range]::-webkit-slider-thumb {
-	height:20px;
-	width:20px;
-	border-radius:50%;
-	background:#fff;
-	cursor:pointer;
-	-webkit-appearance:none;
-	margin-top:-8px
-}
-input[type=range]::-moz-range-track {
-	width:100%;
-	height:3px;
-	cursor:pointer;
-	background:#aaa;
-	border-radius:3px;
-}
-input[type=range]::-moz-range-thumb {
-	border:0;
-	height:20px;
-	width:20px;
-	border-radius:50%;
-	background:#fff;
-	cursor:pointer
-}
-input[type=range]::-moz-focus-outer {
-	border:0
-}
-input[type=range]::-ms-track {
-	width:100%;
-	height:3px;
-	background:transparent;
-	border-color:transparent;
-	border-width:12px 0;
-	color:transparent
-}
-input[type=range]::-ms-thumb {
-	border:none;
-	height:20px;
-	width:20px;
-	border-radius:50%;
-	background:#fff
-}
-input[type=range]::-ms-fill-lower,input[type=range]::-ms-fill-upper {
-	background:#aaa;
-	border-radius:3px
-}
-input[type=range]:focus::-ms-fill-lower,input[type=range]:focus::-ms-fill-upper {
-	background:#aaa
-}
-*/
