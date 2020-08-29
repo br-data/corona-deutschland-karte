@@ -70,7 +70,7 @@ console.log('start with deutschland');
 
 let deutschland = JSON.parse(fs.readFileSync(resolve(folder, 'deutschland.geo.json')));
 deutschland = deutschland.features[0].geometry.coordinates;
-deutschland = deutschland.map(p => p[0]).filter(p => p.length > 100);
+deutschland = deutschland.map(p => p[0]).filter(p => p.length > 15);
 
 deutschland = deutschland.map(poly => poly.map(p => ([
 	Math.round( (p[0]-centerX)*scaleX*10000)/10000,
