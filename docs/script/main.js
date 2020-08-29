@@ -96,6 +96,8 @@ $(function () {
 			})
 			ctx.stroke();
 			ctx.fill();
+
+			drawLegend(ctx, opt)
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
@@ -230,20 +232,37 @@ $(function () {
 		})
 
 		container.init();
-		initLegend();
 
 
+		function drawLegend(ctx, opt) {
+			let width = 10*opt.retina;
+			let padding = 10*opt.retina;
+			let step = 1*opt.retina;
+			let x0 = opt.width - padding - width;
 
-		function initLegend() {
-			let html = ['<table id="legend">'];
-			for (let v = maxValue; v >= 0; v -= 10) {
-				let color = value2color(v);
-				let text = (v % 50 === 0) ? v : '';
-				html.push('<tr><td>'+text+'</td><td style="background:'+color+'"></td></tr>');
+			for (let y = 0; y <= maxValue*step; y++) {
+				let y0 = opt.height-padding-y;
+
+				ctx.fillStyle = value2color(y/step);
+				ctx.fillRect(x0,y0,width,1);
 			}
-			html.push('</table>');
 
-			$('#mapContainer').append($(html.join('')));
+			for (let v = 0; v <= maxValue; v += 50) {
+				let y = opt.height - padding - v*step;
+
+				ctx.beginPath();
+				ctx.strokeStyle = baseColor;
+				ctx.moveTo(x0-3*opt.retina, y+0.5);
+				ctx.lineTo(x0+width, y+0.5);
+				ctx.stroke();
+
+				ctx.textBaseline = 'middle';
+
+				ctx.font = 10*opt.retina + 'px sans-serif';
+				ctx.fillStyle = baseColor;
+				ctx.textAlign = 'right';
+				ctx.fillText(v, x0-6*opt.retina, y);
+			}
 		}
 
 		function value2color(v) {

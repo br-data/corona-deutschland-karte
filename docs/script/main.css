@@ -40,12 +40,6 @@ a {
 	height: calc(100vh - 60px);
 }
 
-#legend {
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
-}
-
 #slider_container {
 	position: absolute;
 	left: 0px;
@@ -77,25 +71,6 @@ a {
 
 .leaflet-tooltip small {
 	color: #888;
-}
-
-#legend { 
-	border-spacing: 0px;
-	border-collapse: collapse;
-}
-
-#legend td {
-	margin: 0;
-	width: 10px;
-	height: 10px;
-	font-size: 10px;
-	line-height: 0;
-}
-
-#legend td:first-child {
-	width: auto;
-	text-align: right;
-	padding-right: 3px;
 }
 
 #button_play {
