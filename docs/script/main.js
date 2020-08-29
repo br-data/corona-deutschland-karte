@@ -15,7 +15,10 @@ $(function () {
 		animation = initAnimation();
 
 		$('#button_play').click(animation.play);
-		setTimeout(animation.play, 1000);
+		slider.setValue(data.dayMax-data.dayMin);
+		map.redraw();
+		chart.redraw();
+		//setTimeout(animation.play, 1000);
 	});
 
 	function highlight(e) {
@@ -58,35 +61,37 @@ $(function () {
 	function initMap() {
 		const maxValue = 150;
 		let highlightEntry = false;
-/*
+		let zoom, offsetX, offsetY;
+		
 		const gradient = [
-			[150, 60, 40,1],
-			[ 60, 60, 70,1],
-			[ 30, 90, 80,1],
-			[  0, 80,100,1],
-		].map(hsv2rgb);*/
-
-		const gradient = [
-			[ 60,  0, 50],
 			[ 60,100, 90],
 			[ 30,100,100],
-			[  0,100, 90],
+			[  0,100, 80],
 			[  0,100, 40],
 		].map(hsv2rgb);
 
 		let container = new CanvasContainer('#mapContainer');
-		let changeChecker = new ChangeChecker();
+		let changeCheckerDraw = new ChangeChecker();
+		let changeCheckerLayout = new ChangeChecker();
+
+		function relayout(opt) {
+			zoom = opt.width/2;
+			offsetX = opt.width/2;
+			offsetY = opt.height/2;
+		}
 
 		container.drawBg = function drawMapBg (ctx, opt) {
+			if (!changeCheckerLayout(opt)) return;
+
+			relayout(opt);
+
 			ctx.clearRect(0,0,opt.width,opt.height);
 
-			let zoom = opt.width/2;
-			let offsetX = opt.width/2;
-			let offsetY = opt.height/2;
-
-			ctx.strokeStyle = 'rgba(0,0,0,0.5)';
-			ctx.fillStyle = '#eee';
-			ctx.lineWidth = 0.5*opt.retina;
+			ctx.fillStyle = '#fff';
+			ctx.shadowBlur = 20*opt.retina;
+			ctx.shadowColor = 'rgba(255,255,255,1)';
+			ctx.shadowOffsetX = 0;
+			ctx.shadowOffsetY = 0;
 			
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
@@ -94,20 +99,19 @@ $(function () {
 					(i?ctx.lineTo:ctx.moveTo).call(ctx,zoom*p[0]+offsetX,zoom*p[1]+offsetY)
 				})
 			})
-			ctx.stroke();
 			ctx.fill();
+
+			ctx.shadowColor = 'transparent';
 
 			drawLegend(ctx, opt)
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
-			if (!changeChecker([opt, dayIndex, highlightEntry.index])) return;
+			if (changeCheckerLayout(opt)) relayout(opt);
+
+			if (!changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
 
 			ctx.clearRect(0,0,opt.width,opt.height);
-
-			let zoom = opt.width/2;
-			let offsetX = opt.width/2;
-			let offsetY = opt.height/2;
 
 			const minStep = 0.002;
 			data.landkreise.forEach(f => {
@@ -294,22 +298,35 @@ $(function () {
 
 	function initChart() {
 		let dayMin = data.dayMin, dayMax = data.dayMax;
-		let maxValue = 200, paddingTop = 5, paddingLeft = 25, paddingBottom = 20;
+		let maxValue = 200;
+		let paddingTop, paddingLeft, paddingRight, paddingBottom;
+		let projX, projY, x0, x1, y0, y1;
 		let highlightEntry = false;
 
 		let container = new CanvasContainer('#chartContainer');
-		let changeChecker = new ChangeChecker();
+		let changeCheckerDraw   = new ChangeChecker();
+		let changeCheckerLayout = new ChangeChecker();
+
+		function relayout(opt) {
+			paddingTop = 5*opt.retina;
+			paddingLeft = 25*opt.retina;
+			paddingRight = 1*opt.retina;
+			paddingBottom = 20*opt.retina;
+
+			projX = getProjection(0, dayMax-dayMin, paddingLeft, opt.width - paddingRight);
+			projY = getProjection(0, maxValue, opt.height - paddingBottom, paddingTop);
+
+			x0 = projX.v2p(0);
+			x1 = projX.v2p(dayMax-dayMin);
+			y0 = projY.v2p(0);
+			y1 = projY.v2p(maxValue);
+		}
 
 		container.drawBg = function drawChartBg (ctx, opt) {
+			if (!changeCheckerLayout(opt)) return;
+			relayout(opt);
+
 			ctx.clearRect(0,0,opt.width,opt.height);
-
-			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
-			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, paddingTop*opt.retina);
-
-			let x0 = projX.v2p(0);
-			let x1 = projX.v2p(dayMax-dayMin);
-			let y0 = projY.v2p(0);
-			let y1 = projY.v2p(maxValue);
 
 			// draw chart
 
@@ -367,10 +384,9 @@ $(function () {
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
-			if (!changeChecker([opt, dayIndex, highlightEntry.index])) return;
+			if (changeCheckerLayout(opt)) relayout(opt);
 
-			let projX = getProjection(0, dayMax-dayMin, paddingLeft*opt.retina, opt.width);
-			let projY = getProjection(0, maxValue, opt.height - paddingBottom*opt.retina, paddingTop*opt.retina);
+			if (!changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
@@ -382,16 +398,16 @@ $(function () {
 				ctx.beginPath();
 				highlightEntry.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
 				ctx.stroke();
-				ctx.lineTo(projX.v2p(dayMax-dayMin), projY.v2p(0));
-				ctx.lineTo(projX.v2p(0), projY.v2p(0));
+				ctx.lineTo(x1, y0);
+				ctx.lineTo(x0, y0);
 				ctx.fill();
 			}
 
 			ctx.setLineDash([1*opt.retina, 3*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
-			ctx.moveTo(projX.v2p(dayIndex), projY.v2p(maxValue));
-			ctx.lineTo(projX.v2p(dayIndex), projY.v2p(0));
+			ctx.moveTo(projX.v2p(dayIndex), y1);
+			ctx.lineTo(projX.v2p(dayIndex), y0);
 			ctx.stroke();
 			ctx.setLineDash([]);
 		}
