@@ -1,5 +1,4 @@
 
-
 $(function () {
 	let dayIndex, animation, map;
 	let data = window.fvOZwtTDlpiMFxSV;
@@ -66,8 +65,8 @@ $(function () {
 		const gradient = [
 			[ 60,100, 90],
 			[ 30,100,100],
-			[  0,100, 80],
-			[  0,100, 40],
+			[  0,100, 70],
+			[  0,100, 30],
 		].map(hsv2rgb);
 
 		let container = new CanvasContainer('#mapContainer');
@@ -130,12 +129,6 @@ $(function () {
 			data.pairs.forEach(p => {
 				let f0 = p[0];
 				let f1 = p[1];
-
-				//ctx.strokeStyle = 'rgb('+Math.floor(Math.random()*256)+','+Math.floor(Math.random()*256)+','+Math.floor(Math.random()*256)+')';
-				//ctx.beginPath();
-				//ctx.moveTo(f0.px, f0.py);
-				//ctx.lineTo(f1.px, f1.py);
-				//ctx.stroke();
 
 				let dx = f0.x - f1.x;
 				let dy = f0.y - f1.y;
@@ -200,14 +193,8 @@ $(function () {
 				ctx.arcTo( x  , y+h, x  , y-h, r);
 				ctx.arcTo( x  , y-h, x+w, y-h, r);
 
-				//ctx.shadowBlur = 2*opt.retina;
-				//ctx.shadowColor = 'rgba(0,0,0,0.2)';
-				//ctx.shadowOffsetX = 2*opt.retina;
-				//ctx.shadowOffsetY = 2*opt.retina;
 				ctx.fillStyle = '#fff';
 				ctx.fill();
-				//ctx.shadowBlur = 0;
-				//ctx.shadowColor = 'transparent';
 
 				ctx.lineWidth = 1*opt.retina;
 				ctx.strokeStyle = 'rgba(0,0,0,1)';
@@ -247,24 +234,25 @@ $(function () {
 			for (let y = 0; y <= maxValue*step; y++) {
 				let y0 = opt.height-padding-y;
 
-				ctx.fillStyle = value2color(y/step);
-				ctx.fillRect(x0,y0,width,1);
+				ctx.strokeStyle = value2color(y/step);
+				ctx.beginPath();
+				ctx.lineH(x0,y0,x0+width);
+				ctx.stroke();
 			}
+
+			ctx.textBaseline = 'middle';
+			ctx.font = 10*opt.retina + 'px sans-serif';
+			ctx.fillStyle = baseColor;
+			ctx.textAlign = 'right';
 
 			for (let v = 0; v <= maxValue; v += 50) {
 				let y = opt.height - padding - v*step;
 
 				ctx.beginPath();
 				ctx.strokeStyle = baseColor;
-				ctx.moveTo(x0-3*opt.retina, y+0.5);
-				ctx.lineTo(x0+width, y+0.5);
+				ctx.lineH(x0-3*opt.retina, y, x0+width);
 				ctx.stroke();
 
-				ctx.textBaseline = 'middle';
-
-				ctx.font = 10*opt.retina + 'px sans-serif';
-				ctx.fillStyle = baseColor;
-				ctx.textAlign = 'right';
 				ctx.fillText(v, x0-6*opt.retina, y);
 			}
 		}
@@ -330,7 +318,7 @@ $(function () {
 
 			// draw chart
 
-			ctx.lineWidth = 1*opt.retina;
+			ctx.lineWidth = 1;
 			ctx.strokeStyle = 'rgba(11,159,216,0.5)';
 			ctx.fillStyle = 'rgba(21,159,216,0.1)';
 			
@@ -349,20 +337,19 @@ $(function () {
 
 			ctx.beginPath();
 
-			ctx.moveTo(x0, y1);
-			ctx.lineTo(x0, y0);
-			ctx.lineTo(x1, y0);
+			ctx.lineV(x0,y0,y1);
+			ctx.lineH(x0,y0,x1);
 
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'right';
 			
 			for (let v = 0; v <= maxValue; v += 10) {
-				ctx.moveTo(x0, projY.v2p(v));
+				let y = projY.v2p(v);
 				if (v % 50 === 0) {
-					ctx.lineTo(x0 - 4*opt.retina, projY.v2p(v));
-					ctx.fillText(v, x0 - 5*opt.retina, projY.v2p(v) + 0.5*opt.retina);
+					ctx.lineH(x0, y, x0 - 4*opt.retina);
+					ctx.fillText(v, x0 - 5*opt.retina, y + 0.5*opt.retina);
 				} else {
-					ctx.lineTo(x0 - 2*opt.retina, projY.v2p(v));
+					ctx.lineH(x0, y, x0 - 2*opt.retina);
 				}
 			}
 
@@ -374,8 +361,7 @@ $(function () {
 				let monthStart = (d.getDate() === 1);
 				
 				if (monthStart) {
-					ctx.moveTo(projX.v2p(v-dayMin),y0);
-					ctx.lineTo(projX.v2p(v-dayMin),y0+6*opt.retina);
+					ctx.lineV(projX.v2p(v-dayMin), y0, y0+6*opt.retina);
 					ctx.fillText(months[d.getMonth()], projX.v2p(v-dayMin)+2*opt.retina, y0+2*opt.retina);
 				}
 			}
@@ -406,8 +392,7 @@ $(function () {
 			ctx.setLineDash([1*opt.retina, 3*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
-			ctx.moveTo(projX.v2p(dayIndex), y1);
-			ctx.lineTo(projX.v2p(dayIndex), y0);
+			ctx.lineV(projX.v2p(dayIndex), y1, y0);
 			ctx.stroke();
 			ctx.setLineDash([]);
 		}
@@ -587,3 +572,15 @@ $(function () {
 		return v*v;
 	}
 })
+
+CanvasRenderingContext2D.prototype.lineH = function (x0,y0,x1) {
+	this.moveTo(Math.round(x0), Math.round(y0) + 0.5)
+	this.lineTo(Math.round(x1), Math.round(y0) + 0.5)
+}
+
+CanvasRenderingContext2D.prototype.lineV = function (x0,y0,y1) {
+	this.moveTo(Math.round(x0) + 0.5, Math.round(y0))
+	this.lineTo(Math.round(x0) + 0.5, Math.round(y1))
+}
+
+
