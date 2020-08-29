@@ -3,7 +3,7 @@ body {
 	margin: 0;
 	font-family: Open Sans,Arial,Helvetica,sans-serif;
 	color: #000;
-	background: #fff;
+	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
 }
 
 a {

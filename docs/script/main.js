@@ -6,6 +6,7 @@ $(function () {
 	let slider;
 	let chart;
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
+	const baseColor = 'rgba(255,255,255,0.5)';
 
 	initData(() => {
 		slider = initSlider();
@@ -273,7 +274,6 @@ $(function () {
 	}
 
 	function initChart() {
-		const baseColor = 'rgba(0,0,0,0.5)';
 		let dayMin = data.dayMin, dayMax = data.dayMax;
 		let maxValue = 200, paddingTop = 5, paddingLeft = 25, paddingBottom = 20;
 		let highlightEntry = false;
