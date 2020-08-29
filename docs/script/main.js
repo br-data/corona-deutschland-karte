@@ -8,17 +8,22 @@ $(function () {
 	const baseColor = 'rgba(255,255,255,0.5)';
 
 	initData(() => {
-		slider = initSlider();
 		chart = initChart();
 		map = initMap();
-		animation = initAnimation();
+		
+		setDay(data.dayMax-data.dayMin)
 
+		animation = initAnimation();
 		$('#button_play').click(animation.play);
-		slider.setValue(data.dayMax-data.dayMin);
-		map.redraw();
-		chart.redraw();
 		//setTimeout(animation.play, 1000);
 	});
+
+	function setDay(index) {
+		if (index === dayIndex) return;
+		dayIndex = index;
+		map.redraw();
+		chart.redraw();
+	}
 
 	function highlight(e) {
 		if (!chart || !map) return;
@@ -70,11 +75,11 @@ $(function () {
 		].map(hsv2rgb);
 
 		let container = new CanvasContainer('#mapContainer');
-		let changeCheckerDraw = new ChangeChecker();
+		let changeCheckerDraw   = new ChangeChecker();
 		let changeCheckerLayout = new ChangeChecker();
 
 		function relayout(opt) {
-			zoom = opt.width/2;
+			zoom = 0.99*opt.width/2;
 			offsetX = opt.width/2;
 			offsetY = opt.height/2;
 		}
@@ -109,6 +114,7 @@ $(function () {
 			if (changeCheckerLayout(opt)) relayout(opt);
 
 			if (!changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
+			if (dayIndex === undefined) return;
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
@@ -120,8 +126,10 @@ $(function () {
 				let dx = f.x0 - f.x;
 				let dy = f.y0 - f.y;
 				let d0 = Math.sqrt(dx*dx + dy*dy);
+
 				if (d0 < 1e-5) return;
 				if (d0 < minStep) d0 = minStep;
+
 				f.x += minStep*dx/d0;
 				f.y += minStep*dy/d0;
 			})
@@ -132,12 +140,12 @@ $(function () {
 
 				let dx = f0.x - f1.x;
 				let dy = f0.y - f1.y;
-				let d0 = Math.sqrt(dx*dx + dy*dy);
+				let d0 = Math.sqrt(dx*dx + dy*dy) + 1e-10;
 				let d = d0 - f0.r - f1.r;
-				
-				if (d > 0) return;
 
-				let m = f0.m + f1.m;
+				if (d >= 0) return;
+
+				let m = f0.m + f1.m + 1e-10;
 				d = d/d0/m;
 
 				f0.x -= f1.m*d*dx;
@@ -258,7 +266,7 @@ $(function () {
 		}
 
 		function value2color(v) {
-			v = Math.max(0, Math.min(1, v/maxValue))*(gradient.length-1);
+			v = Math.max(0, Math.min(1, (v||0)/maxValue))*(gradient.length-1);
 
 			let i = Math.max(0,Math.min(Math.floor(v), gradient.length-2));
 			let c0 = gradient[i];
@@ -285,15 +293,15 @@ $(function () {
 	}
 
 	function initChart() {
-		let dayMin = data.dayMin, dayMax = data.dayMax;
-		let maxValue = 200;
+		const dayMin = data.dayMin, dayMax = data.dayMax;
+		const maxValue = 200;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, x0, x1, y0, y1;
 		let highlightEntry = false;
 
-		let container = new CanvasContainer('#chartContainer');
-		let changeCheckerDraw   = new ChangeChecker();
-		let changeCheckerLayout = new ChangeChecker();
+		const container = new CanvasContainer('#chartContainer');
+		const changeCheckerDraw   = new ChangeChecker();
+		const changeCheckerLayout = new ChangeChecker();
 
 		function relayout(opt) {
 			paddingTop = 5*opt.retina;
@@ -308,6 +316,9 @@ $(function () {
 			x1 = projX.v2p(dayMax-dayMin);
 			y0 = projY.v2p(0);
 			y1 = projY.v2p(maxValue);
+
+			if (!slider) return;
+			slider.setX(x0/opt.retina, x1/opt.retina);
 		}
 
 		container.drawBg = function drawChartBg (ctx, opt) {
@@ -397,6 +408,24 @@ $(function () {
 			ctx.setLineDash([]);
 		}
 
+		let drag = false
+		container.on('mousedown', e => {
+			drag = true;
+			handleEvent(e);
+		});
+		container.on('mousemove', e => {
+			if (!drag) return;
+			handleEvent(e);
+		});
+		container.on('mouseup', e => drag = false);
+		$(document).on('mouseup', e => drag = false);
+		function handleEvent(e) {
+			let day = projX.p2v(e.px);
+			day = Math.max(0, Math.min(dayMax-dayMin, Math.round(day)));
+			setDay(day);
+		}
+
+
 		container.init();
 
 		return {
@@ -446,38 +475,6 @@ $(function () {
 			if (!playInterval) return;
 			clearInterval(playInterval);
 			playInterval = false;
-		}
-	}
-
-	function initSlider() {
-		let slider = $('#slider');
-		let sliderLabel = $('#slider_label');
-		slider.attr({
-			min:0,
-			max:data.dayMax-data.dayMin,
-		})
-		slider.on('mousedown mousemove touchstart touchmove', e => e.stopPropagation());
-		slider.on('input', function (event) {
-			dayIndex = Math.round(slider.val());
-			updateLabel();
-			map.redraw();
-			chart.redraw();
-			animation.stop();
-		})
-		setValue(0);
-
-		function setValue(index) {
-			slider.val(index);
-			dayIndex = index
-			updateLabel();
-		}
-
-		function updateLabel() {
-			sliderLabel.text((new Date((dayIndex+data.dayMin)*86400000)).toLocaleDateString());
-		}
-
-		return {
-			setValue
 		}
 	}
 
