@@ -70,7 +70,7 @@ console.log('start with deutschland');
 
 let deutschland = JSON.parse(fs.readFileSync(resolve(folder, 'deutschland.geo.json')));
 deutschland = deutschland.features[0].geometry.coordinates;
-deutschland = deutschland.map(p => p[0]).filter(p => p.length > 15);
+deutschland = deutschland.map(p => p[0]);
 
 deutschland = deutschland.map(poly => poly.map(p => ([
 	Math.round( (p[0]-centerX)*scaleX*10000)/10000,
@@ -134,15 +134,9 @@ file = resolve(folder, file);
 	console.log('   save');
 
 	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => {
-		if ((l > 1) && Array.isArray(d) && (d.length < 1000)) {
-			//console.log(d.length);
-			//return false;
-			return true;
-		}
-		//if ((l > 1) && (d.title)) return true;
+		if ((l > 1) && Array.isArray(d) && (d.length < 1000)) return true;
 		return false;
 	});
-	//console.log(result);
 
 	fs.writeFileSync('../docs/data/data.js', result, 'utf8');
 })()
@@ -155,8 +149,6 @@ function stringify(data, collapseChecker = false) {
 		switch (type) {
 			case 'undefined':
 				return JSON.stringify(data);
-				//console.log(JSON.stringify(data));
-			//break;
 			case 'number':
 			case 'string':
 				return JSON.stringify(data);
