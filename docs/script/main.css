@@ -2,17 +2,18 @@
 body {
 	margin: 0;
 	font-family: Open Sans,Arial,Helvetica,sans-serif;
-	color: #fff;
-	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
+	color: #000;
+	background: #fff;
 }
 
 a {
-	color: #fff;
+	color: #000;
 }
 
 #wrapper {
 	position: relative;
-	height: 600px;
+	height: 100vh;
+	width: 100vw;
 }
 
 .canvasContainer {
@@ -20,23 +21,23 @@ a {
 	overflow: hidden;
 }
 
-#mapContainer {
-	position: absolute;
-	top: 0px;
-	right: 0px;
-	width: 450px;
-	height: 600px;
-}
-
-#chartContainer {
-	width: calc(100% - 470px);
-	height: 550px;
-}
-
 .canvasContainer canvas {
 	position: absolute;
 	top: 0px;
 	left: 0px;
+}
+
+#mapContainer {
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	width: 75vh;
+	height: 100vh;
+}
+
+#chartContainer {
+	width: calc(100vw - 75vh);
+	height: calc(100vh - 60px);
 }
 
 #legend {
@@ -137,14 +138,14 @@ input[type=range]::-webkit-slider-runnable-track {
 	width:100%;
 	height:5px;
 	cursor:pointer;
-	background:#a1a5b5;
-	border-radius:.5em
+	background:#aaa;
+	border-radius:5px;
 }
 input[type=range]::-webkit-slider-thumb {
 	height:20px;
 	width:20px;
 	border-radius:50%;
-	background:#fff;
+	background:#000;
 	cursor:pointer;
 	-webkit-appearance:none;
 	margin-top:-8px
@@ -153,15 +154,15 @@ input[type=range]::-moz-range-track {
 	width:100%;
 	height:5px;
 	cursor:pointer;
-	background:#a1a5b5;
-	border-radius:.5em
+	background:#aaa;
+	border-radius:5px;
 }
 input[type=range]::-moz-range-thumb {
 	border:0;
 	height:20px;
 	width:20px;
 	border-radius:50%;
-	background:#fff;
+	background:#000;
 	cursor:pointer
 }
 input[type=range]::-moz-focus-outer {
@@ -180,12 +181,12 @@ input[type=range]::-ms-thumb {
 	height:20px;
 	width:20px;
 	border-radius:50%;
-	background:#fff
+	background:#000
 }
 input[type=range]::-ms-fill-lower,input[type=range]::-ms-fill-upper {
-	background:#a1a5b5;
+	background:#aaa;
 	border-radius:5px
 }
 input[type=range]:focus::-ms-fill-lower,input[type=range]:focus::-ms-fill-upper {
-	background:#a1a5b5
+	background:#aaa
 }

@@ -31,7 +31,7 @@ $(function () {
 		data.landkreise.forEach(l => {
 			l.infected = days.map(d => data.days[d][l.index]);
 			l.normalized = l.infected.map(v => 100000*v/l.ew);
-			l.radius = l.infected.map(v => Math.sqrt(v)*0.002);
+			l.radius = l.infected.map(v => Math.sqrt(v)*0.0025);
 			l.rMax = l.radius.reduce((s,r) => Math.max(s,r));
 			l.x0 = l.x;
 			l.y0 = l.y;
@@ -44,7 +44,7 @@ $(function () {
 			for (let i1 = i0+1; i1 < data.landkreise.length; i1++) {
 				let l1 = data.landkreise[i1];
 				let d = Math.sqrt(sqr(l0.x - l1.x) + sqr(l0.y - l1.y)) - l0.rMax - l1.rMax;
-				if (d < 1) pairs.push([l0,l1]);
+				if (d < 0.2) pairs.push([l0,l1]);
 			}
 		})
 		data.pairs = pairs;
@@ -57,12 +57,20 @@ $(function () {
 	function initMap() {
 		const maxValue = 150;
 		let highlightEntry = false;
-
+/*
 		const gradient = [
 			[150, 60, 40,1],
 			[ 60, 60, 70,1],
 			[ 30, 90, 80,1],
 			[  0, 80,100,1],
+		].map(hsv2rgb);*/
+
+		const gradient = [
+			[ 60,  0, 50],
+			[ 60,100, 90],
+			[ 30,100,100],
+			[  0,100, 90],
+			[  0,100, 40],
 		].map(hsv2rgb);
 
 		let container = new CanvasContainer('#mapContainer');
@@ -75,7 +83,8 @@ $(function () {
 			let offsetX = opt.width/2;
 			let offsetY = opt.height/2;
 
-			ctx.strokeStyle = 'rgba(255,255,255,0.5)';
+			ctx.strokeStyle = 'rgba(0,0,0,0.5)';
+			ctx.fillStyle = '#eee';
 			ctx.lineWidth = 0.5*opt.retina;
 			
 			ctx.beginPath();
@@ -85,6 +94,7 @@ $(function () {
 				})
 			})
 			ctx.stroke();
+			ctx.fill();
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
@@ -96,7 +106,7 @@ $(function () {
 			let offsetX = opt.width/2;
 			let offsetY = opt.height/2;
 
-			const minStep = 0.005;
+			const minStep = 0.002;
 			data.landkreise.forEach(f => {
 				f.r = f.radius[dayIndex];
 				f.m = f.r*f.r;
@@ -113,6 +123,13 @@ $(function () {
 			data.pairs.forEach(p => {
 				let f0 = p[0];
 				let f1 = p[1];
+
+				//ctx.strokeStyle = 'rgb('+Math.floor(Math.random()*256)+','+Math.floor(Math.random()*256)+','+Math.floor(Math.random()*256)+')';
+				//ctx.beginPath();
+				//ctx.moveTo(f0.px, f0.py);
+				//ctx.lineTo(f1.px, f1.py);
+				//ctx.stroke();
+
 				let dx = f0.x - f1.x;
 				let dy = f0.y - f1.y;
 				let d0 = Math.sqrt(dx*dx + dy*dy);
@@ -142,47 +159,60 @@ $(function () {
 			})
 
 			if (highlightEntry) {
-				ctx.strokeStyle = '#fff';
-				
-				ctx.font = 10*opt.retina + 'px sans-serif';
-				ctx.textAlign = 'left';
-
+				// markiere entry
+				ctx.strokeStyle = '#000';
 				ctx.lineWidth = 2*opt.retina;
 				ctx.beginPath();
 				ctx.arc(highlightEntry.px, highlightEntry.py, highlightEntry.pr+1*opt.retina, 0, 2*Math.PI);
 				ctx.stroke();
+				
+				ctx.font = 12*opt.retina + 'px sans-serif';
+				ctx.textAlign = 'left';
 
 				let x = highlightEntry.px;
 				let y = highlightEntry.py;
 				let m1 = ctx.measureText(highlightEntry.title);
 				let m2 = ctx.measureText(highlightEntry.type);
-				let p = 2*opt.retina;
-				let w = Math.max(m1.width, m2.width)+2*p;
-				let h = 10*opt.retina+p;
-				let r = 2*opt.retina;
+				let px = 4*opt.retina;
+				let py = 3*opt.retina;
+				let w = Math.max(m1.width, m2.width)+2*px;
+				let h = 12*opt.retina+py;
+				let r = 3*opt.retina;
 
 				if (x < offsetX) {
-					x += highlightEntry.pr + 5*opt.retina;
+					x += highlightEntry.pr + 10*opt.retina;
 				} else {
-					x -= highlightEntry.pr + 5*opt.retina + w;
+					x -= highlightEntry.pr + 10*opt.retina + w;
 				}
 
-				ctx.fillStyle = '#fff';
+
 				ctx.beginPath();
 				ctx.moveTo(x+r, y-h);
-				ctx.arcTo(x+w, y-h, x+w, y+h, r);
-				ctx.arcTo(x+w, y+h, x, y+h, r);
-				ctx.arcTo(x, y+h, x, y-h, r);
-				ctx.arcTo(x, y-h, x+w, y-h, r);
+				ctx.arcTo( x+w, y-h, x+w, y+h, r);
+				ctx.arcTo( x+w, y+h, x  , y+h, r);
+				ctx.arcTo( x  , y+h, x  , y-h, r);
+				ctx.arcTo( x  , y-h, x+w, y-h, r);
+
+				//ctx.shadowBlur = 2*opt.retina;
+				//ctx.shadowColor = 'rgba(0,0,0,0.2)';
+				//ctx.shadowOffsetX = 2*opt.retina;
+				//ctx.shadowOffsetY = 2*opt.retina;
+				ctx.fillStyle = '#fff';
 				ctx.fill();
+				//ctx.shadowBlur = 0;
+				//ctx.shadowColor = 'transparent';
+
+				ctx.lineWidth = 1*opt.retina;
+				ctx.strokeStyle = 'rgba(0,0,0,1)';
+				ctx.stroke();
 
 				ctx.fillStyle = '#000';
 				ctx.textBaseline = 'bottom';
-				ctx.fillText(highlightEntry.title, x+p, y);
+				ctx.fillText(highlightEntry.title, x+px, y);
 
 				ctx.fillStyle = '#888';
 				ctx.textBaseline = 'top';
-				ctx.fillText(highlightEntry.type, x+p, y);
+				ctx.fillText(highlightEntry.type, x+px, y);
 			}
 		}
 
@@ -223,11 +253,10 @@ $(function () {
 			let c1 = gradient[i+1];
 			let a = v-i;
 
-			let c = 'rgba('+
+			let c = 'rgb('+
 				Math.round(c0[0]*(1-a) + a*c1[0])+','+
 				Math.round(c0[1]*(1-a) + a*c1[1])+','+
-				Math.round(c0[2]*(1-a) + a*c1[2])+','+
-				Math.round((c0[3]*(1-a) + a*c1[3])*100)/100+
+				Math.round(c0[2]*(1-a) + a*c1[2])+
 			')';
 
 			return c;
@@ -244,7 +273,7 @@ $(function () {
 	}
 
 	function initChart() {
-		const baseColor = 'rgba(255,255,255,0.5)';
+		const baseColor = 'rgba(0,0,0,0.5)';
 		let dayMin = data.dayMin, dayMax = data.dayMax;
 		let maxValue = 200, paddingTop = 5, paddingLeft = 25, paddingBottom = 20;
 		let highlightEntry = false;
@@ -280,7 +309,7 @@ $(function () {
 
 			ctx.fillStyle = baseColor;
 			ctx.strokeStyle = baseColor;
-			ctx.font = 10*opt.retina + 'px sans-serif';
+			ctx.font = 12*opt.retina + 'px sans-serif';
 
 			ctx.beginPath();
 
@@ -339,7 +368,7 @@ $(function () {
 				ctx.fill();
 			}
 
-			ctx.setLineDash([1*opt.retina, 5*opt.retina]);
+			ctx.setLineDash([1*opt.retina, 3*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
 			ctx.moveTo(projX.v2p(dayIndex), projY.v2p(maxValue));
