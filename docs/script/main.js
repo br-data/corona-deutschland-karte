@@ -257,6 +257,7 @@ $(function () {
 			})
 			highlight((minD < 10*e.retina) && minF);
 		})
+		container.on('mouseout', e => highlight(false))
 
 		container.init();
 
