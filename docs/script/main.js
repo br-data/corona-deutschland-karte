@@ -158,7 +158,7 @@ $(function () {
 			let zoomR = zoomY;
 			let aspectRatioRadius = zoomX/zoomY;
 
-			for (let i = 0; i < 10; i++) {
+			for (let i = 0; i < 3; i++) {
 				let c = 0;
 				data.pairs.forEach(p => {
 					let f0 = p[0];
@@ -180,7 +180,7 @@ $(function () {
 
 					c++;
 				})
-				if (c <= 3) break;
+				if (c <= 10) break;
 			}
 
 			let changeSum = 0;
@@ -227,14 +227,8 @@ $(function () {
 					x -= f.pr + 10*opt.retina + w;
 				}
 
-
 				ctx.beginPath();
-				ctx.moveTo(x+r, y-h);
-				ctx.arcTo( x+w, y-h, x+w, y+h, r);
-				ctx.arcTo( x+w, y+h, x  , y+h, r);
-				ctx.arcTo( x  , y+h, x  , y-h, r);
-				ctx.arcTo( x  , y-h, x+w, y-h, r);
-
+				ctx.drawRoundRect(x, y-h, x+w, y+h, r);
 				ctx.fillStyle = '#fff';
 				ctx.fill();
 
@@ -335,7 +329,7 @@ $(function () {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
 		const maxValue = 200;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
-		let projX, projY, x0, x1, y0, y1;
+		let projX, projY, x0, x1, y0, y1, retina;
 
 		const container = new CanvasContainer('#chartContainer');
 		const changeCheckerDraw   = new ChangeChecker();
@@ -348,10 +342,11 @@ $(function () {
 		]
 
 		function relayout(opt) {
+			retina = opt.retina;
 			paddingTop = 10*opt.retina;
 			paddingLeft = 30*opt.retina;
 			paddingRight = 30*opt.retina;
-			paddingBottom = 16*opt.retina;
+			paddingBottom = 30*opt.retina;
 
 			let w = opt.width - paddingLeft - paddingRight;
 			let h = opt.height - paddingTop - paddingBottom;
@@ -465,12 +460,39 @@ $(function () {
 				ctx.fill();
 			})
 
-			ctx.setLineDash([1*opt.retina, 3*opt.retina]);
+			let x = projX.v2p(dayIndex);
+			let ya = y0 + 8*opt.retina;
+			let yb = ya + 8*opt.retina;
+			let yc = yb + 12*opt.retina;
+			let w = 8*opt.retina;
+			let r = 3*opt.retina;
+
+			ctx.setLineDash([2*opt.retina, 4*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
-			ctx.lineV(projX.v2p(dayIndex), y1, y0);
+			ctx.lineV(x, y1, y0);
 			ctx.stroke();
 			ctx.setLineDash([]);
+
+
+			ctx.fillStyle = '#fff';
+			ctx.beginPath();
+			ctx.moveTo(x, ya);
+			ctx.arcTo(x+w, yb, x+w, yc, r);
+			ctx.arcTo(x+w, yc, x-w, yc, r);
+			ctx.arcTo(x-w, yc, x-w, yb, r);
+			ctx.arcTo(x-w, yb, x, ya, r);
+			//ctx.arcTo(x0, y0, x1, y0, r);
+			//ctx.drawRoundRect(x-w, y, x+w, y+h, 3*opt.retina);
+			ctx.fill();
+
+			//ctx.beginPath();
+			//ctx.arc(projX.v2p(dayIndex), (y1*2+y0)/3, 30*opt.retina, 0, Math.PI*2);
+			//ctx.stroke();
+
+			//ctx.beginPath();
+			//ctx.lineV(projX.v2p(dayIndex), y1, y0);
+			//ctx.stroke();
 		}
 
 		let drag = false
@@ -479,6 +501,8 @@ $(function () {
 			handleEvent(e);
 		});
 		container.on('mousemove', e => {
+			container.setCursor((Math.abs(projX.v2p(dayIndex) - e.px) < 5*retina) ? 'col-resize' : 'default');
+
 			if (!drag) return;
 			handleEvent(e);
 		});
@@ -563,7 +587,7 @@ $(function () {
 	}
 
 	function CanvasContainer(containerName) {
-		let retina, width, height, random;
+		let retina, width, height, random, cursorName;
 
 		let container = $(containerName);
 		let canvasBg = $('<canvas>').appendTo(container);
@@ -577,6 +601,13 @@ $(function () {
 			redrawBg,
 			redrawFg,
 			on,
+			setCursor,
+		}
+
+		function setCursor(name) {
+			if (name === cursorName) return;
+			cursorName = name;
+			canvasFg.css('cursor', name);
 		}
 
 		function on(event, cb) {
@@ -640,4 +671,11 @@ CanvasRenderingContext2D.prototype.lineV = function (x0,y0,y1) {
 	this.lineTo(Math.round(x0) + 0.5, Math.round(y1))
 }
 
+CanvasRenderingContext2D.prototype.drawRoundRect = function (x0, y0, x1, y1, r) {
+	this.moveTo(x0+r, y0);
+	this.arcTo(x1, y0, x1, y1, r);
+	this.arcTo(x1, y1, x0, y1, r);
+	this.arcTo(x0, y1, x0, y0, r);
+	this.arcTo(x0, y0, x1, y0, r);
+}
 
