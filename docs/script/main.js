@@ -155,14 +155,17 @@ $(function () {
 				f.y += 0.3*dy;
 			})
 
+			let zoomR = zoomY;
+			let aspectRatioRadius = zoomX/zoomY;
+
 			for (let i = 0; i < 10; i++) {
 				let c = 0;
 				data.pairs.forEach(p => {
 					let f0 = p[0];
 					let f1 = p[1];
 
-					let dx = f0.x - f1.x;
-					let dy = f0.y - f1.y;
+					let dx = (f0.x - f1.x)*aspectRatioRadius;
+					let dy = (f0.y - f1.y);
 					let d0 = Math.sqrt(dx*dx + dy*dy);
 					let d = d0 - f0.r - f1.r;
 
@@ -180,7 +183,6 @@ $(function () {
 				if (c <= 3) break;
 			}
 
-			let zoomR = Math.sqrt(zoomX*zoomY);
 			let changeSum = 0;
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[dayIndex])
