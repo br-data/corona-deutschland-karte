@@ -27,15 +27,16 @@ $(function () {
 	}
 
 	function highlight(e) {
-		if (!chart || !map || (selection[0] === e)) return;
-		selection[0] = e;
+		if (!chart || !map || (selection[1] === e)) return;
+		selection[1] = e;
 		chart.redraw();
 		map.redraw();
 	}
 
 	function select(e) {
-		if (!chart || !map || (selection[1] === e)) return;
-		selection[1] = e;
+		if (!chart || !map) return;
+		if (selection[0] === e) e = false;
+		selection[0] = e;
 		chart.redraw();
 		map.redraw();
 	}
@@ -252,6 +253,16 @@ $(function () {
 		}
 
 		container.on('mousemove', e => {
+			highlight(findLandkreis(e));
+		})
+		container.on('click', e => {
+			select(findLandkreis(e));
+		})
+		container.on('mouseout', e => highlight(false))
+
+		container.init();
+
+		function findLandkreis(e) {
 			let minD = 1e10, minF;
 			data.landkreise.forEach(f => {
 				let d = Math.sqrt(sqr(f.px - e.px) + sqr(f.py - e.py))-f.pr;
@@ -260,12 +271,9 @@ $(function () {
 					minF = f;
 				}
 			})
-			highlight((minD < 10*e.retina) && minF);
-		})
-		container.on('mouseout', e => highlight(false))
-
-		container.init();
-
+			if (minD > 10*e.retina) return false;
+			return minF;
+		}
 
 		function drawLegend(ctx, opt) {
 			let width = 10*opt.retina;
@@ -323,13 +331,19 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 150;
+		const maxValue = 200;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, x0, x1, y0, y1;
 
 		const container = new CanvasContainer('#chartContainer');
 		const changeCheckerDraw   = new ChangeChecker();
 		const changeCheckerLayout = new ChangeChecker();
+
+		const colors = [
+			[ 11,159,216,1.0],
+			[230, 66,  6,1.0],
+			[255,184,  0,1.0],
+		]
 
 		function relayout(opt) {
 			paddingTop = 10*opt.retina;
@@ -368,8 +382,8 @@ $(function () {
 			// draw chart
 
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = 'rgba(11,159,216,0.5)';
-			ctx.fillStyle   = 'rgba(21,159,216,0.1)';
+			ctx.strokeStyle = 'rgba('+colors[0].join(',')+')';
+			ctx.fillStyle   = 'rgba('+colors[0].map((v,i)=>v/(i>2?5:1)).join(',')+')';
 			
 			ctx.beginPath();
 			data.deutschland.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
@@ -435,11 +449,11 @@ $(function () {
 			ctx.lineWidth = 1*opt.retina;
 
 			
-			selection.forEach(f => {
+			selection.forEach((f,index) => {
 				if (!f) return;
 
-				ctx.strokeStyle = 'rgba(255,184,0,1.0)';
-				ctx.fillStyle = 'rgba(255,184,0,0.2)';
+				ctx.strokeStyle = 'rgba('+colors[index+1].join(',')+')';
+				ctx.fillStyle   = 'rgba('+colors[index+1].map((v,i)=>v/(i>2?5:1)).join(',')+')';
 
 				ctx.beginPath();
 				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
