@@ -4,6 +4,7 @@ $(function () {
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider;
 	let chart;
+	let selection = [];
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,0.5)';
 
@@ -26,9 +27,17 @@ $(function () {
 	}
 
 	function highlight(e) {
-		if (!chart || !map) return;
-		chart.highlight(e);
-		map.highlight(e);
+		if (!chart || !map || (selection[0] === e)) return;
+		selection[0] = e;
+		chart.redraw();
+		map.redraw();
+	}
+
+	function select(e) {
+		if (!chart || !map || (selection[1] === e)) return;
+		selection[1] = e;
+		chart.redraw();
+		map.redraw();
 	}
 
 	function initData(cb) {
@@ -64,7 +73,6 @@ $(function () {
 
 	function initMap() {
 		const maxValue = 150;
-		let highlightEntry = false;
 		let zoomX, zoomY, offsetX, offsetY;
 		let timeoutHandler;
 		
@@ -115,13 +123,12 @@ $(function () {
 		container.drawFg = function drawMapFg (ctx, opt) {
 			if (changeCheckerLayout(opt)) relayout(opt);
 
-			if (!timeoutHandler && !changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
+			if (!timeoutHandler && !changeCheckerDraw([opt, dayIndex, selection.map(f => f.index)])) return;
 			if (dayIndex === undefined) return;
 			if (timeoutHandler) {
 				clearTimeout(timeoutHandler);
 				timeoutHandler = false;
 			}
-			console.log('redraw');
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
@@ -183,21 +190,23 @@ $(function () {
 				ctx.fill();
 			})
 
-			if (highlightEntry) {
+			selection.forEach(f => {
+				if (!f) return;
+
 				// markiere entry
 				ctx.strokeStyle = '#000';
 				ctx.lineWidth = 2*opt.retina;
 				ctx.beginPath();
-				ctx.arc(highlightEntry.px, highlightEntry.py, highlightEntry.pr+1*opt.retina, 0, 2*Math.PI);
+				ctx.arc(f.px, f.py, f.pr+1*opt.retina, 0, 2*Math.PI);
 				ctx.stroke();
 				
 				ctx.font = 12*opt.retina + 'px sans-serif';
 				ctx.textAlign = 'left';
 
-				let x = highlightEntry.px;
-				let y = highlightEntry.py;
-				let m1 = ctx.measureText(highlightEntry.title);
-				let m2 = ctx.measureText(highlightEntry.type);
+				let x = f.px;
+				let y = f.py;
+				let m1 = ctx.measureText(f.title);
+				let m2 = ctx.measureText(f.type);
 				let px = 4*opt.retina;
 				let py = 3*opt.retina;
 				let w = Math.max(m1.width, m2.width)+2*px;
@@ -205,9 +214,9 @@ $(function () {
 				let r = 3*opt.retina;
 
 				if (x < offsetX) {
-					x += highlightEntry.pr + 10*opt.retina;
+					x += f.pr + 10*opt.retina;
 				} else {
-					x -= highlightEntry.pr + 10*opt.retina + w;
+					x -= f.pr + 10*opt.retina + w;
 				}
 
 
@@ -227,12 +236,12 @@ $(function () {
 
 				ctx.fillStyle = '#000';
 				ctx.textBaseline = 'bottom';
-				ctx.fillText(highlightEntry.title, x+px, y);
+				ctx.fillText(f.title, x+px, y);
 
 				ctx.fillStyle = '#888';
 				ctx.textBaseline = 'top';
-				ctx.fillText(highlightEntry.type, x+px, y);
-			}
+				ctx.fillText(f.type, x+px, y);
+			})
 
 			if (changeSum > 0.01) timeoutHandler = setTimeout(container.redrawFg, 30);
 		}
@@ -303,11 +312,6 @@ $(function () {
 
 		return {
 			redraw: container.redrawFg,
-			highlight: e => {
-				if (e === highlightEntry) return;
-				highlightEntry = e;
-				container.redrawFg()
-			}
 		}
 	}
 
@@ -316,7 +320,6 @@ $(function () {
 		const maxValue = 150;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, x0, x1, y0, y1;
-		let highlightEntry = false;
 
 		const container = new CanvasContainer('#chartContainer');
 		const changeCheckerDraw   = new ChangeChecker();
@@ -410,22 +413,25 @@ $(function () {
 		container.drawFg = function drawChartFg (ctx, opt) {
 			if (changeCheckerLayout(opt)) relayout(opt);
 
-			if (!changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
+			if (!changeCheckerDraw([opt, dayIndex, selection.map(f => f.index)])) return;
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
 
-			if (highlightEntry) {
+			
+			selection.forEach(f => {
+				if (!f) return;
+
 				ctx.strokeStyle = 'rgba(255,184,0,1.0)';
 				ctx.fillStyle = 'rgba(255,184,0,0.2)';
 
 				ctx.beginPath();
-				highlightEntry.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
+				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
 				ctx.stroke();
 				ctx.lineTo(x1, y0);
 				ctx.lineTo(x0, y0);
 				ctx.fill();
-			}
+			})
 
 			ctx.setLineDash([1*opt.retina, 3*opt.retina]);
 			ctx.strokeStyle = baseColor;
@@ -457,11 +463,6 @@ $(function () {
 
 		return {
 			redraw: container.redrawFg,
-			highlight: e => {
-				if (e === highlightEntry) return;
-				highlightEntry = e;
-				container.redrawFg()
-			}
 		}
 
 		function getProjection(v0,v1,p0,p1) {
