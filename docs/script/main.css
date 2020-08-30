@@ -1,11 +1,12 @@
 html {
 	background: #1d2029;
+	font-size: 18px;
 }
 
 body {
 	margin: 0;
-	font-family: Open Sans,Arial,Helvetica,sans-serif;
-	color: #000;
+	font-family: Open Sans,Helvetica,Arial,sans-serif;
+	color: #fff;
 	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
 }
 
@@ -15,26 +16,57 @@ body {
 	width: 100vw;
 }
 
-.canvasContainer {
-	position: relative;
+.container {
+	position: absolute;
 	overflow: hidden;
 }
 
-.canvasContainer canvas {
+.container canvas {
 	position: absolute;
 	top: 0px;
 	left: 0px;
 }
 
+#headline {
+	top: 0px;
+	left: 0px;
+	width: calc(100vw - 75vh);
+	height: 4rem;
+	line-height: 1.2rem;
+	text-align: center;
+}
+
+#chartContainer {
+	top: 4rem;
+	left: 0px;
+	width: calc(100vw - 75vh);
+	height: calc(100vh - 8rem);
+}
+
 #mapContainer {
-	position: absolute;
 	top: 0px;
 	right: 0px;
 	width: 75vh;
 	height: 100vh;
 }
 
-#chartContainer {
-	width: calc(100vw - 75vh);
-	height: calc(100vh);
+@media (max-aspect-ratio: 1/1) {
+	#headline {
+		width: 100vw;
+	}
+	#chartContainer {
+		width: 100vw;
+		height: 40vw;
+	}
+
+	#mapContainer {
+		top: calc(4rem + 40vw);
+		width: 100vw;
+		height: 100vw;
+	}
 }
+
+
+
+
+

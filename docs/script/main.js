@@ -65,7 +65,7 @@ $(function () {
 	function initMap() {
 		const maxValue = 150;
 		let highlightEntry = false;
-		let zoom, offsetX, offsetY;
+		let zoomX, zoomY, offsetX, offsetY;
 		
 		const gradient = [
 			[ 60,100, 90],
@@ -79,7 +79,8 @@ $(function () {
 		let changeCheckerLayout = new ChangeChecker();
 
 		function relayout(opt) {
-			zoom = 0.99*opt.width/2;
+			zoomX = 0.99*opt.width/2;
+			zoomY = 0.74*opt.height/2;
 			offsetX = opt.width/2;
 			offsetY = opt.height/2;
 		}
@@ -100,7 +101,7 @@ $(function () {
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
 				poly.forEach((p,i) => {
-					(i?ctx.lineTo:ctx.moveTo).call(ctx,zoom*p[0]+offsetX,zoom*p[1]+offsetY)
+					(i?ctx.lineTo:ctx.moveTo).call(ctx, zoomX*p[0]+offsetX, zoomY*p[1]+offsetY)
 				})
 			})
 			ctx.fill();
@@ -154,12 +155,13 @@ $(function () {
 				f1.y += f0.m*d*dy;
 			})
 
+			let zoomR = Math.sqrt(zoomX*zoomY);
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[dayIndex])
 
-				f.px = zoom*f.x + offsetX;
-				f.py = zoom*f.y + offsetY;
-				f.pr = zoom*f.r;
+				f.px = zoomX*f.x + offsetX;
+				f.py = zoomY*f.y + offsetY;
+				f.pr = zoomR*f.r;
 				
 				ctx.beginPath();
 				ctx.arc(f.px, f.py, f.pr, 0, 2*Math.PI);
@@ -294,7 +296,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 200;
+		const maxValue = 150;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, x0, x1, y0, y1;
 		let highlightEntry = false;
@@ -305,7 +307,7 @@ $(function () {
 
 		function relayout(opt) {
 			paddingTop = 7*opt.retina;
-			paddingLeft = 50*opt.retina;
+			paddingLeft = 28*opt.retina;
 			paddingRight = 1*opt.retina;
 			paddingBottom = 20*opt.retina;
 
@@ -331,7 +333,7 @@ $(function () {
 
 			ctx.lineWidth = 1;
 			ctx.strokeStyle = 'rgba(11,159,216,0.5)';
-			ctx.fillStyle = 'rgba(21,159,216,0.1)';
+			ctx.fillStyle   = 'rgba(21,159,216,0.1)';
 			
 			ctx.beginPath();
 			data.deutschland.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
@@ -379,11 +381,13 @@ $(function () {
 
 			ctx.stroke();
 
+			/*
 			ctx.rotate(-Math.PI/2);
 			ctx.textBaseline = 'top';
 			ctx.textAlign = 'center';
 			ctx.fillText('Innerhalb von 7 Tagen gemeldete Infektionen auf 100.000 Einwohner_innen', -(y0+y1)/2, 5*opt.retina);
 			ctx.setTransform(1, 0, 0, 1, 0, 0);
+			*/
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
