@@ -90,6 +90,11 @@ $(function () {
 		function relayout(opt) {
 			zoomX = 0.99*opt.width/2;
 			zoomY = 0.74*opt.height/2;
+			if (zoomX > zoomY) {
+				zoomX = Math.sqrt(zoomX*zoomY);
+			} else {
+				zoomY = Math.sqrt(zoomX*zoomY);
+			}
 			offsetX = opt.width/2;
 			offsetY = opt.height/2;
 		}
