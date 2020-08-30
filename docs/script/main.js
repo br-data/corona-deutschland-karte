@@ -324,8 +324,8 @@ $(function () {
 
 		function relayout(opt) {
 			paddingTop = 7*opt.retina;
-			paddingLeft = 28*opt.retina;
-			paddingRight = 1*opt.retina;
+			paddingLeft = 30*opt.retina;
+			paddingRight = 30*opt.retina;
 			paddingBottom = 20*opt.retina;
 
 			projX = getProjection(0, dayMax-dayMin, paddingLeft, opt.width - paddingRight);
