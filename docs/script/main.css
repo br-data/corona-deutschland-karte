@@ -29,19 +29,18 @@ body {
 }
 
 #headline {
-	top: 0px;
+	top: 1rem;
 	left: 0px;
 	width: calc(100vw - 75vh);
-	height: 4rem;
 	line-height: 1.2rem;
 	text-align: center;
 }
 
 #chartContainer {
-	top: 4rem;
+	top: 0px;
 	left: 0px;
 	width: calc(100vw - 75vh);
-	height: calc(100vh - 8rem);
+	height: 100vh;
 }
 
 #mapContainer {
@@ -56,14 +55,14 @@ body {
 		width: 100vw;
 	}
 	#chartContainer {
+		top: 0;
 		width: 100vw;
 		height: 40vw;
 	}
-
 	#mapContainer {
-		top: calc(4rem + 40vw);
+		top: 40vw;
 		width: 100vw;
-		height: 100vw;
+		height: calc(100vh - 40vw);
 	}
 }
 

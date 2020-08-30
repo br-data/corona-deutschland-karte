@@ -332,10 +332,20 @@ $(function () {
 		const changeCheckerLayout = new ChangeChecker();
 
 		function relayout(opt) {
-			paddingTop = 7*opt.retina;
+			paddingTop = 10*opt.retina;
 			paddingLeft = 30*opt.retina;
 			paddingRight = 30*opt.retina;
-			paddingBottom = 20*opt.retina;
+			paddingBottom = 16*opt.retina;
+
+			let w = opt.width - paddingLeft - paddingRight;
+			let h = opt.height - paddingTop - paddingBottom;
+			let aspectRatio = w/h;
+			const minAspectRatio = 1;
+			if (aspectRatio < minAspectRatio) {
+				diff = Math.round((h-w/minAspectRatio)/2);
+				paddingTop += diff;
+				paddingBottom += diff;
+			}
 
 			projX = getProjection(0, dayMax-dayMin, paddingLeft, opt.width - paddingRight);
 			projY = getProjection(0, maxValue, opt.height - paddingBottom, paddingTop);
