@@ -66,6 +66,7 @@ $(function () {
 		const maxValue = 150;
 		let highlightEntry = false;
 		let zoomX, zoomY, offsetX, offsetY;
+		let timeoutHandler;
 		
 		const gradient = [
 			[ 60,100, 90],
@@ -114,12 +115,16 @@ $(function () {
 		container.drawFg = function drawMapFg (ctx, opt) {
 			if (changeCheckerLayout(opt)) relayout(opt);
 
-			if (!changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
+			if (!timeoutHandler && !changeCheckerDraw([opt, dayIndex, highlightEntry.index])) return;
 			if (dayIndex === undefined) return;
+			if (timeoutHandler) {
+				clearTimeout(timeoutHandler);
+				timeoutHandler = false;
+			}
+			console.log('redraw');
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
-			const minStep = 0.002;
 			data.landkreise.forEach(f => {
 				f.r = f.radius[dayIndex];
 				f.m = f.r*f.r;
@@ -128,36 +133,46 @@ $(function () {
 				let dy = f.y0 - f.y;
 				let d0 = Math.sqrt(dx*dx + dy*dy);
 
+				f.xOld = f.x;
+				f.yOld = f.y;
+
 				if (d0 < 1e-5) return;
-				if (d0 < minStep) d0 = minStep;
 
-				f.x += minStep*dx/d0;
-				f.y += minStep*dy/d0;
+				f.x += 0.3*dx;
+				f.y += 0.3*dy;
 			})
 
-			data.pairs.forEach(p => {
-				let f0 = p[0];
-				let f1 = p[1];
+			for (let i = 0; i < 10; i++) {
+				let c = 0;
+				data.pairs.forEach(p => {
+					let f0 = p[0];
+					let f1 = p[1];
 
-				let dx = f0.x - f1.x;
-				let dy = f0.y - f1.y;
-				let d0 = Math.sqrt(dx*dx + dy*dy) + 1e-10;
-				let d = d0 - f0.r - f1.r;
+					let dx = f0.x - f1.x;
+					let dy = f0.y - f1.y;
+					let d0 = Math.sqrt(dx*dx + dy*dy);
+					let d = d0 - f0.r - f1.r;
 
-				if (d >= 0) return;
+					if (d >= -1e-4) return;
 
-				let m = f0.m + f1.m + 1e-10;
-				d = d/d0/m;
+					d = d/(d0*(f0.m + f1.m) + 1e-10);
 
-				f0.x -= f1.m*d*dx;
-				f0.y -= f1.m*d*dy;
-				f1.x += f0.m*d*dx;
-				f1.y += f0.m*d*dy;
-			})
+					f0.x -= f1.m*d*dx;
+					f0.y -= f1.m*d*dy;
+					f1.x += f0.m*d*dx;
+					f1.y += f0.m*d*dy;
+
+					c++;
+				})
+				if (c <= 3) break;
+			}
 
 			let zoomR = Math.sqrt(zoomX*zoomY);
+			let changeSum = 0;
 			data.landkreise.forEach(f => {
 				ctx.fillStyle = value2color(f.normalized[dayIndex])
+
+				changeSum += Math.sqrt(sqr(f.x-f.xOld) + sqr(f.y-f.yOld));
 
 				f.px = zoomX*f.x + offsetX;
 				f.py = zoomY*f.y + offsetY;
@@ -218,6 +233,8 @@ $(function () {
 				ctx.textBaseline = 'top';
 				ctx.fillText(highlightEntry.type, x+px, y);
 			}
+
+			if (changeSum > 0.01) timeoutHandler = setTimeout(container.redrawFg, 30);
 		}
 
 		container.on('mousemove', e => {
