@@ -1,6 +1,6 @@
 
 $(function () {
-	let dayIndex, animation, map;
+	let dayIndex, animation, map, touchOnly;
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider;
 	let chart;
@@ -74,7 +74,7 @@ $(function () {
 
 	function initMap() {
 		const maxValue = 150;
-		let zoomX, zoomY, offsetX, offsetY;
+		let zoomX, zoomY, offsetX, offsetY, retina;
 		let timeoutHandler;
 		
 		const gradient = [
@@ -89,6 +89,7 @@ $(function () {
 		let changeCheckerLayout = new ChangeChecker();
 
 		function relayout(opt) {
+			retina = opt.retina;
 			zoomX = 0.99*opt.width/2;
 			zoomY = 0.74*opt.height/2;
 			if (zoomX > zoomY) {
@@ -250,20 +251,28 @@ $(function () {
 			if (changeSum > 0.01) timeoutHandler = setTimeout(container.redrawFg, 30);
 		}
 
+		container.on('touchstart', e => {
+			touchOnly = true;
+			highlight(findLandkreis(e));
+		})
 		container.on('mousemove', e => {
+			if (touchOnly) return;
 			let f = findLandkreis(e);
 			container.setCursor(f ? 'pointer' : 'default');
 			highlight(f);
 		})
-		container.on('click', e => select(findLandkreis(e)))
+		container.on('click', e => {
+			if (touchOnly) return;
+			select(findLandkreis(e))
+		})
 		container.on('mouseout', e => highlight(false))
 
 		container.init();
 
 		function findLandkreis(e) {
 			let minD = 1e10, minF;
-			let x = e.offsetX*e.retina;
-			let y = e.offsetY*e.retina;
+			let x = (e.offsetX || e.layerX || 0)*retina;
+			let y = (e.offsetY || e.layerY || 0)*retina;
 			data.landkreise.forEach(f => {
 				let d = Math.sqrt(sqr(f.px - x) + sqr(f.py - y)) - f.pr;
 				if (d < minD) {
@@ -271,7 +280,7 @@ $(function () {
 					minF = f;
 				}
 			})
-			if (minD > 10*e.retina) return false;
+			if (minD > 10*retina) return false;
 			return minF;
 		}
 
@@ -349,7 +358,7 @@ $(function () {
 			retina = opt.retina;
 			paddingTop = 10*opt.retina;
 			paddingLeft = 30*opt.retina;
-			paddingRight = 30*opt.retina;
+			paddingRight = 20*opt.retina;
 			paddingBottom = 30*opt.retina;
 
 			let w = opt.width - paddingLeft - paddingRight;
@@ -476,17 +485,17 @@ $(function () {
 			ctx.textBaseline = 'top';
 			ctx.textAlign = 'right';
 
-			let y = Math.round(projY.v2p(20)) - 36;
+			let y = Math.round(projY.v2p(20)) - 36*retina;
 			ctx.fillStyle = 'rgb(' +colors[0]+')';
 			ctx.fillText('Deutschland', x1, y);
 
 			if (selection[0]) {
-				y += 12;
+				y += 12*retina;
 				ctx.fillStyle = 'rgb(' +colors[1]+')';
 				ctx.fillText(selection[0].title, x1, y);
 			}
 			if (selection[1]) {
-				y += 12;
+				y += 12*retina;
 				ctx.fillStyle = 'rgb(' +colors[2]+')';
 				ctx.fillText(selection[1].title, x1, y);
 			}
@@ -538,21 +547,22 @@ $(function () {
 		}
 
 		let drag = false
-		container.on('mousedown', e => {
+		container.on('mousedown touchstart', e => {
 			drag = true;
 			handleEvent(e);
 		});
-		container.on('mousemove', e => {
-			container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.offsetX) < 10) ? 'col-resize' : 'default');
+		container.on('mousemove touchmove', e => {
+			container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.x) < 10) ? 'col-resize' : 'default');
 		});
-		$(document).on('mousemove', e => {
-			if (!drag) return;
-			handleEvent(e);
-		});
-		container.on('mouseup', e => drag = false);
-		$(document).on('mouseup', e => drag = false);
+		document.addEventListener('mousemove', e => { if (drag) handleEvent(e) });
+		document.addEventListener('touchmove', e => { if (drag) handleEvent(e) });
+		container.on('mouseup touchend', e => drag = false);
+		document.addEventListener('mouseup',  e => drag = false);
+		document.addEventListener('touchend', e => drag = false);
+
 		function handleEvent(e) {
-			let day = projX.p2v(e.offsetX*retina);
+			let x = e.offsetX || e.layerX || 0;
+			let day = projX.p2v(x*retina);
 			day = Math.max(0, Math.min(dayMax-dayMin, Math.round(day)));
 			setDay(day);
 		}
@@ -654,12 +664,7 @@ $(function () {
 		}
 
 		function on(event, cb) {
-			event.split(' ').forEach(eventName => {
-				canvasFg.get(0).addEventListener(eventName, e => {
-					e.retina = retina;
-					cb(e);
-				})
-			})
+			event.split(' ').forEach(eventName => canvasFg.get(0).addEventListener(eventName, cb))
 		}
 
 		return me;
