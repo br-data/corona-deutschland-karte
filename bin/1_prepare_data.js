@@ -15,8 +15,8 @@ let dayMax = 0;
 
 console.log('start with landkreise');
 
-const centerX = 10.4541236;
-const centerY = 51.1846362;
+const centerX = 10.45;
+const centerY = 51.10;
 const scaleY = 2/6;
 const scaleX = scaleY*Math.cos(centerY*Math.PI/180);
 
