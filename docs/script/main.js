@@ -251,7 +251,9 @@ $(function () {
 		}
 
 		container.on('mousemove', e => {
-			highlight(findLandkreis(e));
+			let f = findLandkreis(e);
+			container.setCursor(f ? 'pointer' : 'default');
+			highlight(f);
 		})
 		container.on('click', e => {
 			select(findLandkreis(e));
