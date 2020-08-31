@@ -3,12 +3,17 @@ html {
 	font-size: 18px;
 }
 
+* {
+	user-select: none;
+	-webkit-user-select: none;
+	webkit-touch-callout: none;
+}
+
 body {
 	margin: 0;
 	font-family: Open Sans,Helvetica,Arial,sans-serif;
 	color: #fff;
 	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
-	user-select: none;
 }
 
 #wrapper {
