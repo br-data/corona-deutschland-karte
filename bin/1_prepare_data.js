@@ -54,7 +54,6 @@ landkreise.forEach(f => {
 	let n = 10000;
 	f.x = Math.round(f.x*n)/n;
 	f.y = Math.round(f.y*n)/n;
-	f.r = Math.round(f.r);
 })
 
 let lookup = new Map();
@@ -133,10 +132,7 @@ file = resolve(folder, file);
 	
 	console.log('   save');
 
-	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => {
-		if ((l > 1) && Array.isArray(d) && (d.length < 1000)) return true;
-		return false;
-	});
+	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => l > 1);
 
 	fs.writeFileSync('../docs/data/data.js', result, 'utf8');
 })()
