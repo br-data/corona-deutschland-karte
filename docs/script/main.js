@@ -255,17 +255,17 @@ $(function () {
 			container.setCursor(f ? 'pointer' : 'default');
 			highlight(f);
 		})
-		container.on('click', e => {
-			select(findLandkreis(e));
-		})
+		container.on('click', e => select(findLandkreis(e)))
 		container.on('mouseout', e => highlight(false))
 
 		container.init();
 
 		function findLandkreis(e) {
 			let minD = 1e10, minF;
+			let x = e.offsetX*e.retina;
+			let y = e.offsetY*e.retina;
 			data.landkreise.forEach(f => {
-				let d = Math.sqrt(sqr(f.px - e.px) + sqr(f.py - e.py))-f.pr;
+				let d = Math.sqrt(sqr(f.px - x) + sqr(f.py - y)) - f.pr;
 				if (d < minD) {
 					minD = d;
 					minF = f;
@@ -515,15 +515,16 @@ $(function () {
 			handleEvent(e);
 		});
 		container.on('mousemove', e => {
-			container.setCursor((Math.abs(projX.v2p(dayIndex) - e.px) < 5*retina) ? 'col-resize' : 'default');
-
+			container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.offsetX) < 5) ? 'col-resize' : 'default');
+		});
+		$(document).on('mousemove', e => {
 			if (!drag) return;
 			handleEvent(e);
 		});
 		container.on('mouseup', e => drag = false);
 		$(document).on('mouseup', e => drag = false);
 		function handleEvent(e) {
-			let day = projX.p2v(e.px);
+			let day = projX.p2v(e.offsetX*retina);
 			day = Math.max(0, Math.min(dayMax-dayMin, Math.round(day)));
 			setDay(day);
 		}
@@ -627,8 +628,6 @@ $(function () {
 		function on(event, cb) {
 			event.split(' ').forEach(eventName => {
 				canvasFg.get(0).addEventListener(eventName, e => {
-					e.px = e.offsetX*retina;
-					e.py = e.offsetY*retina;
 					e.retina = retina;
 					cb(e);
 				})
@@ -692,4 +691,3 @@ CanvasRenderingContext2D.prototype.drawRoundRect = function (x0, y0, x1, y1, r) 
 	this.arcTo(x0, y1, x0, y0, r);
 	this.arcTo(x0, y0, x1, y0, r);
 }
-
