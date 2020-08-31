@@ -451,7 +451,7 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
-
+			ctx.font = 12*opt.retina + 'px sans-serif';
 
 
 			// draw selection and hover
@@ -468,8 +468,7 @@ $(function () {
 				ctx.lineTo(x0, y0);
 				ctx.fill();
 			})
-			ctx.font = 12*opt.retina + 'px sans-serif';
-
+			
 			
 
 			// draw legend
@@ -500,30 +499,42 @@ $(function () {
 			// vertical time marker
 
 			let x = projX.v2p(dayIndex);
-			let s = 4*opt.retina;
-			let ya = y0 + 8*opt.retina;
-			let yb = ya + 8*opt.retina;
-			let yc = yb + 12*opt.retina;
-			let w = 8*opt.retina;
+			let s = 3*opt.retina;
+			let ya = y0 + 12*opt.retina;
+			let yb = ya + 4*opt.retina;
+			let yc = yb + 13*opt.retina;
+			let w = 17*opt.retina;
 			let r = 3*opt.retina;
 
-			ctx.setLineDash([2*opt.retina, 4*opt.retina]);
+			ctx.setLineDash([2*opt.retina, 2*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
 			ctx.lineV(x, y1, y0);
 			ctx.stroke();
 			ctx.setLineDash([]);
 
+
+
 			// handle
 
 			ctx.fillStyle = '#fff';
 			ctx.beginPath();
 			ctx.moveTo(x, ya);
+			ctx.arcTo(x+s, yb, x+w, yb, r);
 			ctx.arcTo(x+w, yb, x+w, yc, r);
 			ctx.arcTo(x+w, yc, x-w, yc, r);
 			ctx.arcTo(x-w, yc, x-w, yb, r);
-			ctx.arcTo(x-w, yb, x, ya, r);
+			ctx.arcTo(x-w, yb, x-s, yb, r);
+			ctx.arcTo(x-s, yb, x  , ya, r);
 			ctx.fill();
+
+			let date = new Date((dayIndex+data.dayMin)*86400000);
+			date = date.getDate()+'.'+(date.getMonth()+1)+'.';
+			ctx.fillStyle = '#000';
+			ctx.textBaseline = 'middle';
+			ctx.textAlign = 'center';
+			ctx.font = 10*opt.retina + 'px sans-serif';
+			ctx.fillText(date, x, (yb+yc)/2);
 		}
 
 		let drag = false
@@ -532,7 +543,7 @@ $(function () {
 			handleEvent(e);
 		});
 		container.on('mousemove', e => {
-			container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.offsetX) < 5) ? 'col-resize' : 'default');
+			container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.offsetX) < 10) ? 'col-resize' : 'default');
 		});
 		$(document).on('mousemove', e => {
 			if (!drag) return;
