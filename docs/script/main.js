@@ -213,8 +213,10 @@ $(function () {
 
 				let x = f.px;
 				let y = f.py;
-				let m1 = ctx.measureText(f.title);
-				let m2 = ctx.measureText(f.type);
+				let textLine1 = f.title+': '+f.infected[dayIndex];
+				let textLine2 = f.type;
+				let m1 = ctx.measureText(textLine1);
+				let m2 = ctx.measureText(textLine2);
 				let px = 4*opt.retina;
 				let py = 3*opt.retina;
 				let w = Math.max(m1.width, m2.width)+2*px;
@@ -238,11 +240,11 @@ $(function () {
 
 				ctx.fillStyle = '#000';
 				ctx.textBaseline = 'bottom';
-				ctx.fillText(f.title, x+px, y);
+				ctx.fillText(textLine1, x+px, y);
 
 				ctx.fillStyle = '#888';
 				ctx.textBaseline = 'top';
-				ctx.fillText(f.type, x+px, y);
+				ctx.fillText(textLine2, x+px, y);
 			})
 
 			if (changeSum > 0.01) timeoutHandler = setTimeout(container.redrawFg, 30);
