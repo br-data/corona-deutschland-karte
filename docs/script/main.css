@@ -49,6 +49,25 @@ body {
 	width: 75vh;
 	height: 100vh;
 }
+#footer {
+	left: 0px;
+	right: 75vh;
+	bottom: 0px;
+	height: 14px;
+	font-size: 10px;
+	color: rgba(255,255,255,0.5);
+	padding-left: 1px;
+	text-align: center;
+}
+#footer a {
+	color: inherit;
+	text-decoration: underline transparent;
+	transition: color 0.1s, text-decoration-color 0.1s;
+}
+#footer a:hover {
+	color: #fff;
+	text-decoration-color: #fff;
+}
 
 @media (max-aspect-ratio: 1/1) {
 	#headline {
@@ -62,7 +81,12 @@ body {
 	#mapContainer {
 		top: 40vw;
 		width: 100vw;
-		height: calc(100vh - 40vw);
+		height: auto;
+		bottom: 1rem;
+	}
+	#footer {
+		text-align: center;
+		right: 0px;
 	}
 }
 
