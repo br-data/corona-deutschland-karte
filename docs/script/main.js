@@ -213,7 +213,7 @@ $(function () {
 
 				let x = f.px;
 				let y = f.py;
-				let textLine1 = f.title+': '+f.infected[dayIndex];
+				let textLine1 = f.title+': '+f.normalized[dayIndex].toFixed(1);
 				let textLine2 = f.type;
 				let m1 = ctx.measureText(textLine1);
 				let m2 = ctx.measureText(textLine2);
