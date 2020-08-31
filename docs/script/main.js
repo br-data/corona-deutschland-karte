@@ -127,10 +127,10 @@ $(function () {
 		}
 
 		container.drawFg = function drawMapFg (ctx, opt) {
+			if (dayIndex === undefined) return;
 			if (changeCheckerLayout(opt)) relayout(opt);
 
 			if (!timeoutHandler && !changeCheckerDraw([opt, dayIndex, selection.map(f => f.index)])) return;
-			if (dayIndex === undefined) return;
 			if (timeoutHandler) {
 				clearTimeout(timeoutHandler);
 				timeoutHandler = false;
@@ -362,8 +362,14 @@ $(function () {
 				paddingBottom += diff;
 			}
 
-			projX = getProjection(0, dayMax-dayMin, paddingLeft, opt.width - paddingRight);
-			projY = getProjection(0, maxValue, opt.height - paddingBottom, paddingTop);
+			projX = getProjection(
+				0, dayMax-dayMin,
+				Math.round(paddingLeft), Math.round(opt.width - paddingRight)
+			);
+			projY = getProjection(
+				0, maxValue,
+				opt.height - paddingBottom, paddingTop
+			);
 
 			x0 = projX.v2p(0);
 			x1 = projX.v2p(dayMax-dayMin);
@@ -442,6 +448,7 @@ $(function () {
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
+			if (dayIndex === undefined) return;
 			if (changeCheckerLayout(opt)) relayout(opt);
 
 			if (!changeCheckerDraw([opt, dayIndex, selection.map(f => f.index)])) return;
@@ -449,7 +456,7 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
 
-			
+			// selection and hover
 			selection.forEach((f,index) => {
 				if (!f) return;
 
@@ -463,6 +470,8 @@ $(function () {
 				ctx.lineTo(x0, y0);
 				ctx.fill();
 			})
+
+			// vertical time marker
 
 			let x = projX.v2p(dayIndex);
 			let ya = y0 + 8*opt.retina;
@@ -478,6 +487,7 @@ $(function () {
 			ctx.stroke();
 			ctx.setLineDash([]);
 
+			// handle
 
 			ctx.fillStyle = '#fff';
 			ctx.beginPath();
