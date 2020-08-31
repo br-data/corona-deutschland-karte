@@ -340,9 +340,9 @@ $(function () {
 		const changeCheckerLayout = new ChangeChecker();
 
 		const colors = [
-			[ 11,159,216,1.0],
-			[230, 66,  6,1.0],
-			[255,184,  0,1.0],
+			[ 11,159,216].join(','),
+			[230, 66,  6].join(','),
+			[255,184,  0].join(','),
 		]
 
 		function relayout(opt) {
@@ -386,11 +386,13 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
+
+
 			// draw chart
 
 			ctx.lineWidth = 1;
-			ctx.strokeStyle = 'rgba('+colors[0].join(',')+')';
-			ctx.fillStyle   = 'rgba('+colors[0].map((v,i)=>v/(i>2?5:1)).join(',')+')';
+			ctx.strokeStyle = 'rgb(' +colors[0]+')';
+			ctx.fillStyle   = 'rgba('+colors[0]+',0.2)';
 			
 			ctx.beginPath();
 			data.deutschland.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
@@ -398,6 +400,8 @@ $(function () {
 			ctx.lineTo(x1, y0);
 			ctx.lineTo(x0, y0);
 			ctx.fill();
+
+
 
 			// draw axes
 
@@ -437,14 +441,6 @@ $(function () {
 			}
 
 			ctx.stroke();
-
-			/*
-			ctx.rotate(-Math.PI/2);
-			ctx.textBaseline = 'top';
-			ctx.textAlign = 'center';
-			ctx.fillText('Innerhalb von 7 Tagen gemeldete Infektionen auf 100.000 Einwohner_innen', -(y0+y1)/2, 5*opt.retina);
-			ctx.setTransform(1, 0, 0, 1, 0, 0);
-			*/
 		}
 
 		container.drawFg = function drawChartFg (ctx, opt) {
@@ -456,12 +452,14 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
 
-			// selection and hover
+
+
+			// draw selection and hover
 			selection.forEach((f,index) => {
 				if (!f) return;
 
-				ctx.strokeStyle = 'rgba('+colors[index+1].join(',')+')';
-				ctx.fillStyle   = 'rgba('+colors[index+1].map((v,i)=>v/(i>2?5:1)).join(',')+')';
+				ctx.strokeStyle = 'rgb(' +colors[index+1]+')';
+				ctx.fillStyle   = 'rgba('+colors[index+1]+',0.2)';
 
 				ctx.beginPath();
 				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
@@ -470,10 +468,39 @@ $(function () {
 				ctx.lineTo(x0, y0);
 				ctx.fill();
 			})
+			ctx.font = 12*opt.retina + 'px sans-serif';
+
+			
+
+			// draw legend
+
+			ctx.textBaseline = 'top';
+			ctx.textAlign = 'right';
+
+			let y = Math.round(projY.v2p(20)) - 36;
+			ctx.fillStyle = 'rgb(' +colors[0]+')';
+			ctx.fillText('Deutschland', x1, y);
+
+			if (selection[0]) {
+				y += 12;
+				ctx.fillStyle = 'rgb(' +colors[1]+')';
+				ctx.fillText(selection[0].title, x1, y);
+			}
+			if (selection[1]) {
+				y += 12;
+				ctx.fillStyle = 'rgb(' +colors[2]+')';
+				ctx.fillText(selection[1].title, x1, y);
+			}
+
+			ctx.fillStyle = baseColor;
+			ctx.strokeStyle = baseColor;
+
+
 
 			// vertical time marker
 
 			let x = projX.v2p(dayIndex);
+			let s = 4*opt.retina;
 			let ya = y0 + 8*opt.retina;
 			let yb = ya + 8*opt.retina;
 			let yc = yb + 12*opt.retina;
@@ -496,17 +523,7 @@ $(function () {
 			ctx.arcTo(x+w, yc, x-w, yc, r);
 			ctx.arcTo(x-w, yc, x-w, yb, r);
 			ctx.arcTo(x-w, yb, x, ya, r);
-			//ctx.arcTo(x0, y0, x1, y0, r);
-			//ctx.drawRoundRect(x-w, y, x+w, y+h, 3*opt.retina);
 			ctx.fill();
-
-			//ctx.beginPath();
-			//ctx.arc(projX.v2p(dayIndex), (y1*2+y0)/3, 30*opt.retina, 0, Math.PI*2);
-			//ctx.stroke();
-
-			//ctx.beginPath();
-			//ctx.lineV(projX.v2p(dayIndex), y1, y0);
-			//ctx.stroke();
 		}
 
 		let drag = false
