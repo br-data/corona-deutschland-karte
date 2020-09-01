@@ -109,10 +109,6 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 
 			ctx.fillStyle = '#fff';
-			ctx.shadowBlur = 0.01*opt.width*opt.retina;
-			ctx.shadowColor = 'rgba(255,255,255,1)';
-			ctx.shadowOffsetX = 0;
-			ctx.shadowOffsetY = 0;
 			
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
@@ -121,8 +117,6 @@ $(function () {
 				})
 			})
 			ctx.fill();
-
-			ctx.shadowColor = 'transparent';
 
 			drawLegend(ctx, opt)
 		}
