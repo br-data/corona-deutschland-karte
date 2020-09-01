@@ -357,7 +357,7 @@ $(function () {
 			paddingTop = 10*opt.retina;
 			paddingLeft = 30*opt.retina;
 			paddingRight = 20*opt.retina;
-			paddingBottom = 30*opt.retina;
+			paddingBottom = 35*opt.retina;
 
 			let w = opt.width - paddingLeft - paddingRight;
 			let h = opt.height - paddingTop - paddingBottom;
@@ -508,10 +508,11 @@ $(function () {
 			let x = projX.v2p(dayIndex);
 			let s = 3*opt.retina;
 			let ya = y0 + 12*opt.retina;
-			let yb = ya + 4*opt.retina;
-			let yc = yb + 13*opt.retina;
-			let w = 17*opt.retina;
-			let r = 3*opt.retina;
+			let yb = ya +  6*opt.retina;
+			let yc = yb + 16*opt.retina;
+			let yt = ya +  8*opt.retina;
+			let w = 18*opt.retina;
+			let r =  3*opt.retina;
 
 			ctx.setLineDash([2*opt.retina, 2*opt.retina]);
 			ctx.strokeStyle = baseColor;
@@ -538,10 +539,10 @@ $(function () {
 			let date = new Date((dayIndex+data.dayMin)*86400000);
 			date = date.getDate()+'.'+(date.getMonth()+1)+'.';
 			ctx.fillStyle = '#000';
-			ctx.textBaseline = 'middle';
+			ctx.textBaseline = 'top';
 			ctx.textAlign = 'center';
-			ctx.font = 10*opt.retina + 'px sans-serif';
-			ctx.fillText(date, x, (yb+yc)/2);
+			ctx.font = 12*opt.retina + 'px sans-serif';
+			ctx.fillText(date, x, yt);
 		}
 
 		let drag = false
