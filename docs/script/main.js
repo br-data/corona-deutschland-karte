@@ -488,13 +488,13 @@ $(function () {
 			ctx.fillText('Deutschland', x1, y);
 
 			if (selection[0]) {
-				y += 12*retina;
-				ctx.fillStyle = 'rgb(' +colors[1]+')';
+				y -= 12*retina;
+				ctx.fillStyle = 'rgb('+colors[1]+')';
 				ctx.fillText(selection[0].title, x1, y);
 			}
 			if (selection[1]) {
-				y += 12*retina;
-				ctx.fillStyle = 'rgb(' +colors[2]+')';
+				y -= 12*retina;
+				ctx.fillStyle = 'rgb('+colors[2]+')';
 				ctx.fillText(selection[1].title, x1, y);
 			}
 
