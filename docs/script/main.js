@@ -208,7 +208,11 @@ $(function () {
 
 				let x = f.px;
 				let y = f.py;
-				let textLine1 = f.title+': '+f.normalized[dayIndex].toFixed(1);
+				
+				let textLine1 = f.title;
+				if (textLine1.length > 30) textLine1 = textLine1.slice(0,30)+'...';
+				textLine1 += ': '+f.normalized[dayIndex].toFixed(1);
+
 				let textLine2 = f.type;
 				let m1 = ctx.measureText(textLine1);
 				let m2 = ctx.measureText(textLine2);
