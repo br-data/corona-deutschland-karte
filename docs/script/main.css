@@ -14,6 +14,8 @@ body {
 	font-family: Open Sans,Helvetica,Arial,sans-serif;
 	color: #fff;
 	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
+	height: 100vh;
+	touch-action: none;
 }
 
 #wrapper {
