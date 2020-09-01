@@ -212,8 +212,8 @@ $(function () {
 				let textLine2 = f.type;
 				let m1 = ctx.measureText(textLine1);
 				let m2 = ctx.measureText(textLine2);
-				let px = 4*opt.retina;
-				let py = 3*opt.retina;
+				let px = 6*opt.retina;
+				let py = 6*opt.retina;
 				let w = Math.max(m1.width, m2.width)+2*px;
 				let h = 12*opt.retina+py;
 				let r = 3*opt.retina;
