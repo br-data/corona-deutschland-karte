@@ -1,5 +1,6 @@
 
 *.bz2
 *.gz
-/data/
+/data/*.js
+/data/*.json.bz2
 /node_modules/
