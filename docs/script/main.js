@@ -213,8 +213,9 @@ $(function () {
 				ctx.fill();
 			})
 
-			selection.forEach(f => {
+			selection.forEach((f,index) => {
 				if (!f) return;
+				if ((index === 1) && (selection[0] === f)) return
 
 				// markiere entry
 				ctx.strokeStyle = '#000';
@@ -497,6 +498,7 @@ $(function () {
 			// draw selection and hover
 			selection.forEach((f,index) => {
 				if (!f) return;
+				if ((index === 1) && (selection[0] === f)) return;
 
 				ctx.strokeStyle = 'rgb(' +colors[index+1]+')';
 				ctx.fillStyle   = 'rgba('+colors[index+1]+',0.2)';
@@ -525,7 +527,7 @@ $(function () {
 				ctx.fillStyle = 'rgb('+colors[1]+')';
 				ctx.fillText(selection[0].title, x1, y);
 			}
-			if (selection[1]) {
+			if (selection[1] && (selection[1] !== selection[0])) {
 				y -= 12*retina;
 				ctx.fillStyle = 'rgb('+colors[2]+')';
 				ctx.fillText(selection[1].title, x1, y);
