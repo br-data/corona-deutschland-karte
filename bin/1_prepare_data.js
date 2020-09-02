@@ -22,6 +22,10 @@ const centerY = 51.10;
 const scaleY = 2/6;
 const scaleX = scaleY*Math.cos(centerY*Math.PI/180);
 
+
+
+// parse geojson
+
 let landkreise = JSON.parse(fs.readFileSync(resolve(folder, 'landkreise.geo.json')));
 landkreise = landkreise.features.map(f => {
 	let sx = 0, sy = 0, s = 0;
@@ -34,7 +38,6 @@ landkreise = landkreise.features.map(f => {
 	return {
 		x:  (sx/s-centerX)*scaleX,
 		y: -(sy/s-centerY)*scaleY,
-		r: Math.sqrt(f.properties.EWZ)*15,
 		id:  f.properties.RS, 
 		ew: f.properties.EWZ, 
 		type: f.properties.BEZ, 
@@ -42,15 +45,34 @@ landkreise = landkreise.features.map(f => {
 	}
 })
 
-let pairs = [];
-for (let j1 = 0; j1 < landkreise.length; j1++) {
-	let f1 = landkreise[j1];
-	for (let j2 = j1+1; j2 < landkreise.length; j2++) {
-		let f2 = landkreise[j2];
-		let d = distance([f1.x,f1.y], [f2.x,f2.y], {units:'kilometers'});
-		if (d < 30+f1.r+f2.r) pairs.push([f1,f2]);
+
+
+// merge data for Berlin :(
+
+let berlin = {x:0,y:0,s:0,ids:[],ew:0,type:'Kreisfreie Stadt',title:'Berlin'};
+landkreise = landkreise.filter(f => {
+	if (f.id.startsWith('11')) {
+		berlin.x += f.x;
+		berlin.y += f.y;
+		berlin.s++;
+		berlin.ids.push(f.id);
+		berlin.ew += f.ew;
+		// Berlin
+		return false;
+	} else {
+		// not Berlin
+		f.ids = [f.id];
+		return true;
 	}
-}
+})
+berlin.x /= berlin.s;
+berlin.y /= berlin.s;
+delete berlin.s;
+landkreise.push(berlin);
+
+
+
+// prepare merging
 
 landkreise.forEach(f => {
 	let n = 10000;
@@ -62,7 +84,9 @@ let lookup = new Map();
 landkreise.sort((a,b) => a.id < b.id ? -1 : 1);
 landkreise.forEach((l,i) => {
 	l.index = i;
-	lookup.set(l.id,l);
+	l.ids.forEach(id => lookup.set(id,l));
+	delete l.id;
+	delete l.ids;
 });
 
 
