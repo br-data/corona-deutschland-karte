@@ -117,8 +117,8 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
+			// draw deutschland
 			ctx.fillStyle = '#fff';
-			
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
 				poly.forEach((p,i) => {
@@ -126,6 +126,17 @@ $(function () {
 				})
 			})
 			ctx.fill();
+
+			// draw bundeslaender
+			ctx.strokeStyle = 'rgba(0,0,0,0.3)';
+			ctx.lineWidth = 0.5*opt.retina;
+			ctx.beginPath();
+			data.borders1.forEach(poly => {
+				poly.forEach((p,i) => {
+					(i?ctx.lineTo:ctx.moveTo).call(ctx, zoomX*p[0]+offsetX, zoomY*p[1]+offsetY)
+				})
+			})
+			ctx.stroke();
 
 			drawLegend(ctx, opt)
 		}

@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/br-data/2020-second-wave#readme",
   "dependencies": {
-    "@turf/distance": "^6.0.1"
+    "@turf/distance": "^6.0.1",
+    "topojson": "^3.0.2"
   }
 }

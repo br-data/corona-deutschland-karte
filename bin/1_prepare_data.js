@@ -6,6 +6,7 @@ const fs = require('fs');
 const helper = require('./lib/helper.js');
 const {resolve} = require('path');
 const distance = require('@turf/distance').default;
+const topojson = require('topojson');
 
 const dayMin = parseDate('2020-02-10');
 const blurWindow = 7;
@@ -15,7 +16,7 @@ let dayMax = 0;
 
 
 
-console.log('start with landkreise');
+
 
 const centerX = 10.45;
 const centerY = 51.10;
@@ -24,6 +25,25 @@ const scaleX = scaleY*Math.cos(centerY*Math.PI/180);
 
 
 
+console.log('start with bundeslaender');
+
+let bundeslaender = JSON.parse(fs.readFileSync(resolve(folder, 'bundeslaender.geo.json')));
+bundeslaender = topojson.topology({bundeslaender}, 1e6);
+//console.log(bundeslaender);
+var ps = topojson.presimplify(bundeslaender);
+bundeslaender = topojson.simplify(ps, 1e-3);
+//console.log(bundeslaender);
+bundeslaender = topojson.mesh(bundeslaender, bundeslaender.objects.bundeslaender);
+bundeslaender = bundeslaender.coordinates.map(poly => poly.map(p => ([
+	Math.round( (p[0]-centerX)*scaleX*10000)/10000,
+	Math.round(-(p[1]-centerY)*scaleY*10000)/10000,
+])));
+console.log('   size: '+JSON.stringify(bundeslaender).length);
+
+
+
+
+console.log('start with landkreise');
 // parse geojson
 
 let landkreise = JSON.parse(fs.readFileSync(resolve(folder, 'landkreise.geo.json')));
@@ -88,6 +108,7 @@ landkreise.forEach((l,i) => {
 	delete l.id;
 	delete l.ids;
 });
+console.log('   size: '+JSON.stringify(landkreise).length);
 
 
 
@@ -101,6 +122,7 @@ deutschland = deutschland.map(poly => poly.map(p => ([
 	Math.round( (p[0]-centerX)*scaleX*10000)/10000,
 	Math.round(-(p[1]-centerY)*scaleY*10000)/10000,
 ])));
+console.log('   size: '+JSON.stringify(deutschland).length);
 
 
 
@@ -155,6 +177,7 @@ file = resolve(folder, file);
 		landkreise,
 		days,
 		borders0: deutschland,
+		borders1: bundeslaender,
 	}
 	
 	console.log('   save');
