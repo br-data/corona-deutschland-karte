@@ -23,9 +23,7 @@ $(function () {
 		
 		setDay(data.dayMax-data.dayMin)
 
-		animation = initAnimation();
-		$('#button_play').click(animation.play);
-		//setTimeout(animation.play, 1000);
+		initAnimation();
 	});
 
 	function setDay(index) {
@@ -614,6 +612,44 @@ $(function () {
 	}
 
 	function initAnimation() {
+		let container = $('#finger');
+		let finger1 = $('#finger1');
+		let finger2 = $('#finger2');
+
+		//$(document).one(() => setTimeout(start, 1000));
+		$(document).one('mousemove', () => start());
+
+		function start() {
+			let xOffset = container.width()*0.4;
+			let x0 = 27-xOffset;
+			let x1 = $('#chartContainer').width()-20-xOffset;
+			let y0 = '40vw';
+			let y1 = '30vw';
+
+			container.css({left:x0,top:y0,display:'block',opacity:0});
+			finger2.hide();
+
+			let animation = [
+				() => container.animate({top:y1,opacity:1}, 500),
+				() => finger2.fadeIn(200),
+				() => container.animate({left:x1}, {duration:3000, step}),
+				() => container.fadeOut(200),
+			]
+			run();
+			
+			function run() {
+				let phase = animation.shift();
+				if (!phase) return;
+				$.when(phase()).then(run);
+			}
+
+			function step(now, tween) {
+				let v = (tween.now-tween.start)/(tween.end-tween.start);
+				setDay(Math.round(v*(data.dayMax-data.dayMin)));
+			}
+		}
+
+		/*
 		let playInterval = false;
 
 		return {play, stop}
@@ -636,6 +672,7 @@ $(function () {
 			clearInterval(playInterval);
 			playInterval = false;
 		}
+		*/
 	}
 
 	function hsv2rgb(c) {

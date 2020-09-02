@@ -86,13 +86,14 @@ body {
 	text-decoration-color: #fff;
 }
 #finger {
-	width: 100px;
-	height: 140px;
+	width: 20vw;
+	height: 28vw;
 	pointer-events: none;
 	display: none;
+	position: absolute;
 }
 #finger svg {
-	opacity: 0.5;
+	opacity: 0.8;
 	position: absolute;
 	top: 0px;
 	left: 0px;
