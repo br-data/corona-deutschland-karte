@@ -684,7 +684,8 @@ $(function () {
 			$(window).resize(updateLayout);
 			window.matchMedia('(resolution: 1dppx)').addListener(updateLayout);
 			window.matchMedia('(resolution: 2dppx)').addListener(updateLayout);
-			updateLayout()
+			updateLayout();
+			setTimeout(updateLayout, 10);
 		}
 
 		function redrawBg() { me.drawBg(ctxBg, {width,height,retina,random}); }
