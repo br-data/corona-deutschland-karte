@@ -231,7 +231,7 @@ $(function () {
 				
 				let textLine1 = f.title;
 				if (textLine1.length > 30) textLine1 = textLine1.slice(0,30)+'...';
-				textLine1 += ': '+f.normalized[dayIndex].toFixed(1);
+				textLine1 += ': '+f.normalized[dayIndex].toFixed(1).replace('.',',');
 
 				let textLine2 = f.type;
 				let m1 = ctx.measureText(textLine1);
