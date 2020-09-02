@@ -136,7 +136,7 @@ file = resolve(folder, file);
 
 	result = 'window.fvOZwtTDlpiMFxSV = '+stringify(result, (d,l) => l > 1);
 
-	fs.writeFileSync('../docs/data/data.js', result, 'utf8');
+	fs.writeFileSync('../data/data.js', result, 'utf8');
 })()
 
 function stringify(data, collapseChecker = false) {

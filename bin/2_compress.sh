@@ -2,7 +2,7 @@
 set -e
 
 cd "$(dirname "$0")"
-cd "../docs/data/"
+cd "../data/"
 
 zopfli data.js
 
