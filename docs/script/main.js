@@ -399,7 +399,7 @@ $(function () {
 			let aspectRatio = w/h;
 			const minAspectRatio = 1;
 			if (aspectRatio < minAspectRatio) {
-				diff = Math.round((h-w/minAspectRatio)/2);
+				diff = Math.round((h-w/minAspectRatio)*0.3);
 				paddingTop += diff;
 				paddingBottom += diff;
 			}
