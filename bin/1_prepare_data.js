@@ -99,7 +99,8 @@ file = resolve(folder, file);
 
 	console.log('   scan');
 	data.forEach(entry => {
-		let dayMelde = parseDate(entry.MeldedatumISO);
+		let dayMelde = (entry.IstErkrankungsbeginn === 1) ? entry.RefdatumISO : entry.MeldedatumISO;
+		dayMelde = parseDate(dayMelde);
 
 		let id = entry.IdLandkreis;
 		if (!lookup.has(id)) throw Error();
