@@ -1,12 +1,21 @@
 
 $(function () {
-	let dayIndex, animation, map, touchOnly;
+	let dayIndex, animation, map;
 	let data = window.fvOZwtTDlpiMFxSV;
 	let slider;
 	let chart;
 	let selection = [];
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,0.5)';
+
+	const useTouchEvents = (() => {
+		try { 
+			document.createEvent("TouchEvent");
+			return true;
+		} catch (e) {
+			return false;
+		}
+	})()
 
 	initData(() => {
 		chart = initChart();
@@ -249,28 +258,29 @@ $(function () {
 			if (changeSum > 0.01) timeoutHandler = setTimeout(container.redrawFg, 30);
 		}
 
-		container.on('touchstart', e => {
-			touchOnly = true;
-			highlight(findLandkreis(e));
-		})
-		container.on('mousemove touchmove', e => {
-			let f = findLandkreis(e);
-			highlight(f);
-			if (touchOnly) return;
-			container.setCursor(f ? 'pointer' : 'default');
-		})
-		container.on('click', e => {
-			if (touchOnly) return;
-			select(findLandkreis(e))
-		})
-		container.on('mouseout', e => highlight(false))
-
+		if (useTouchEvents) {
+			container.on('touchstart touchmove', e => highlight(findLandkreis(e)));
+		} else {
+			container.on('mousemove', e => {
+				let f = findLandkreis(e);
+				highlight(f);
+				container.setCursor(f ? 'pointer' : 'default');
+			})
+			container.on('click', e => select(findLandkreis(e)))
+			container.on('mouseout', e => highlight(false))
+		}
 		container.init();
 
 		function findLandkreis(e) {
 			let minD = 1e10, minF;
-			let x = (e.offsetX || e.layerX || 0)*retina;
-			let y = (e.offsetY || e.layerY || 0)*retina;
+			if (e.touches) {
+				e = e.touches[0];
+				var rect = e.target.getBoundingClientRect();
+				e.offsetX = e.clientX - rect.left;
+				e.offsetY = e.clientY - rect.top;
+			}
+			let x = (e.offsetX || 0)*retina;
+			let y = (e.offsetY || 0)*retina;
 			data.landkreise.forEach(f => {
 				let d = Math.sqrt(sqr(f.px - x) + sqr(f.py - y)) - f.pr;
 				if (d < minD) {
@@ -546,26 +556,28 @@ $(function () {
 		}
 
 		let drag = false
-		container.on('mousedown touchstart', e => {
-			drag = true;
-			handleEvent(e);
-		});
-		container.on('mousemove touchmove', e => {
-			container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.x) < 10) ? 'col-resize' : 'default');
-		});
-		document.addEventListener('mousemove', e => { if (drag) handleEvent(e) });
-		document.addEventListener('touchmove', e => { if (drag) handleEvent(e) });
-		container.on('mouseup touchend', e => drag = false);
-		document.addEventListener('mouseup',  e => drag = false);
-		document.addEventListener('touchend', e => drag = false);
-
-		function handleEvent(e) {
-			let x = e.offsetX || e.layerX || 0;
-			let day = projX.p2v(x*retina);
-			day = Math.max(0, Math.min(dayMax-dayMin, Math.round(day)));
-			setDay(day);
+		if (useTouchEvents) {
+			container.on('touchstart', e => { drag = true; handleEvent(e); });
+			document.addEventListener('touchmove', e => { if (drag) handleEvent(e) });
+			container.on('touchend', e => drag = false);
+			document.addEventListener('touchend', e => drag = false);
+		} else {
+			container.on('mousedown', e => { drag = true; handleEvent(e); });
+			container.on('mousemove', e => {
+				container.setCursor((Math.abs(projX.v2p(dayIndex)/retina - e.x) < 10) ? 'col-resize' : 'default');
+			});
+			document.addEventListener('mousemove', e => { if (drag) handleEvent(e) });
+			container.on('mouseup', e => drag = false);
+			document.addEventListener('mouseup',  e => drag = false);
 		}
 
+		function handleEvent(e) {
+			if (e.touches) e = e.touches[0];
+			let x = e.clientX || 0;
+			let day = projX.p2v(x*retina);
+			day = Math.max(0, Math.min(dayMax-dayMin, Math.floor(day)));
+			setDay(day);
+		}
 
 		container.init();
 
