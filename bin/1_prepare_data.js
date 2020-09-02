@@ -7,7 +7,7 @@ const helper = require('./lib/helper.js');
 const {resolve} = require('path');
 const distance = require('@turf/distance').default;
 
-const dayMin = parseDate('2020-02-20');
+const dayMin = parseDate('2020-02-10');
 const blurWindow = 7;
 const folder = resolve(__dirname, '../data/');
 
