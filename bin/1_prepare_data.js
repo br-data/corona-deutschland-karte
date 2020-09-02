@@ -145,7 +145,7 @@ file = resolve(folder, file);
 
 	days = days.map((day,i) => landkreise.map(l => {
 		let s = 0;
-		for (let j = Math.max(0,i-blurWindow); j <= i; j++) s += days[j][l.index] || 0;
+		for (let j = Math.max(0,i-blurWindow); j < i; j++) s += days[j][l.index] || 0;
 		return s;
 	}))
 
