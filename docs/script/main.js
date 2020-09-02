@@ -615,11 +615,19 @@ $(function () {
 		let container = $('#finger');
 		let finger1 = $('#finger1');
 		let finger2 = $('#finger2');
+		let stopped = false;
 
-		//$(document).one(() => setTimeout(start, 1000));
-		$(document).one('mousemove', () => start());
+		if (useTouchEvents) {
+			setTimeout(start,2000);
+			$(document).one('touchstart', kill);
+		} else {
+			$(document).one('mousemove', () => start());
+			$(document).one('mousedown', kill);
+		}
 
 		function start() {
+			if (stopped) return;
+
 			let xOffset = container.width()*0.4;
 			let x0 = 27-xOffset;
 			let x1 = $('#chartContainer').width()-20-xOffset;
@@ -639,40 +647,21 @@ $(function () {
 			
 			function run() {
 				let phase = animation.shift();
-				if (!phase) return;
+				if (stopped || !phase) return;
 				$.when(phase()).then(run);
 			}
 
 			function step(now, tween) {
+				if (stopped) return;
 				let v = (tween.now-tween.start)/(tween.end-tween.start);
 				setDay(Math.round(v*(data.dayMax-data.dayMin)));
 			}
 		}
 
-		/*
-		let playInterval = false;
-
-		return {play, stop}
-
-		function play() {
-			let i0 = 0;
-			let i1 = data.dayMax-data.dayMin;
-			let i = i0;
-			playInterval = setInterval(() => {
-				slider.setValue(i);
-				chart.redraw();
-				map.redraw();
-				i++;
-				if (i > i1) stop();
-			}, 30)
+		function kill() {
+			stopped = true;
+			container.css({display:'none'});
 		}
-
-		function stop() {
-			if (!playInterval) return;
-			clearInterval(playInterval);
-			playInterval = false;
-		}
-		*/
 	}
 
 	function hsv2rgb(c) {
