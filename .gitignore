@@ -4,3 +4,5 @@
 /data/*.js
 /data/*.json.bz2
 /node_modules/
+/publish/*.css
+/publish/*.js
