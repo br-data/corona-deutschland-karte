@@ -39,9 +39,18 @@ body {
 	top: 0.5rem;
 	left: 0px;
 	width: calc(100vw - 75vh);
-	line-height: 1.2em;
+	line-height: 1em;
+	font-size: min(4vw, 18px);
+}
+
+#headline p {
 	text-align: center;
-	font-size: min(3.5vw, 18px);
+	margin: 0;
+}
+
+#headline p.small {
+	font-size: 0.65em;
+	opacity: 0.5;
 }
 
 #chartContainer {
@@ -104,7 +113,7 @@ body {
 		top: 40vw;
 		width: 100vw;
 		height: auto;
-		bottom: 1rem;
+		bottom: 0;
 	}
 	#footer {
 		text-align: center;

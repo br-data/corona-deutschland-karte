@@ -102,8 +102,8 @@ $(function () {
 
 		function relayout(opt) {
 			retina = opt.retina;
-			zoomX = 0.99*opt.width/2;
-			zoomY = 0.74*opt.height/2;
+			zoomX = 1.03*opt.width/2;
+			zoomY = 0.75*opt.height/2;
 			if (zoomX > zoomY) {
 				zoomX = Math.sqrt(zoomX*zoomY);
 			} else {
@@ -392,9 +392,9 @@ $(function () {
 		function relayout(opt) {
 			retina = opt.retina;
 			paddingTop = 10*opt.retina;
-			paddingLeft = 30*opt.retina;
+			paddingLeft = 27*opt.retina;
 			paddingRight = 20*opt.retina;
-			paddingBottom = 35*opt.retina;
+			paddingBottom = 34*opt.retina;
 
 			let w = opt.width - paddingLeft - paddingRight;
 			let h = opt.height - paddingTop - paddingBottom;
@@ -436,7 +436,7 @@ $(function () {
 
 			ctx.fillStyle = baseColor;
 			ctx.strokeStyle = baseColor;
-			ctx.font = 12*opt.retina + 'px sans-serif';
+			ctx.font = 11*opt.retina + 'px sans-serif';
 
 			ctx.beginPath();
 
