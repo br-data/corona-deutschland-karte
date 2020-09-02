@@ -128,8 +128,8 @@ $(function () {
 			ctx.fill();
 
 			// draw bundeslaender
-			ctx.strokeStyle = 'rgba(0,0,0,0.3)';
-			ctx.lineWidth = 0.5*opt.retina;
+			ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+			ctx.lineWidth = opt.retina;
 			ctx.beginPath();
 			data.borders1.forEach(poly => {
 				poly.forEach((p,i) => {
