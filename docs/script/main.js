@@ -253,11 +253,11 @@ $(function () {
 			touchOnly = true;
 			highlight(findLandkreis(e));
 		})
-		container.on('mousemove', e => {
-			if (touchOnly) return;
+		container.on('mousemove touchmove', e => {
 			let f = findLandkreis(e);
-			container.setCursor(f ? 'pointer' : 'default');
 			highlight(f);
+			if (touchOnly) return;
+			container.setCursor(f ? 'pointer' : 'default');
 		})
 		container.on('click', e => {
 			if (touchOnly) return;
