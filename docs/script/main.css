@@ -75,6 +75,20 @@ body {
 	color: #fff;
 	text-decoration-color: #fff;
 }
+#finger {
+	width: 100px;
+	height: 140px;
+	pointer-events: none;
+	display: none;
+}
+#finger svg {
+	opacity: 0.5;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+}
 
 @media (max-aspect-ratio: 1/1) {
 	#headline {
