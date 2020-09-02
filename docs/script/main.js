@@ -76,7 +76,10 @@ $(function () {
 		})
 		data.pairs = pairs;
 
-		data.deutschland = data.days.map(d => d.reduce((s,v) => s+v, 0)*100000/ewD)
+		data.deutschland = {
+			title: 'Deutschland',
+			normalized: data.days.map(d => d.reduce((s,v) => s+v, 0)*100000/ewD),
+		}
 
 		cb();
 	}
@@ -217,8 +220,11 @@ $(function () {
 				if (!f) return;
 				if ((index === 1) && (selection[0] === f)) return
 
+				let colorBg = (index === 0) ? '108,186,217' : '255,255,255';
+				let colorFg = (index === 0) ? '0,55,77' : '100,100,100';
+
 				// markiere entry
-				ctx.strokeStyle = '#000';
+				ctx.strokeStyle = 'rgb('+colorFg+')';
 				ctx.lineWidth = 2*opt.retina;
 				ctx.beginPath();
 				ctx.arc(f.px, f.py, f.pr+1*opt.retina, 0, 2*Math.PI);
@@ -251,18 +257,18 @@ $(function () {
 
 				ctx.beginPath();
 				ctx.drawRoundRect(x, y-h, x+w, y+h, r);
-				ctx.fillStyle = '#fff';
+				ctx.fillStyle = 'rgb('+colorBg+')';
 				ctx.fill();
 
 				ctx.lineWidth = 1*opt.retina;
-				ctx.strokeStyle = 'rgba(0,0,0,1)';
+				ctx.strokeStyle = 'rgb('+colorFg+')';
 				ctx.stroke();
 
-				ctx.fillStyle = '#000';
+				ctx.fillStyle = 'rgb('+colorFg+')';
 				ctx.textBaseline = 'bottom';
 				ctx.fillText(textLine1, x+px, y);
 
-				ctx.fillStyle = '#888';
+				ctx.fillStyle = 'rgba('+colorFg+',0.5)';
 				ctx.textBaseline = 'top';
 				ctx.fillText(textLine2, x+px, y);
 			})
@@ -380,8 +386,7 @@ $(function () {
 
 		const colors = [
 			[ 11,159,216].join(','),
-			[230, 66,  6].join(','),
-			[255,184,  0].join(','),
+			[255,255,255].join(','),
 		]
 
 		function relayout(opt) {
@@ -424,21 +429,6 @@ $(function () {
 			relayout(opt);
 
 			ctx.clearRect(0,0,opt.width,opt.height);
-
-
-
-			// draw chart
-
-			ctx.lineWidth = 1;
-			ctx.strokeStyle = 'rgb(' +colors[0]+')';
-			ctx.fillStyle   = 'rgba('+colors[0]+',0.2)';
-			
-			ctx.beginPath();
-			data.deutschland.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
-			ctx.stroke();
-			ctx.lineTo(x1, y0);
-			ctx.lineTo(x0, y0);
-			ctx.fill();
 
 
 
@@ -496,12 +486,15 @@ $(function () {
 
 
 			// draw selection and hover
-			selection.forEach((f,index) => {
-				if (!f) return;
-				if ((index === 1) && (selection[0] === f)) return;
+			let features = selection.slice(0);
+			if (!features[0]) features[0] = data.deutschland;
+			if (features[0] === features[1]) features[1] = false;
 
-				ctx.strokeStyle = 'rgb(' +colors[index+1]+')';
-				ctx.fillStyle   = 'rgba('+colors[index+1]+',0.2)';
+			features.forEach((f,index) => {
+				if (!f) return;
+
+				ctx.strokeStyle = 'rgb(' +colors[index]+')';
+				ctx.fillStyle   = 'rgba('+colors[index]+',0.2)';
 
 				ctx.beginPath();
 				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
@@ -518,19 +511,13 @@ $(function () {
 			ctx.textBaseline = 'top';
 			ctx.textAlign = 'right';
 
-			let y = Math.round(projY.v2p(20)) - 36*retina;
-			ctx.fillStyle = 'rgb(' +colors[0]+')';
-			ctx.fillText('Deutschland', x1, y);
+			let y = Math.round(projY.v2p(20)) - 24*retina;
 
-			if (selection[0]) {
+			for (let index = 0; index < 2; index++) {
 				y -= 12*retina;
-				ctx.fillStyle = 'rgb('+colors[1]+')';
-				ctx.fillText(selection[0].title, x1, y);
-			}
-			if (selection[1] && (selection[1] !== selection[0])) {
-				y -= 12*retina;
-				ctx.fillStyle = 'rgb('+colors[2]+')';
-				ctx.fillText(selection[1].title, x1, y);
+				if (!features[index]) continue;
+				ctx.fillStyle = 'rgb('+colors[index]+')';
+				ctx.fillText(features[index].title, x1, y);
 			}
 
 			ctx.fillStyle = baseColor;
