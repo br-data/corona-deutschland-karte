@@ -328,7 +328,7 @@ $(function () {
 
 				ctx.beginPath();
 				ctx.strokeStyle = baseColor;
-				ctx.lineH(x0-3*opt.retina, y, x0+width);
+				ctx.lineH(x0-3*opt.retina, y, x0);
 				ctx.stroke();
 
 				ctx.fillText(v, x0-6*opt.retina, y);
@@ -336,7 +336,17 @@ $(function () {
 		}
 
 		function value2color(v) {
-			v = Math.max(0, Math.min(1, (v||0)/maxValue))*(gradient.length-1);
+			let threshold = 50/maxValue;
+			let thresholdFlattening = 0.8;
+			v = Math.max(0, Math.min(1, (v||0)/maxValue));
+
+			if (v < threshold) {
+				v = v*thresholdFlattening;
+			} else {
+				v = 1-(1-v)*thresholdFlattening;
+			}
+
+			v *= gradient.length-1;
 
 			let i = Math.max(0,Math.min(Math.floor(v), gradient.length-2));
 			let c0 = gradient[i];
