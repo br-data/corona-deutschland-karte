@@ -510,7 +510,7 @@ $(function () {
 			ctx.textBaseline = 'top';
 			ctx.textAlign = 'right';
 
-			let y = Math.round(projY.v2p(20)) - 24*retina;
+			let y = Math.round(projY.v2p(20)) - 0*retina;
 
 			features.forEach((f,index) => {
 				if (!f) return;
@@ -632,8 +632,8 @@ $(function () {
 			let xOffset = container.width()*0.4;
 			let x0 = 27-xOffset;
 			let x1 = $('#chartContainer').width()-20-xOffset;
-			let y0 = '30vw';
-			let y1 = '20vw';
+			let y0 = '35vw';
+			let y1 = '25vw';
 
 			container.css({left:x0,top:y0,display:'block',opacity:0});
 			finger2.hide();

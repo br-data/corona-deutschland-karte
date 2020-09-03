@@ -36,7 +36,7 @@ body {
 }
 
 #headline {
-	top: 1em;
+	top: 0.5em;
 	left: 0px;
 	width: calc(100vw - 75vh);
 	line-height: 1em;
@@ -108,10 +108,10 @@ body {
 	#chartContainer {
 		top: 0;
 		width: 100vw;
-		height: 30vw;
+		height: 35vw;
 	}
 	#mapContainer {
-		top: 30vw;
+		top: 35vw;
 		width: 100vw;
 		height: auto;
 		bottom: 0;
