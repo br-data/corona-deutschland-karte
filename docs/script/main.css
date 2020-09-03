@@ -36,11 +36,11 @@ body {
 }
 
 #headline {
-	top: 0.5rem;
+	top: 1em;
 	left: 0px;
 	width: calc(100vw - 75vh);
 	line-height: 1em;
-	font-size: min(4vw, 16px);
+	font-size: min(4vw, 18px);
 }
 
 #headline p {
