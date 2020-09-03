@@ -632,8 +632,8 @@ $(function () {
 			let xOffset = container.width()*0.4;
 			let x0 = 27-xOffset;
 			let x1 = $('#chartContainer').width()-20-xOffset;
-			let y0 = '40vw';
-			let y1 = '30vw';
+			let y0 = '30vw';
+			let y1 = '20vw';
 
 			container.css({left:x0,top:y0,display:'block',opacity:0});
 			finger2.hide();

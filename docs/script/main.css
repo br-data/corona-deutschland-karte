@@ -108,10 +108,10 @@ body {
 	#chartContainer {
 		top: 0;
 		width: 100vw;
-		height: 40vw;
+		height: 30vw;
 	}
 	#mapContainer {
-		top: 40vw;
+		top: 30vw;
 		width: 100vw;
 		height: auto;
 		bottom: 0;
