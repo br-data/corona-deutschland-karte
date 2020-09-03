@@ -34,16 +34,16 @@ $(function () {
 	}
 
 	function highlight(e) {
-		if (!chart || !map || (selection[1] === e)) return;
-		selection[1] = e;
+		if (!chart || !map || (selection[2] === e)) return;
+		selection[2] = e;
 		chart.redraw();
 		map.redraw();
 	}
 
 	function select(e) {
 		if (!chart || !map) return;
-		if (selection[0] === e) e = false;
-		selection[0] = e;
+		if (selection[1] === e) e = false;
+		selection[1] = e;
 		chart.redraw();
 		map.redraw();
 	}
@@ -78,6 +78,7 @@ $(function () {
 			title: 'Deutschland',
 			normalized: data.days.map(d => d.reduce((s,v) => s+v, 0)*100000/ewD),
 		}
+		selection = [data.deutschland];
 
 		cb();
 	}
@@ -215,11 +216,11 @@ $(function () {
 			})
 
 			selection.forEach((f,index) => {
-				if (!f) return;
-				if ((index === 1) && (selection[0] === f)) return
+				if (!f || !index) return;
+				if ((index === 2) && (selection[1] === f)) return
 
-				let colorBg = (index === 0) ? '108,186,217' : '255,255,255';
-				let colorFg = (index === 0) ? '0,55,77' : '100,100,100';
+				let colorBg = (index === 1) ? '255,212,191' : '255,255,255';
+				let colorFg = (index === 1) ? '100,51,26' : '100,100,100';
 
 				// markiere entry
 				ctx.strokeStyle = 'rgb('+colorFg+')';
@@ -384,6 +385,7 @@ $(function () {
 
 		const colors = [
 			[ 11,159,216].join(','),
+			[255,130, 65].join(','),
 			[255,255,255].join(','),
 		]
 
@@ -485,8 +487,7 @@ $(function () {
 
 			// draw selection and hover
 			let features = selection.slice(0);
-			if (!features[0]) features[0] = data.deutschland;
-			if (features[0] === features[1]) features[1] = false;
+			if (features[1] === features[2]) features[2] = false;
 
 			features.forEach((f,index) => {
 				if (!f) return;
@@ -511,12 +512,12 @@ $(function () {
 
 			let y = Math.round(projY.v2p(20)) - 24*retina;
 
-			for (let index = 0; index < 2; index++) {
+			features.forEach((f,index) => {
+				if (!f) return;
 				y -= 12*retina;
-				if (!features[index]) continue;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
 				ctx.fillText(features[index].title, x1, y);
-			}
+			})
 
 			ctx.fillStyle = baseColor;
 			ctx.strokeStyle = baseColor;
