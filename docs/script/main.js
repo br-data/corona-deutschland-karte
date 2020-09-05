@@ -531,7 +531,7 @@ $(function () {
 			let ya = y0 + 12*opt.retina;
 			let yb = ya +  6*opt.retina;
 			let yc = yb + 16*opt.retina;
-			let yt = ya +  8*opt.retina;
+			let yt = yb +  7.5*opt.retina;
 			let w = 18*opt.retina;
 			let r =  3*opt.retina;
 
@@ -560,7 +560,7 @@ $(function () {
 			let date = new Date((dayIndex+data.dayMin)*86400000);
 			date = date.getDate()+'.'+(date.getMonth()+1)+'.';
 			ctx.fillStyle = '#000';
-			ctx.textBaseline = 'top';
+			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'center';
 			ctx.font = 12*opt.retina + 'px sans-serif';
 			ctx.fillText(date, x, yt);
