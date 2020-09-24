@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+cd "$(dirname "$0")"
+
 echo '# cleanup data folder'
 rm -f ../data/*.json.bz2
 
