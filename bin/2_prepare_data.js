@@ -68,27 +68,30 @@ landkreise = landkreise.features.map(f => {
 
 
 // merge data for Berlin :(
-
-let berlin = {x:0,y:0,s:0,ids:[],ew:0,type:'Kreisfreie Stadt',title:'Berlin'};
-landkreise = landkreise.filter(f => {
-	if (f.id.startsWith('11')) {
-		berlin.x += f.x;
-		berlin.y += f.y;
-		berlin.s++;
-		berlin.ids.push(f.id);
-		berlin.ew += f.ew;
-		// Berlin
-		return false;
-	} else {
-		// not Berlin
-		f.ids = [f.id];
-		return true;
-	}
-})
-berlin.x /= berlin.s;
-berlin.y /= berlin.s;
-delete berlin.s;
-landkreise.push(berlin);
+if (true) {
+	let berlin = {x:0,y:0,s:0,ids:[],ew:0,type:'Kreisfreie Stadt',title:'Berlin'};
+	landkreise = landkreise.filter(f => {
+		if (f.id.startsWith('11')) {
+			berlin.x += f.x;
+			berlin.y += f.y;
+			berlin.s++;
+			berlin.ids.push(f.id);
+			berlin.ew += f.ew;
+			// Berlin
+			return false;
+		} else {
+			// not Berlin
+			f.ids = [f.id];
+			return true;
+		}
+	})
+	berlin.x /= berlin.s;
+	berlin.y /= berlin.s;
+	delete berlin.s;
+	landkreise.push(berlin);
+} else {
+	landkreise.forEach(f => f.ids = [f.id]);
+}
 
 
 
