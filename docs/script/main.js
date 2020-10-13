@@ -618,6 +618,9 @@ $(function () {
 		let finger2 = $('#finger2');
 		let stopped = false;
 
+		let used = parseFloat(localStorage.getItem('animationrun')) || 0;
+		if (used > 3) return;
+
 		if (useTouchEvents) {
 			setTimeout(start,2000);
 			$(document).one('touchstart', kill);
@@ -628,6 +631,8 @@ $(function () {
 
 		function start() {
 			if (stopped) return;
+
+			localStorage.setItem('animationrun', used+1);
 
 			let xOffset = container.width()*0.4;
 			let x0 = 27-xOffset;
