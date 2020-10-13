@@ -9,7 +9,6 @@ const distance = require('@turf/distance').default;
 const topojson = require('topojson');
 
 const dayMin = parseDate('2020-02-10');
-const blurWindow = 7;
 const folder = resolve(__dirname, '../data/');
 
 let dayMax = 0;
@@ -171,7 +170,7 @@ file = resolve(folder, file);
 
 	days = days.map((day,i) => landkreise.map(l => {
 		let s = 0;
-		for (let j = Math.max(0,i-blurWindow); j < i; j++) s += days[j][l.index] || 0;
+		for (let j = Math.max(0,i-6); j <= i; j++) s += days[j][l.index] || 0;
 		return s;
 	}))
 
