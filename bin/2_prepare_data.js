@@ -148,7 +148,8 @@ file = resolve(folder, file);
 
 	console.log('   scan');
 	data.forEach(entry => {
-		let dayMelde = (entry.IstErkrankungsbeginn === 1) ? entry.RefdatumISO : entry.MeldedatumISO;
+		//let dayMelde = (entry.IstErkrankungsbeginn === 1) ? entry.RefdatumISO : entry.MeldedatumISO;
+		let dayMelde = entry.MeldedatumISO;
 		dayMelde = parseDate(dayMelde);
 
 		let id = entry.IdLandkreis;
