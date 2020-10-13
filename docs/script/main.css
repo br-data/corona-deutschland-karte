@@ -1,27 +1,29 @@
-html {
+html, body {
 	background: #1d2029;
 	font-size: 18px;
+	width: 100vw;
+	height: 100%;
+	padding: 0;
+	margin: 0;
 }
 
 * {
 	user-select: none;
 	-webkit-user-select: none;
-	webkit-touch-callout: none;
 }
 
+
 body {
-	margin: 0;
 	font-family: Open Sans,Helvetica,Arial,sans-serif;
 	color: #fff;
 	background: radial-gradient(ellipse at center,#484b5a 0,#1d2029 100%);
-	height: 100vh;
-	touch-action: none;
 }
 
 #wrapper {
 	position: relative;
-	height: 100vh;
 	width: 100vw;
+	height: 100%;
+	top: 0;
 }
 
 .container {

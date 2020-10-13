@@ -276,7 +276,11 @@ $(function () {
 		}
 
 		if (useTouchEvents) {
-			container.on('touchstart touchmove', e => highlight(findLandkreis(e)));
+			container.on('touchstart touchmove', e => {
+				let l = findLandkreis(e);
+				if (l) e.preventDefault();
+				highlight(l)
+			});
 		} else {
 			container.on('mousemove', e => {
 				let f = findLandkreis(e);
@@ -568,8 +572,8 @@ $(function () {
 
 		let drag = false
 		if (useTouchEvents) {
-			container.on('touchstart', e => { drag = true; handleEvent(e); });
-			document.addEventListener('touchmove', e => { if (drag) handleEvent(e) });
+			container.on('touchstart', e => { drag = true; handleEvent(e); e.preventDefault(); });
+			document.addEventListener('touchmove', e => { if (drag) handleEvent(e); e.preventDefault(); });
 			container.on('touchend', e => drag = false);
 			document.addEventListener('touchend', e => drag = false);
 		} else {
