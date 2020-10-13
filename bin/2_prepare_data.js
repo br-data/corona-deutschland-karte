@@ -147,6 +147,8 @@ file = resolve(folder, file);
 
 	console.log('   scan');
 	data.forEach(entry => {
+		if (entry.NeuerFall < 0) return;
+		
 		//let dayMelde = (entry.IstErkrankungsbeginn === 1) ? entry.RefdatumISO : entry.MeldedatumISO;
 		let dayMelde = entry.MeldedatumISO;
 		dayMelde = parseDate(dayMelde);
