@@ -56,7 +56,7 @@ $(function () {
 		data.landkreise.forEach(l => {
 			l.infected = days.map(d => data.days[d][l.index]);
 			l.normalized = l.infected.map(v => 100000*v/l.ew);
-			l.radius = l.infected.map(v => Math.sqrt(v)*0.0025);
+			l.radius = l.infected.map(v => Math.sqrt(v)*0.002);
 			l.rMax = l.radius.reduce((s,r) => Math.max(s,r));
 			l.x0 = l.x;
 			l.y0 = l.y;
