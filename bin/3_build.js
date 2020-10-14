@@ -24,7 +24,9 @@ html = html.replace(/<script.*?<\/script>/g, match => {
 })
 
 html = html.replace(/<link.*?>/g, match => {
-	if (!match.includes('rel="stylesheet"')) return match;
+	if (!match.includes('rel="stylesheet"')) {
+		return match.replace('href="', 'href="https://2ndwave.storage.googleapis.com/');
+	}
 
 	style.push(fs.readFileSync(resolve(folderSrc, match.match(/href="(.*?)"/)[1]), 'utf8'));
 	return (style.length > 1) ? '' : '<link rel="stylesheet" type="text/css" href="https://2ndwave.storage.googleapis.com/style.css">';
