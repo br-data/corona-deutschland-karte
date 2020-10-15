@@ -617,7 +617,7 @@ $(function () {
 		let stopped = false;
 
 		let used = parseFloat(localStorage.getItem('animationrun')) || 0;
-		if (used > 3) return;
+		if (used >= 2) return;
 
 		if (useTouchEvents) {
 			setTimeout(start,2000);
