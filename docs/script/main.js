@@ -89,8 +89,10 @@ $(function () {
 		let timeoutHandler;
 		
 		const gradient = [
-			[ 60,100, 90],
-			[ 30,100,100],
+			[ 60,100,100],
+			[ 60,100, 80],
+			[ 40,100, 90],
+			[ 40,100, 80],
 			[  0,100, 70],
 			[  0,100, 30],
 		].map(hsv2rgb);
@@ -324,7 +326,7 @@ $(function () {
 
 				ctx.strokeStyle = value2color(y/step);
 				ctx.beginPath();
-				ctx.lineH(x0,y0,x0+width);
+				lineH(x0,y0,x0+width);
 				ctx.stroke();
 			}
 
@@ -333,43 +335,35 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			for (let v = 0; v <= maxValue; v += 50) {
+			[0,35,50,100,150].forEach(v => {
 				let y = opt.height - padding - v*step;
 
 				ctx.beginPath();
 				ctx.strokeStyle = baseColor;
-				ctx.lineH(x0-3*opt.retina, y, x0);
+				lineH(x0-3*opt.retina, y, x0);
 				ctx.stroke();
 
 				ctx.fillText(v, x0-6*opt.retina, y);
+			})
+
+			function lineH(x0,y0,x1) {
+				ctx.moveTo(Math.round(x0), Math.round(y0))
+				ctx.lineTo(Math.round(x1), Math.round(y0))
 			}
 		}
 
 		function value2color(v) {
-			let threshold = 50/maxValue;
-			let thresholdFlattening = 0.8;
-			v = Math.max(0, Math.min(1, (v||0)/maxValue));
+			if (v < 35) return mixColor(gradient[0], gradient[1], v/35);
+			if (v < 50) return mixColor(gradient[2], gradient[3], (v-35)/15);
+			return mixColor(gradient[4], gradient[5], (v-50)/100);
 
-			if (v < threshold) {
-				v = v*thresholdFlattening;
-			} else {
-				v = 1-(1-v)*thresholdFlattening;
+			function mixColor(c0, c1, a) {
+				return 'rgb('+
+					Math.round(c0[0]*(1-a) + a*c1[0])+','+
+					Math.round(c0[1]*(1-a) + a*c1[1])+','+
+					Math.round(c0[2]*(1-a) + a*c1[2])+
+				')';
 			}
-
-			v *= gradient.length-1;
-
-			let i = Math.max(0,Math.min(Math.floor(v), gradient.length-2));
-			let c0 = gradient[i];
-			let c1 = gradient[i+1];
-			let a = v-i;
-
-			let c = 'rgb('+
-				Math.round(c0[0]*(1-a) + a*c1[0])+','+
-				Math.round(c0[1]*(1-a) + a*c1[1])+','+
-				Math.round(c0[2]*(1-a) + a*c1[2])+
-			')';
-
-			return c;
 		}
 
 		return {
