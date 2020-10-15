@@ -759,6 +759,13 @@ $(function () {
 	function sqr(v) {
 		return v*v;
 	}
+
+	let time0 = Date.now();
+	setInterval(() => {
+		// auto reload page after 3 hours
+		let duration = (Date.now() - time0)/1000;
+		if (duration > 3*3600) location.reload();
+	}, 60*1000);
 })
 
 CanvasRenderingContext2D.prototype.lineH = function (x0,y0,x1) {
