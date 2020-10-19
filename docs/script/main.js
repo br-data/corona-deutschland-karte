@@ -567,7 +567,7 @@ $(function () {
 		let drag = false
 		if (useTouchEvents) {
 			container.on('touchstart', e => { drag = true; handleEvent(e); e.preventDefault(); });
-			document.addEventListener('touchmove', e => { if (drag) handleEvent(e); e.preventDefault(); });
+			document.addEventListener('touchmove', e => { if (drag) handleEvent(e); });
 			container.on('touchend', e => drag = false);
 			document.addEventListener('touchend', e => drag = false);
 		} else {
