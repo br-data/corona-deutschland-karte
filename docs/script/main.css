@@ -60,6 +60,7 @@ body {
 	left: 0px;
 	width: calc(100vw - 75vh);
 	height: 100vh;
+	z-index: 100;
 }
 
 #mapContainer {
@@ -111,9 +112,11 @@ body {
 		top: 0;
 		width: 100vw;
 		height: 35vw;
+		height: max(35vw,180px);
 	}
 	#mapContainer {
 		top: 35vw;
+		top: max(35vw - 20px,180px - 20px);
 		width: 100vw;
 		height: auto;
 		bottom: 0;
