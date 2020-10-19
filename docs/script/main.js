@@ -103,13 +103,12 @@ $(function () {
 
 		function relayout(opt) {
 			retina = opt.retina;
+
 			zoomX = 1.03*opt.width/2;
 			zoomY = 0.75*opt.height/2;
-			if (zoomX > zoomY) {
-				zoomX = Math.sqrt(zoomX*zoomY);
-			} else {
-				zoomY = Math.sqrt(zoomX*zoomY);
-			}
+			
+			zoomX = zoomY = Math.min(zoomX, zoomY);
+			
 			offsetX = opt.width/2;
 			offsetY = opt.height/2;
 		}
