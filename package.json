@@ -1,30 +1,29 @@
 {
-  "name": "2020-second-wave",
+  "name": "corona-deutschland-karte",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "bin": {
-    "2020-second-wave": "1_prepare_data.js"
-  },
+  "description": "Interaktive Deutschlandkarte, die die COVID19-Infektionszahlen auf Landkreis-/Stadtebene zeigt.",
   "directories": {
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "./node_modules/.bin/http-server -s -c-1 -p 8088 -a localhost -o / ./docs/",
+    "build": "./bin/run.sh"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/br-data/2020-second-wave.git"
+    "url": "git+https://github.com/br-data/corona-deutschland-karte.git"
   },
   "author": "Michael Kreil",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/br-data/2020-second-wave/issues"
+    "url": "https://github.com/br-data/corona-deutschland-karte/issues"
   },
-  "homepage": "https://github.com/br-data/2020-second-wave#readme",
+  "private": true,
+  "homepage": "https://github.com/br-data/corona-deutschland-karte#readme",
   "dependencies": {
     "@turf/distance": "^6.0.1",
     "babel-minify": "^0.5.1",
+    "http-server": "^0.12.3",
     "topojson": "^3.0.2",
     "uglifycss": "0.0.29"
   }
