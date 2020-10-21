@@ -89,13 +89,11 @@ $(function () {
 		let timeoutHandler;
 		
 		const gradient = [
-			[ 60,100,100],
-			[ 60,100, 80],
+			[ 60,100, 90],
 			[ 40,100, 90],
-			[ 40,100, 80],
-			[  0,100, 70],
-			[  0,100, 30],
-		].map(hsv2rgb);
+			[  0, 90, 70],
+			[  0,100, 35],
+		].map(hsv2rgb).map(rgb2hex);
 
 		let container = new CanvasContainer('#mapContainer');
 		let changeCheckerDraw   = new ChangeChecker();
@@ -352,17 +350,10 @@ $(function () {
 		}
 
 		function value2color(v) {
-			if (v < 35) return mixColor(gradient[0], gradient[1], v/35);
-			if (v < 50) return mixColor(gradient[2], gradient[3], (v-35)/15);
-			return mixColor(gradient[4], gradient[5], (v-50)/100);
-
-			function mixColor(c0, c1, a) {
-				return 'rgb('+
-					Math.round(c0[0]*(1-a) + a*c1[0])+','+
-					Math.round(c0[1]*(1-a) + a*c1[1])+','+
-					Math.round(c0[2]*(1-a) + a*c1[2])+
-				')';
-			}
+			if (v <  35) return gradient[0];
+			if (v <  50) return gradient[1];
+			if (v < 100) return gradient[2];
+			return gradient[3];
 		}
 
 		return {
@@ -689,6 +680,14 @@ $(function () {
 		}
 
 		return c;
+	}
+
+	function rgb2hex(c) {
+		return 'rgb('+
+			c[0].toFixed(0)+','+
+			c[1].toFixed(0)+','+
+			c[2].toFixed(0)+
+		')';
 	}
 
 	function CanvasContainer(containerName) {
