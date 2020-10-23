@@ -6,7 +6,7 @@ $(function () {
 	let chart;
 	let selection = [];
 	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
-	const baseColor = 'rgba(255,255,255,0.5)';
+	const baseColor = 'rgba(255,255,255,1)';
 
 	const useTouchEvents = (() => {
 		try { 
@@ -89,11 +89,11 @@ $(function () {
 		let timeoutHandler;
 		
 		const gradient = [
-			[ 60,100, 90],
-			[ 40,100, 90],
-			[  0, 90, 70],
-			[  0,100, 35],
-		].map(hsv2rgb).map(rgb2hex);
+			'#ffeda0',
+			'#feb24c',
+			'#f03b20',
+			'#bd0026',
+		];
 
 		let container = new CanvasContainer('#mapContainer');
 		let changeCheckerDraw   = new ChangeChecker();
@@ -102,8 +102,10 @@ $(function () {
 		function relayout(opt) {
 			retina = opt.retina;
 
-			zoomX = 1.03*opt.width/2;
-			zoomY = 0.75*opt.height/2;
+			// zoomX = 1.03*opt.width/2;
+			// zoomY = 0.75*opt.height/2;
+			zoomX = 0.9*opt.width/2;
+			zoomY = 0.7*opt.height/2;
 			
 			zoomX = zoomY = Math.min(zoomX, zoomY);
 			
@@ -119,7 +121,7 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 
 			// draw deutschland
-			ctx.fillStyle = '#fff';
+			ctx.fillStyle = '#7a7e8e';
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
 				poly.forEach((p,i) => {
@@ -129,7 +131,7 @@ $(function () {
 			ctx.fill();
 
 			// draw bundeslaender
-			ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+			ctx.strokeStyle = '#383b47';
 			ctx.lineWidth = opt.retina;
 			ctx.beginPath();
 			data.borders1.forEach(poly => {
@@ -201,7 +203,7 @@ $(function () {
 
 			let changeSum = 0;
 			data.landkreise.forEach(f => {
-				ctx.fillStyle = value2color(f.normalized[dayIndex])
+				ctx.fillStyle = value2color(f.normalized[dayIndex]);
 
 				changeSum += Math.sqrt(sqr(f.x-f.xOld) + sqr(f.y-f.yOld));
 
@@ -314,12 +316,13 @@ $(function () {
 
 		function drawLegend(ctx, opt) {
 			let width = 10*opt.retina;
-			let padding = 10*opt.retina;
+			let paddingRight = 40*opt.retina;
+			let paddingBottom = 60*opt.retina;
 			let step = 1*opt.retina;
-			let x0 = opt.width - padding - width;
+			let x0 = opt.width - paddingRight - width;
 
 			for (let y = 0; y <= maxValue*step; y++) {
-				let y0 = opt.height-padding-y;
+				let y0 = opt.height-paddingBottom-y;
 
 				ctx.strokeStyle = value2color(y/step);
 				ctx.beginPath();
@@ -333,7 +336,7 @@ $(function () {
 			ctx.textAlign = 'right';
 
 			[0,35,50,100,150].forEach(v => {
-				let y = opt.height - padding - v*step;
+				let y = opt.height - paddingBottom - v*step;
 
 				ctx.beginPath();
 				ctx.strokeStyle = baseColor;
@@ -379,10 +382,10 @@ $(function () {
 
 		function relayout(opt) {
 			retina = opt.retina;
-			paddingTop = 10*opt.retina;
-			paddingLeft = 27*opt.retina;
-			paddingRight = 20*opt.retina;
-			paddingBottom = 34*opt.retina;
+			paddingTop = 60*opt.retina;
+			paddingLeft = 40*opt.retina;
+			paddingRight = 40*opt.retina;
+			paddingBottom = 60*opt.retina;
 
 			let w = opt.width - paddingLeft - paddingRight;
 			let h = opt.height - paddingTop - paddingBottom;
@@ -656,38 +659,6 @@ $(function () {
 			stopped = true;
 			container.css({display:'none'});
 		}
-	}
-
-	function hsv2rgb(c) {
-		let h = c[0]/360;
-		let s = c[1]/100;
-		let v = 255*c[2]/100;
-
-		let i = Math.floor(h * 6);
-		let f = h * 6 - i;
-		
-		let p = v * (1 - s);
-		let q = v * (1 - f * s);
-		let t = v * (1 - (1 - f) * s);
-
-		switch (i % 6) {
-			case 0: c[0] = v, c[1] = t, c[2] = p; break;
-			case 1: c[0] = q, c[1] = v, c[2] = p; break;
-			case 2: c[0] = p, c[1] = v, c[2] = t; break;
-			case 3: c[0] = p, c[1] = q, c[2] = v; break;
-			case 4: c[0] = t, c[1] = p, c[2] = v; break;
-			case 5: c[0] = v, c[1] = p, c[2] = q; break;
-		}
-
-		return c;
-	}
-
-	function rgb2hex(c) {
-		return 'rgb('+
-			c[0].toFixed(0)+','+
-			c[1].toFixed(0)+','+
-			c[2].toFixed(0)+
-		')';
 	}
 
 	function CanvasContainer(containerName) {
