@@ -56,7 +56,7 @@ $(function () {
 		data.landkreise.forEach(l => {
 			l.infected = days.map(d => data.days[d][l.index]);
 			l.normalized = l.infected.map(v => 100000*v/l.ew);
-			l.radius = l.infected.map(v => Math.sqrt(v)*0.002);
+			l.radius = l.infected.map(v => Math.sqrt(v)/600);
 			l.rMax = l.radius.reduce((s,r) => Math.max(s,r));
 			l.x0 = l.x;
 			l.y0 = l.y;
@@ -156,48 +156,61 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
+
+			let zoomR = zoomY;
+
 			data.landkreise.forEach(f => {
 				f.r = f.radius[dayIndex];
 				f.m = f.r*f.r;
-
-				let dx = f.x0 - f.x;
-				let dy = f.y0 - f.y;
-				let d0 = Math.sqrt(dx*dx + dy*dy);
-
 				f.xOld = f.x;
 				f.yOld = f.y;
-
-				if (d0 < 1e-5) return;
-
-				f.x += 0.3*dx;
-				f.y += 0.3*dy;
 			})
 
-			let zoomR = zoomY;
-			let aspectRatioRadius = zoomX/zoomY;
-
-			for (let i = 0; i < 3; i++) {
+			for (let i = 0; i < 10; i++) {
 				let c = 0;
+
+				// Anziehung zum Ursprung
+				data.landkreise.forEach(f => {
+					let dx = f.x0 - f.x;
+					let dy = f.y0 - f.y;
+
+					f.dx = dx/100;
+					f.dy = dy/100;
+					f.d  =  1/100;
+				})
+
 				data.pairs.forEach(p => {
 					let f0 = p[0];
 					let f1 = p[1];
 
-					let dx = (f0.x - f1.x)*aspectRatioRadius;
+					let dx = (f0.x - f1.x);
 					let dy = (f0.y - f1.y);
-					let d0 = Math.sqrt(dx*dx + dy*dy);
+					let d0 = Math.sqrt(dx*dx + dy*dy) + 1e-10;
 					let d = d0 - f0.r - f1.r;
 
-					if (d >= -1e-4) return;
+					if (d >= -1e-3) return;
 
-					d = d/(d0*(f0.m + f1.m) + 1e-10);
+					let factor = (d/d0)/(f0.m + f1.m + 1e-10);
 
-					f0.x -= f1.m*d*dx;
-					f0.y -= f1.m*d*dy;
-					f1.x += f0.m*d*dx;
-					f1.y += f0.m*d*dy;
+					f0.dx -= f1.m * factor * dx;
+					f0.dy -= f1.m * factor * dy;
+					f0.d  += Math.abs(f1.m * factor);
+
+					f1.dx += f0.m * factor * dx;
+					f1.dy += f0.m * factor * dy;
+					f1.d  += Math.abs(f0.m * factor);
 
 					c++;
 				})
+
+				data.landkreise.forEach(f => {
+					let d = f.d+1e-5;
+					let m = Math.sqrt(f.dx*f.dx + f.dy*f.dy)*1000;
+					if (d < m) d = m;
+					f.x += 0.5*f.dx/d;
+					f.y += 0.5*f.dy/d;
+				})
+
 				if (c <= 10) break;
 			}
 
@@ -273,7 +286,7 @@ $(function () {
 				ctx.fillText(textLine2, x+px, y);
 			})
 
-			if (changeSum > 0.01) timeoutHandler = setTimeout(container.redrawFg, 30);
+			if (changeSum > 0.02) timeoutHandler = setTimeout(container.redrawFg, 30);
 		}
 
 		if (useTouchEvents) {
