@@ -132,7 +132,7 @@ $(function () {
 
 			// draw bundeslaender
 			ctx.strokeStyle = '#383b47';
-			ctx.lineWidth = opt.retina;
+			ctx.lineWidth = opt.retina*0.5;
 			ctx.beginPath();
 			data.borders1.forEach(poly => {
 				poly.forEach((p,i) => {
