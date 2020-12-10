@@ -84,13 +84,14 @@ $(function () {
 	}
 
 	function initMap() {
-		const maxValue = 150;
+		const maxValue = 300;
 		let zoomX, zoomY, offsetX, offsetY, retina;
 		let timeoutHandler;
 		
 		const gradient = [
-			'#ffeda0',
-			'#feb24c',
+			'#ffffb2',
+			'#fecc5c',
+			'#fd8d3c',
 			'#f03b20',
 			'#bd0026',
 		];
@@ -104,8 +105,8 @@ $(function () {
 
 			// zoomX = 1.03*opt.width/2;
 			// zoomY = 0.75*opt.height/2;
-			zoomX = 0.9*opt.width/2;
-			zoomY = 0.7*opt.height/2;
+			zoomX = 1.03*opt.width/2;
+			zoomY = 0.73*opt.height/2;
 			
 			zoomX = zoomY = Math.min(zoomX, zoomY);
 			
@@ -329,9 +330,9 @@ $(function () {
 
 		function drawLegend(ctx, opt) {
 			let width = 10*opt.retina;
-			let paddingRight = 40*opt.retina;
-			let paddingBottom = 60*opt.retina;
-			let step = 1*opt.retina;
+			let paddingRight = 30*opt.retina;
+			let paddingBottom = 30*opt.retina;
+			let step = 0.7*opt.retina;
 			let x0 = opt.width - paddingRight - width;
 
 			for (let y = 0; y <= maxValue*step; y++) {
@@ -348,7 +349,7 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			[0,35,50,100,150].forEach(v => {
+			[0,35,50,100,200,300].forEach(v => {
 				let y = opt.height - paddingBottom - v*step;
 
 				ctx.beginPath();
@@ -369,7 +370,8 @@ $(function () {
 			if (v <  35) return gradient[0];
 			if (v <  50) return gradient[1];
 			if (v < 100) return gradient[2];
-			return gradient[3];
+			if (v < 200) return gradient[3];
+			return gradient[4];
 		}
 
 		return {
@@ -379,7 +381,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 200;
+		const maxValue = 300;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, x0, x1, y0, y1, retina;
 
@@ -452,7 +454,7 @@ $(function () {
 			
 			for (let v = 0; v <= maxValue; v += 10) {
 				let y = projY.v2p(v);
-				if (v % 50 === 0) {
+				if (v % 100 === 0) {
 					ctx.lineH(x0, y, x0 - 4*opt.retina);
 					ctx.fillText(v, x0 - 5*opt.retina, y + 0.5*opt.retina);
 				} else {
