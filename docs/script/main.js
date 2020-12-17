@@ -330,9 +330,9 @@ $(function () {
 
 		function drawLegend(ctx, opt) {
 			let width = 10*opt.retina;
-			let paddingRight = 30*opt.retina;
-			let paddingBottom = 30*opt.retina;
-			let step = 0.7*opt.retina;
+			let paddingRight  = 25*opt.retina;
+			let paddingBottom = 25*opt.retina;
+			let step = 0.5*opt.retina;
 			let x0 = opt.width - paddingRight - width;
 
 			for (let y = 0; y <= maxValue*step; y++) {
