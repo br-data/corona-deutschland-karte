@@ -106,12 +106,12 @@ $(function () {
 			// zoomX = 1.03*opt.width/2;
 			// zoomY = 0.75*opt.height/2;
 			zoomX = 1.03*opt.width/2;
-			zoomY = 0.73*opt.height/2;
+			zoomY = 0.75*opt.height/2;
 			
 			zoomX = zoomY = Math.min(zoomX, zoomY);
 			
-			offsetX = opt.width/2;
-			offsetY = opt.height/2;
+			offsetX = opt.width *0.5;
+			offsetY = opt.height*0.48;
 		}
 
 		container.drawBg = function drawMapBg (ctx, opt) {
