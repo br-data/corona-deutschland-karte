@@ -381,7 +381,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 500;
+		const maxValue = 400;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, x0, x1, y0, y1, retina;
 
@@ -452,7 +452,7 @@ $(function () {
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'right';
 			
-			for (let v = 0; v <= maxValue; v += 10) {
+			for (let v = 0; v <= maxValue; v += 20) {
 				let y = projY.v2p(v);
 				if (v % 100 === 0) {
 					ctx.lineH(x0, y, x0 - 4*opt.retina);
