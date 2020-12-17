@@ -349,7 +349,7 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			[0,35,50,100,200,300].forEach(v => {
+			[0,50,100,200,300].forEach(v => {
 				let y = opt.height - paddingBottom - v*step;
 
 				ctx.beginPath();
