@@ -641,8 +641,8 @@ $(function () {
 			localStorage.setItem('animationrun', used+1);
 
 			let xOffset = container.width()*0.4;
-			let x0 = 27-xOffset;
-			let x1 = $('#chartContainer').width()-20-xOffset;
+			let x0 = 40-xOffset;
+			let x1 = $('#chartContainer').width()-40-xOffset;
 			let y0 = '35vw';
 			let y1 = '25vw';
 
