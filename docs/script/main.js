@@ -5,7 +5,8 @@ $(function () {
 	let slider;
 	let chart;
 	let selection = [];
-	const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
+	//const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
+	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
 
 	const useTouchEvents = (() => {
@@ -467,10 +468,9 @@ $(function () {
 			
 			for (let v = dayMin; v <= dayMax; v++) {
 				let d = (new Date((v+0.5)*86400000));
-				let monthStart = (d.getDate() === 1);
-				let x = projX.v2p(v-dayMin);
 				
-				if (monthStart) {
+				if (d.getDate() === 1) {
+					let x = projX.v2p(v-dayMin);
 					ctx.lineV(x, y0, y0+6*opt.retina);
 					if (dayMax - v < 10) continue;
 					ctx.fillText(months[d.getMonth()], x+2*opt.retina, y0+2*opt.retina);
