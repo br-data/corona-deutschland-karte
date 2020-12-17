@@ -8,6 +8,7 @@ $(function () {
 	//const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
+	const circleSize = 1/700;
 
 	const useTouchEvents = (() => {
 		try { 
@@ -57,7 +58,7 @@ $(function () {
 		data.landkreise.forEach(l => {
 			l.infected = days.map(d => data.days[d][l.index]);
 			l.normalized = l.infected.map(v => 100000*v/l.ew);
-			l.radius = l.infected.map(v => Math.sqrt(v)/600);
+			l.radius = l.infected.map(v => Math.sqrt(v)*circleSize);
 			l.rMax = l.radius.reduce((s,r) => Math.max(s,r));
 			l.x0 = l.x;
 			l.y0 = l.y;
