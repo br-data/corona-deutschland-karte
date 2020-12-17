@@ -6,3 +6,4 @@
 /node_modules/
 /publish/*.css
 /publish/*.js
+.DS_Store
