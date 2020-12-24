@@ -86,16 +86,17 @@ $(function () {
 	}
 
 	function initMap() {
-		const maxValue = 300;
+		const maxMapValue = 500;
 		let zoomX, zoomY, offsetX, offsetY, retina;
-		let timeoutHandler;
+		let timeoutHandler, colorLookup = new Map();
 		
 		const gradient = [
 			'#ffffb2',
 			'#fecc5c',
 			'#fd8d3c',
 			'#f03b20',
-			'#bd0026',
+			'#bd000d',
+			'#660014',
 		];
 
 		let container = new CanvasContainer('#mapContainer');
@@ -123,8 +124,8 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 
-			// draw deutschland
-			ctx.fillStyle = '#7a7e8e';
+			// draw deutschland area
+			ctx.fillStyle = 'rgba(219,226,255,0.5)';
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
 				poly.forEach((p,i) => {
@@ -133,7 +134,7 @@ $(function () {
 			})
 			ctx.fill();
 
-			// draw bundeslaender
+			// draw bundeslaender borders
 			ctx.strokeStyle = '#383b47';
 			ctx.lineWidth = opt.retina*0.5;
 			ctx.beginPath();
@@ -334,10 +335,10 @@ $(function () {
 			let width = 10*opt.retina;
 			let paddingRight  = 25*opt.retina;
 			let paddingBottom = 25*opt.retina;
-			let step = 0.5*opt.retina;
+			let step = 0.4*opt.retina;
 			let x0 = opt.width - paddingRight - width;
 
-			for (let y = 0; y <= maxValue*step; y++) {
+			for (let y = 0; y <= maxMapValue*step; y++) {
 				let y0 = opt.height-paddingBottom-y;
 
 				ctx.strokeStyle = value2color(y/step);
@@ -351,7 +352,7 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			[0,50,100,200,300].forEach(v => {
+			[0,50,100,200,300,400,500].forEach(v => {
 				let y = opt.height - paddingBottom - v*step;
 
 				ctx.beginPath();
@@ -372,8 +373,32 @@ $(function () {
 			if (v <  35) return gradient[0];
 			if (v <  50) return gradient[1];
 			if (v < 100) return gradient[2];
-			if (v < 200) return gradient[3];
-			return gradient[4];
+			if (v < 300) return linearInterpolation((v-100)/200, gradient[3], gradient[4]);
+			return linearInterpolation((v-300)/200, gradient[4], gradient[5]);
+		}
+
+		function linearInterpolation(a, c0, c1) {
+			c0 = parseRGB(c0);
+			c1 = parseRGB(c1);
+			if (a < 0) a = 0;
+			if (a > 1) a = 1;
+			let c = [
+				((c1[0]-c0[0])*a + c0[0]).toFixed(0),
+				((c1[1]-c0[1])*a + c0[1]).toFixed(0),
+				((c1[2]-c0[2])*a + c0[2]).toFixed(0),
+			]
+			return 'rgb('+c.join(',')+')';
+		}
+
+		function parseRGB(hex) {
+			if (colorLookup.has(hex)) return colorLookup.get(hex);
+			let color = [
+				parseInt(hex.substr(1,2), 16),
+				parseInt(hex.substr(3,2), 16),
+				parseInt(hex.substr(5,2), 16),
+			]
+			colorLookup.set(hex, color);
+			return color;
 		}
 
 		return {
