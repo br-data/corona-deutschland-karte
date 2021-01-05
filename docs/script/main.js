@@ -8,7 +8,7 @@ $(function () {
 	//const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
-	const circleSize = 1/700;
+	const circleSize = 17e-4;
 
 	const useTouchEvents = (() => {
 		try { 
@@ -86,7 +86,7 @@ $(function () {
 	}
 
 	function initMap() {
-		const maxMapValue = 500;
+		const maxMapValue = 400;
 		let zoomX, zoomY, offsetX, offsetY, retina;
 		let timeoutHandler, colorLookup = new Map();
 		
@@ -352,7 +352,7 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			[0,50,100,200,300,400,500].forEach(v => {
+			[0,50,100,200,300,400].forEach(v => {
 				let y = opt.height - paddingBottom - v*step;
 
 				ctx.beginPath();
@@ -373,8 +373,8 @@ $(function () {
 			if (v <  35) return gradient[0];
 			if (v <  50) return gradient[1];
 			if (v < 100) return gradient[2];
-			if (v < 300) return linearInterpolation((v-100)/200, gradient[3], gradient[4]);
-			return linearInterpolation((v-300)/200, gradient[4], gradient[5]);
+			if (v < 200) return gradient[3];
+			return linearInterpolation((v-200)/200, gradient[4], gradient[5]);
 		}
 
 		function linearInterpolation(a, c0, c1) {
