@@ -1,11 +1,7 @@
 
 $(function () {
-	let dayIndex, animation, map;
+	let dayIndex, animation, chart, map, slider, isLandscape, selection = [];
 	let data = window.fvOZwtTDlpiMFxSV;
-	let slider;
-	let chart;
-	let selection = [];
-	//const months = 'Jan.,Feb.,März,April,Mai,Juni,Juli,Aug.,Sep.,Okt.,Nov.,Dez.'.split(',')
 	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
 	const circleSize = 17e-4;
@@ -18,6 +14,9 @@ $(function () {
 			return false;
 		}
 	})()
+	$(window).resize(updateLayout);
+	window.matchMedia('(resolution: 1dppx)').addListener(updateLayout);
+	window.matchMedia('(resolution: 2dppx)').addListener(updateLayout);
 
 	initData(() => {
 		chart = initChart();
@@ -26,7 +25,16 @@ $(function () {
 		setDay(data.dayMax-data.dayMin)
 
 		initAnimation();
+
+		setTimeout(updateLayout, 1);
 	});
+
+	function updateLayout() {
+		isLandscape = window.innerWidth > window.innerHeight;
+		$('body').toggleClass('landscape', isLandscape);
+		if (chart) chart.updateLayout();
+		if (map) map.updateLayout();
+	}
 
 	function setDay(index) {
 		if (index === dayIndex) return;
@@ -313,7 +321,6 @@ $(function () {
 			container.on('click', e => select(findLandkreis(e)))
 			container.on('mouseout', e => highlight(false))
 		}
-		container.init();
 
 		function findLandkreis(e) {
 			let minD = 1e10, minF;
@@ -404,6 +411,7 @@ $(function () {
 
 		return {
 			redraw: container.redrawFg,
+			updateLayout: container.updateLayout,
 		}
 	}
 
@@ -613,10 +621,9 @@ $(function () {
 			setDay(day);
 		}
 
-		container.init();
-
 		return {
 			redraw: container.redrawFg,
+			updateLayout: container.updateLayout,
 		}
 	}
 
@@ -689,11 +696,11 @@ $(function () {
 		let ctxFg = canvasFg.get(0).getContext('2d');
 
 		let me = {
-			init,
 			redrawBg,
 			redrawFg,
 			on,
 			setCursor,
+			updateLayout,
 		}
 
 		function setCursor(name) {
@@ -708,16 +715,8 @@ $(function () {
 
 		return me;
 
-		function init() {
-			$(window).resize(updateLayout);
-			window.matchMedia('(resolution: 1dppx)').addListener(updateLayout);
-			window.matchMedia('(resolution: 2dppx)').addListener(updateLayout);
-			updateLayout();
-			setTimeout(updateLayout, 10);
-		}
-
-		function redrawBg() { me.drawBg(ctxBg, {width,height,retina,random}); }
-		function redrawFg() { me.drawFg(ctxFg, {width,height,retina,random}); }
+		function redrawBg() { me.drawBg(ctxBg, {width,height,retina,random,isLandscape}); }
+		function redrawFg() { me.drawFg(ctxFg, {width,height,retina,random,isLandscape}); }
 
 		function updateLayout() {
 			retina = window.devicePixelRatio;

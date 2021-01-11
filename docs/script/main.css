@@ -1,17 +1,16 @@
-html, body {
-	background: #1d2029;
-	font-size: 18px;
-	width: 100vw;
-	height: 100%;
-	padding: 0;
-	margin: 0;
-}
-
 * {
 	user-select: none;
 	-webkit-user-select: none;
 }
 
+html, body {
+	background: #1d2029;
+	font-size: 18px;
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
 
 body {
 	font-family: Open Sans,Helvetica,Arial,sans-serif;
@@ -21,14 +20,15 @@ body {
 
 #wrapper {
 	position: relative;
-	width: 100vw;
+	width: 100%;
 	height: 100%;
 	top: 0;
+	left: 0;
 }
 
 .container {
 	position: absolute;
-	overflow: hidden;
+	overflow: visible;
 }
 
 .container canvas {
@@ -40,38 +40,58 @@ body {
 #headline {
 	top: 0.5em;
 	left: 0px;
-	width: calc(100vw - 75vh);
+	width: 100vw;
 	line-height: 1em;
 	font-size: min(4vw, 18px);
 }
 
-#headline p {
-	text-align: center;
-	margin: 0;
-}
+	#headline p {
+		text-align: center;
+		margin: 0;
+	}
 
-#headline p.small {
-	font-size: 0.65em;
-	opacity: 0.5;
-}
+	#headline p.small {
+		font-size: 0.65em;
+		opacity: 0.5;
+	}
+
+	.landscape #headline {
+		width: calc(100vw - 75vh);
+	}
 
 #chartContainer {
 	top: 0px;
 	left: 0px;
-	width: calc(100vw - 75vh);
-	height: 100vh;
+	width: 100vw;
+	height: 35vw;
+	height: max(35vw,180px);
+	
 	z-index: 100;
 }
 
+	.landscape #chartContainer {
+		width: calc(100vw - 75vh);
+		height: 100vh;
+	}
+
 #mapContainer {
-	top: 0px;
-	right: 0px;
-	width: 75vh;
-	height: 100vh;
+	top: 35vw;
+	top: max(35vw - 20px,180px - 20px);
+	width: 100vw;
+	height: auto;
+	bottom: 0;
 }
+
+	.landscape #mapContainer {
+		top: 0px;
+		width: 75vh;
+		right: 0px;
+		height: 100vh;
+	}
+
 #footer {
 	left: 0px;
-	right: 75vh;
+	right: 0px;
 	bottom: 0px;
 	height: 14px;
 	font-size: 10px;
@@ -79,15 +99,22 @@ body {
 	padding-left: 1px;
 	text-align: center;
 }
-#footer a {
-	color: inherit;
-	text-decoration: underline transparent;
-	transition: color 0.1s, text-decoration-color 0.1s;
-}
-#footer a:hover {
-	color: #fff;
-	text-decoration-color: #fff;
-}
+
+	#footer a {
+		color: inherit;
+		text-decoration: underline transparent;
+		transition: color 0.1s, text-decoration-color 0.1s;
+	}
+
+	#footer a:hover {
+		color: #fff;
+		text-decoration-color: #fff;
+	}
+
+	.landscape #footer {
+		right: 75vh;
+	}
+
 #finger {
 	width: 20vmin;
 	height: 28vmin;
@@ -95,6 +122,7 @@ body {
 	display: none;
 	position: absolute;
 }
+
 #finger svg {
 	opacity: 0.8;
 	position: absolute;
@@ -103,31 +131,3 @@ body {
 	right: 0px;
 	bottom: 0px;
 }
-
-@media (max-aspect-ratio: 1/1) {
-	#headline {
-		width: 100vw;
-	}
-	#chartContainer {
-		top: 0;
-		width: 100vw;
-		height: 35vw;
-		height: max(35vw,180px);
-	}
-	#mapContainer {
-		top: 35vw;
-		top: max(35vw - 20px,180px - 20px);
-		width: 100vw;
-		height: auto;
-		bottom: 0;
-	}
-	#footer {
-		text-align: center;
-		right: 0px;
-	}
-}
-
-
-
-
-
