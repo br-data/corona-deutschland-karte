@@ -95,7 +95,7 @@ $(function () {
 
 	function initMap() {
 		const maxMapValue = 400;
-		let projX, projY, xMin, xMax, yMin, yMax, retina, zoom;
+		let projX, projY, retina, zoom;
 		let timeoutHandler;
 		
 		const gradient = [
@@ -116,17 +116,32 @@ $(function () {
 		function relayout(opt) {
 			retina = opt.retina;
 
-			let boundingBox = [-0.9584, 0.9604, -1.3188, 1.2767];
+			let bboxValue = [-0.9584, 0.9604, -1.3188, 1.2767];
+			let bboxPixel = [0, opt.width, 0, opt.height];
 
-			let zoomX = opt.width /(boundingBox[1] - boundingBox[0]);
-			let zoomY = opt.height/(boundingBox[3] - boundingBox[2]);
+			if (isLandscape) {
+				bboxPixel[0] += 20*retina;
+				bboxPixel[1] -= 10*retina;
+				bboxPixel[2] += opt.height*0.02;
+				bboxPixel[3] -= opt.height*0.02;
+			} else {
+				bboxPixel[3] -= 15*retina;
+			}
+
+			let zoomX = (bboxPixel[1] - bboxPixel[0])/(bboxValue[1] - bboxValue[0]);
+			let zoomY = (bboxPixel[3] - bboxPixel[2])/(bboxValue[3] - bboxValue[2]);
 			zoom = 0.998*Math.min(zoomX, zoomY);
 			
-			let offsetX = opt.width /2 - zoom*(boundingBox[0]+boundingBox[1])/2;
-			let offsetY = opt.height/2 - zoom*(boundingBox[2]+boundingBox[3])/2;
+			let offsetX = (bboxPixel[0]+bboxPixel[1])/2 - zoom*(bboxValue[0]+bboxValue[1])/2;
+			let offsetY = (bboxPixel[2]+bboxPixel[3])/2 - zoom*(bboxValue[2]+bboxValue[3])/2;
 
-			projX = getProjection(boundingBox[0], boundingBox[1], boundingBox[0]*zoom+offsetX, boundingBox[1]*zoom+offsetX);
-			projY = getProjection(boundingBox[2], boundingBox[3], boundingBox[2]*zoom+offsetY, boundingBox[3]*zoom+offsetY);
+			let xMin = bboxValue[0]*zoom + offsetX;
+			let xMax = bboxValue[1]*zoom + offsetX;
+			let yMin = bboxValue[2]*zoom + offsetY;
+			let yMax = bboxValue[3]*zoom + offsetY;
+
+			projX = getProjection(bboxValue[0], bboxValue[1], xMin, xMax);
+			projY = getProjection(bboxValue[2], bboxValue[3], yMin, yMax);
 		}
 
 		container.drawBg = function drawMapBg (ctx, opt) {
@@ -341,17 +356,23 @@ $(function () {
 
 		function drawLegend(ctx, opt) {
 			let width = 10*opt.retina;
-			let paddingRight  = 25*opt.retina;
-			let paddingBottom = 25*opt.retina;
-			let step = 0.4*opt.retina;
-			let x0 = opt.width - paddingRight - width;
+			let paddingBottom = (isLandscape ? 15 : 15)*opt.retina;
+
+			let xMin = projX.v2p(0.70)+25*opt.retina;
+			let xMax = opt.width - width;
+			let yMin = projY.v2p(0.25);
+			let yMax = opt.height-paddingBottom;
+			let step = Math.floor(10*(yMax-yMin)/maxMapValue)/10;
+			
+			let xPos = (xMin + xMax)/2;
+			let yPos = (yMin + yMax)/2 + step*maxMapValue/2;
 
 			for (let y = 0; y <= maxMapValue*step; y++) {
-				let y0 = opt.height-paddingBottom-y;
+				let y0 = yPos-y;
 
 				ctx.strokeStyle = value2color(y/step);
 				ctx.beginPath();
-				lineH(x0,y0,x0+width);
+				lineH(xPos, y0, xPos+width);
 				ctx.stroke();
 			}
 
@@ -361,14 +382,14 @@ $(function () {
 			ctx.textAlign = 'right';
 
 			[0,50,100,200,300,400].forEach(v => {
-				let y = opt.height - paddingBottom - v*step;
+				let y = yPos - v*step;
 
 				ctx.beginPath();
 				ctx.strokeStyle = baseColor;
-				lineH(x0-3*opt.retina, y, x0);
+				lineH(xPos-3*opt.retina, y, xPos);
 				ctx.stroke();
 
-				ctx.fillText(v, x0-6*opt.retina, y);
+				ctx.fillText(v, xPos-6*opt.retina, y);
 			})
 
 			function lineH(x0,y0,x1) {
@@ -429,18 +450,33 @@ $(function () {
 
 		function relayout(opt) {
 			retina = opt.retina;
-			paddingTop = 5*opt.retina;
-			paddingLeft = 25*opt.retina;
-			paddingRight = 19*opt.retina;
-			paddingBottom = 35*opt.retina;
+
+			paddingTop    = (isLandscape ? 55 : 15)*opt.retina;
+			paddingLeft   = (isLandscape ? 30 : 30)*opt.retina;
+			paddingRight  = (isLandscape ? 19 : 19)*opt.retina;
+			paddingBottom = (isLandscape ? 45 : 35)*opt.retina;
 
 			xMin = Math.round(paddingLeft);
 			xMax = Math.round(opt.width - paddingRight);
-			yMin = opt.height - paddingBottom;
-			yMax = paddingTop;
+			yMin = paddingTop;
+			yMax = opt.height - paddingBottom;
+
+			if (isLandscape) {
+				let w = xMax-xMin;
+				let h = yMax-yMin;
+				let ratio = 1;
+				if (h > w*ratio) {
+					let offset = h-w*ratio;
+					yMin += offset/2;
+					yMax -= offset/2;
+				}
+			}
+
+			yMin = Math.round(yMin);
+			yMax = Math.round(yMax);
 
 			projX = getProjection(0, dayMax-dayMin, xMin, xMax);
-			projY = getProjection(0, maxValue, yMin, yMax);
+			projY = getProjection(maxValue, 0, yMin, yMax);
 
 			if (!slider) return;
 			slider.setX(xMin/opt.retina, xMax/opt.retina);
@@ -462,8 +498,8 @@ $(function () {
 
 			ctx.beginPath();
 
-			ctx.lineV(xMin,yMin,yMax);
-			ctx.lineH(xMin,yMin,xMax);
+			ctx.lineV(xMin,yMax,yMin);
+			ctx.lineH(xMin,yMax,xMax);
 
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'right';
@@ -486,9 +522,9 @@ $(function () {
 				
 				if (d.getDate() === 1) {
 					let x = projX.v2p(v-dayMin);
-					ctx.lineV(x, yMin, yMin+6*opt.retina);
+					ctx.lineV(x, yMax, yMax+6*opt.retina);
 					if (dayMax - v < 10) continue;
-					ctx.fillText(months[d.getMonth()], x+2*opt.retina, yMin+2*opt.retina);
+					ctx.fillText(months[d.getMonth()], x+2*opt.retina, yMax+2*opt.retina);
 				}
 			}
 
@@ -519,8 +555,8 @@ $(function () {
 				ctx.beginPath();
 				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
 				ctx.stroke();
-				ctx.lineTo(xMax, yMin);
-				ctx.lineTo(xMin, yMin);
+				ctx.lineTo(xMax, yMax);
+				ctx.lineTo(xMin, yMax);
 				ctx.fill();
 			})
 			
@@ -549,7 +585,7 @@ $(function () {
 
 			let x = projX.v2p(dayIndex);
 			let s = 3*opt.retina;
-			let ya = yMin + 12*opt.retina;
+			let ya = yMax + 12*opt.retina;
 			let yb = ya +  6*opt.retina;
 			let yc = yb + 16*opt.retina;
 			let yt = yb +  7.5*opt.retina;
@@ -559,7 +595,7 @@ $(function () {
 			ctx.setLineDash([2*opt.retina, 2*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
-			ctx.lineV(x, yMax, yMin);
+			ctx.lineV(x, yMin, yMax);
 			ctx.stroke();
 			ctx.setLineDash([]);
 

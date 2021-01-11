@@ -70,8 +70,9 @@ body {
 }
 
 	.landscape #chartContainer {
-		width: calc(100vw - 75vh);
-		height: 100vh;
+		width: calc(100vw - 73vh);
+		height: auto;
+		bottom: 15px;
 	}
 
 #mapContainer {
@@ -79,7 +80,7 @@ body {
 	top: max(35vw - 20px,180px - 20px);
 	width: 100vw;
 	height: auto;
-	bottom: 0;
+	bottom: 0px;
 }
 
 	.landscape #mapContainer {
