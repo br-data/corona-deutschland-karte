@@ -425,20 +425,10 @@ $(function () {
 
 		function relayout(opt) {
 			retina = opt.retina;
-			paddingTop = 60*opt.retina;
-			paddingLeft = 40*opt.retina;
-			paddingRight = 40*opt.retina;
-			paddingBottom = 60*opt.retina;
-
-			let w = opt.width - paddingLeft - paddingRight;
-			let h = opt.height - paddingTop - paddingBottom;
-			let aspectRatio = w/h;
-			const minAspectRatio = 1;
-			if (aspectRatio < minAspectRatio) {
-				diff = Math.round((h-w/minAspectRatio)*0.3);
-				paddingTop += diff;
-				paddingBottom += diff;
-			}
+			paddingTop = 10*opt.retina;
+			paddingLeft = 25*opt.retina;
+			paddingRight = 20*opt.retina;
+			paddingBottom = 35*opt.retina;
 
 			projX = getProjection(
 				0, dayMax-dayMin,
