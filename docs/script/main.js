@@ -95,7 +95,7 @@ $(function () {
 
 	function initMap() {
 		const maxMapValue = 400;
-		let zoomX, zoomY, offsetX, offsetY, retina;
+		let projX, projY, xMin, xMax, yMin, yMax, retina, zoom;
 		let timeoutHandler;
 		
 		const gradient = [
@@ -118,16 +118,15 @@ $(function () {
 
 			let boundingBox = [-0.9584, 0.9604, -1.3188, 1.2767];
 
+			let zoomX = opt.width /(boundingBox[1] - boundingBox[0]);
+			let zoomY = opt.height/(boundingBox[3] - boundingBox[2]);
+			zoom = 0.998*Math.min(zoomX, zoomY);
+			
+			let offsetX = opt.width /2 - zoom*(boundingBox[0]+boundingBox[1])/2;
+			let offsetY = opt.height/2 - zoom*(boundingBox[2]+boundingBox[3])/2;
 
-			// zoomX = 1.03*opt.width/2;
-			// zoomY = 0.75*opt.height/2;
-			zoomX = opt.width /(boundingBox[1] - boundingBox[0]);
-			zoomY = opt.height/(boundingBox[3] - boundingBox[2]);
-			
-			zoomX = zoomY = 0.998*Math.min(zoomX, zoomY);
-			
-			offsetX = opt.width /2 - zoomX*(boundingBox[0]+boundingBox[1])/2;
-			offsetY = opt.height/2 - zoomY*(boundingBox[2]+boundingBox[3])/2;
+			projX = getProjection(boundingBox[0], boundingBox[1], boundingBox[0]*zoom+offsetX, boundingBox[1]*zoom+offsetX);
+			projY = getProjection(boundingBox[2], boundingBox[3], boundingBox[2]*zoom+offsetY, boundingBox[3]*zoom+offsetY);
 		}
 
 		container.drawBg = function drawMapBg (ctx, opt) {
@@ -142,7 +141,7 @@ $(function () {
 			ctx.beginPath();
 			data.borders0.forEach(poly => {
 				poly.forEach((p,i) => {
-					(i?ctx.lineTo:ctx.moveTo).call(ctx, zoomX*p[0]+offsetX, zoomY*p[1]+offsetY)
+					(i?ctx.lineTo:ctx.moveTo).call(ctx, projX.v2p(p[0]), projY.v2p(p[1]))
 				})
 			})
 			ctx.fill();
@@ -153,7 +152,7 @@ $(function () {
 			ctx.beginPath();
 			data.borders1.forEach(poly => {
 				poly.forEach((p,i) => {
-					(i?ctx.lineTo:ctx.moveTo).call(ctx, zoomX*p[0]+offsetX, zoomY*p[1]+offsetY)
+					(i?ctx.lineTo:ctx.moveTo).call(ctx, projX.v2p(p[0]), projY.v2p(p[1]))
 				})
 			})
 			ctx.stroke();
@@ -172,9 +171,6 @@ $(function () {
 			}
 
 			ctx.clearRect(0,0,opt.width,opt.height);
-
-
-			let zoomR = zoomY;
 
 			data.landkreise.forEach(f => {
 				f.r = f.radius[dayIndex];
@@ -237,9 +233,9 @@ $(function () {
 
 				changeSum += Math.sqrt(sqr(f.x-f.xOld) + sqr(f.y-f.yOld));
 
-				f.px = zoomX*f.x + offsetX;
-				f.py = zoomY*f.y + offsetY;
-				f.pr = zoomR*f.r;
+				f.px = projX.v2p(f.x);
+				f.py = projY.v2p(f.y);
+				f.pr = zoom*f.r;
 				
 				ctx.beginPath();
 				ctx.arc(f.px, f.py, f.pr, 0, 2*Math.PI);
@@ -279,7 +275,7 @@ $(function () {
 				let h = 12*opt.retina+py;
 				let r = 3*opt.retina;
 
-				if (x < offsetX) {
+				if (x < projX.v2p(0)) {
 					x += f.pr + 10*opt.retina;
 				} else {
 					x -= f.pr + 10*opt.retina + w;
