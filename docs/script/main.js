@@ -419,7 +419,7 @@ $(function () {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
 		const maxValue = 400;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
-		let projX, projY, x0, x1, y0, y1, retina;
+		let projX, projY, xMin, xMax, yMin, yMax, retina;
 
 		const container = new CanvasContainer('#chartContainer');
 		const changeCheckerDraw   = new ChangeChecker();
@@ -433,27 +433,21 @@ $(function () {
 
 		function relayout(opt) {
 			retina = opt.retina;
-			paddingTop = 10*opt.retina;
+			paddingTop = 5*opt.retina;
 			paddingLeft = 25*opt.retina;
-			paddingRight = 20*opt.retina;
+			paddingRight = 19*opt.retina;
 			paddingBottom = 35*opt.retina;
 
-			projX = getProjection(
-				0, dayMax-dayMin,
-				Math.round(paddingLeft), Math.round(opt.width - paddingRight)
-			);
-			projY = getProjection(
-				0, maxValue,
-				opt.height - paddingBottom, paddingTop
-			);
+			xMin = Math.round(paddingLeft);
+			xMax = Math.round(opt.width - paddingRight);
+			yMin = opt.height - paddingBottom;
+			yMax = paddingTop;
 
-			x0 = projX.v2p(0);
-			x1 = projX.v2p(dayMax-dayMin);
-			y0 = projY.v2p(0);
-			y1 = projY.v2p(maxValue);
+			projX = getProjection(0, dayMax-dayMin, xMin, xMax);
+			projY = getProjection(0, maxValue, yMin, yMax);
 
 			if (!slider) return;
-			slider.setX(x0/opt.retina, x1/opt.retina);
+			slider.setX(xMin/opt.retina, xMax/opt.retina);
 		}
 
 		container.drawBg = function drawChartBg (ctx, opt) {
@@ -472,8 +466,8 @@ $(function () {
 
 			ctx.beginPath();
 
-			ctx.lineV(x0,y0,y1);
-			ctx.lineH(x0,y0,x1);
+			ctx.lineV(xMin,yMin,yMax);
+			ctx.lineH(xMin,yMin,xMax);
 
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'right';
@@ -481,10 +475,10 @@ $(function () {
 			for (let v = 0; v <= maxValue; v += 20) {
 				let y = projY.v2p(v);
 				if (v % 100 === 0) {
-					ctx.lineH(x0, y, x0 - 4*opt.retina);
-					ctx.fillText(v, x0 - 5*opt.retina, y + 0.5*opt.retina);
+					ctx.lineH(xMin, y, xMin - 4*opt.retina);
+					ctx.fillText(v, xMin - 5*opt.retina, y + 0.5*opt.retina);
 				} else {
-					ctx.lineH(x0, y, x0 - 2*opt.retina);
+					ctx.lineH(xMin, y, xMin - 2*opt.retina);
 				}
 			}
 
@@ -496,9 +490,9 @@ $(function () {
 				
 				if (d.getDate() === 1) {
 					let x = projX.v2p(v-dayMin);
-					ctx.lineV(x, y0, y0+6*opt.retina);
+					ctx.lineV(x, yMin, yMin+6*opt.retina);
 					if (dayMax - v < 10) continue;
-					ctx.fillText(months[d.getMonth()], x+2*opt.retina, y0+2*opt.retina);
+					ctx.fillText(months[d.getMonth()], x+2*opt.retina, yMin+2*opt.retina);
 				}
 			}
 
@@ -529,8 +523,8 @@ $(function () {
 				ctx.beginPath();
 				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
 				ctx.stroke();
-				ctx.lineTo(x1, y0);
-				ctx.lineTo(x0, y0);
+				ctx.lineTo(xMax, yMin);
+				ctx.lineTo(xMin, yMin);
 				ctx.fill();
 			})
 			
@@ -547,7 +541,7 @@ $(function () {
 				if (!f) return;
 				y -= 12*retina;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
-				ctx.fillText(features[index].title, x1, y);
+				ctx.fillText(features[index].title, xMax, y);
 			})
 
 			ctx.fillStyle = baseColor;
@@ -559,7 +553,7 @@ $(function () {
 
 			let x = projX.v2p(dayIndex);
 			let s = 3*opt.retina;
-			let ya = y0 + 12*opt.retina;
+			let ya = yMin + 12*opt.retina;
 			let yb = ya +  6*opt.retina;
 			let yc = yb + 16*opt.retina;
 			let yt = yb +  7.5*opt.retina;
@@ -569,7 +563,7 @@ $(function () {
 			ctx.setLineDash([2*opt.retina, 2*opt.retina]);
 			ctx.strokeStyle = baseColor;
 			ctx.beginPath();
-			ctx.lineV(x, y1, y0);
+			ctx.lineV(x, yMax, yMin);
 			ctx.stroke();
 			ctx.setLineDash([]);
 
