@@ -88,7 +88,7 @@ $(function () {
 	function initMap() {
 		const maxMapValue = 400;
 		let zoomX, zoomY, offsetX, offsetY, retina;
-		let timeoutHandler, colorLookup = new Map();
+		let timeoutHandler;
 		
 		const gradient = [
 			'#ffffb2',
@@ -97,7 +97,9 @@ $(function () {
 			'#f03b20',
 			'#bd000d',
 			'#660014',
+			'#000000',
 		];
+		const gradientRGB = gradient.map(parseRGB);
 
 		let container = new CanvasContainer('#mapContainer');
 		let changeCheckerDraw   = new ChangeChecker();
@@ -374,12 +376,10 @@ $(function () {
 			if (v <  50) return gradient[1];
 			if (v < 100) return gradient[2];
 			if (v < 200) return gradient[3];
-			return linearInterpolation((v-200)/200, gradient[4], gradient[5]);
+			return linearInterpolation((v-200)/500, gradientRGB[4], gradientRGB[6]);
 		}
 
 		function linearInterpolation(a, c0, c1) {
-			c0 = parseRGB(c0);
-			c1 = parseRGB(c1);
 			if (a < 0) a = 0;
 			if (a > 1) a = 1;
 			let c = [
@@ -391,13 +391,11 @@ $(function () {
 		}
 
 		function parseRGB(hex) {
-			if (colorLookup.has(hex)) return colorLookup.get(hex);
 			let color = [
 				parseInt(hex.substr(1,2), 16),
 				parseInt(hex.substr(3,2), 16),
 				parseInt(hex.substr(5,2), 16),
 			]
-			colorLookup.set(hex, color);
 			return color;
 		}
 
