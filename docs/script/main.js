@@ -618,21 +618,6 @@ $(function () {
 		return {
 			redraw: container.redrawFg,
 		}
-
-		function getProjection(v0,v1,p0,p1) {
-			let s = (p1-p0)/(v1-v0);
-			let offsetP = -v0*s+p0
-			let offsetV = -p0/s+v0
-			return {v2p,p2v};
-
-			function v2p(v) {
-				return v*s + offsetP;
-			}
-
-			function p2v(p) {
-				return p/s + offsetV;
-			}
-		}
 	}
 
 	function initAnimation() {
@@ -767,6 +752,27 @@ $(function () {
 		let duration = (Date.now() - time0)/1000;
 		if (duration > 3*3600) location.reload();
 	}, 60*1000);
+
+
+	function getProjection(v0,v1,p0,p1) {
+		let s, offsetP, offsetV;
+		init();
+		return {v2p,p2v};
+
+		function v2p(v) {
+			return v*s + offsetP;
+		}
+
+		function p2v(p) {
+			return p/s + offsetV;
+		}
+
+		function init() {
+			s = (p1-p0)/(v1-v0);
+			offsetP = -v0*s+p0
+			offsetV = -p0/s+v0
+		}
+	}
 })
 
 CanvasRenderingContext2D.prototype.lineH = function (x0,y0,x1) {
