@@ -108,15 +108,18 @@ $(function () {
 		function relayout(opt) {
 			retina = opt.retina;
 
+			let boundingBox = [-0.9584, 0.9604, -1.3188, 1.2767];
+
+
 			// zoomX = 1.03*opt.width/2;
 			// zoomY = 0.75*opt.height/2;
-			zoomX = 1.03*opt.width/2;
-			zoomY = 0.75*opt.height/2;
+			zoomX = opt.width /(boundingBox[1] - boundingBox[0]);
+			zoomY = opt.height/(boundingBox[3] - boundingBox[2]);
 			
-			zoomX = zoomY = Math.min(zoomX, zoomY);
+			zoomX = zoomY = 0.998*Math.min(zoomX, zoomY);
 			
-			offsetX = opt.width *0.5;
-			offsetY = opt.height*0.48;
+			offsetX = opt.width /2 - zoomX*(boundingBox[0]+boundingBox[1])/2;
+			offsetY = opt.height/2 - zoomY*(boundingBox[2]+boundingBox[3])/2;
 		}
 
 		container.drawBg = function drawMapBg (ctx, opt) {
