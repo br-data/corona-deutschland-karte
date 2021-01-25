@@ -1,9 +1,10 @@
 
 *.bz2
 *.gz
+.DS_Store
 /data/*.js
 /data/*.json.bz2
+/data/*.ndjson.xz
 /node_modules/
 /publish/*.css
 /publish/*.js
-.DS_Store

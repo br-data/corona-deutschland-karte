@@ -8,7 +8,7 @@ const {resolve} = require('path');
 
 download('https://api.github.com/repos/ard-data/2020-rki-archive/contents/data/2_parsed', list => {
 	list = JSON.parse(list);
-	list = list.filter(e => /^data_202.*\.json\.bz2$/.test(e.name));
+	list = list.filter(e => /^data_202.*\.ndjson\.xz$/.test(e.name));
 	list.sort((a,b) => a.name < b.name ? -1 : 1);
 	let file = list.pop();
 

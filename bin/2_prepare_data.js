@@ -130,26 +130,17 @@ console.log('   size: '+JSON.stringify(deutschland).length);
 
 console.log('start with data');
 
-let file = fs.readdirSync(folder).filter(f => /^data_202.*\.json\.bz2$/.test(f)).sort().pop();
+let file = fs.readdirSync(folder).filter(f => /^data_202.*\.ndjson\.xz$/.test(f)).sort().pop();
 file = resolve(folder, file);
 
 (async function () {
 	let days = [];
 
 	console.log('   load');
-	let data = fs.readFileSync(file);
-
-	console.log('   decompress');
-	data = await helper.bunzip2(data);
-
-	console.log('   unpack');
-	data = JSON.parse(data);
-
-	console.log('   scan');
-	data.forEach(entry => {
-		if (entry.NeuerFall < 0) return;
+	for await (let line of helper.lineXzipReader(file)) {
+		let entry = JSON.parse(line);
+		if (entry.NeuerFall < 0) continue;
 		
-		//let dayMelde = (entry.IstErkrankungsbeginn === 1) ? entry.RefdatumISO : entry.MeldedatumISO;
 		let dayMelde = entry.MeldedatumISO;
 		dayMelde = parseDate(dayMelde);
 
@@ -158,13 +149,13 @@ file = resolve(folder, file);
 		let index = lookup.get(id).index;
 
 		let i = dayMelde - dayMin;
-		if (i < 0) return;
+		if (i < 0) continue;
 		if (!days[i]) days[i] = [];
 		let day = days[i];
 
 		day[index] = (day[index] || 0) + entry.AnzahlFall;
 		if (dayMelde > dayMax) dayMax = dayMelde;
-	})
+	}
 
 	console.log('   finalize');
 

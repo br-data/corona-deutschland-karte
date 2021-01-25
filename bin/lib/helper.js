@@ -14,6 +14,7 @@ var helper = module.exports = {
 	runParallel,
 	lineGzipReader, lineGzipWriter,
 	jsonGzipMultiReader,
+	lineXzipReader,
 	encodeTSV, encodeCSV,
 	slowDown, logPercent,
 }
@@ -37,6 +38,17 @@ function fetch(url) {
 			throw Error(error)
 		})
 	});
+}
+
+async function* lineXzipReader(filename) {
+	let xz = cp.spawn('xz', ['-dck', filename]);
+
+	let lastLine = '';
+	for await (let block of xz.stdout) {
+		let lines = (lastLine + block.toString()).split('\n');
+		lastLine = lines.pop();
+		for (let line of lines) yield line;
+	}
 }
 
 async function* lineGzipReader(filename, cb) {
