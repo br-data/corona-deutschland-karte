@@ -21,7 +21,7 @@
   "private": true,
   "homepage": "https://github.com/br-data/corona-deutschland-karte#readme",
   "dependencies": {
-    "@turf/distance": "^6.0.1",
+    "@turf/distance": "^6.3.0",
     "babel-minify": "^0.5.1",
     "http-server": "^0.12.3",
     "topojson": "^3.0.2",
