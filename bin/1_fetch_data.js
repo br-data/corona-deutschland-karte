@@ -6,14 +6,15 @@ const fs = require('fs');
 const https = require('https');
 const {resolve} = require('path');
 
-download('https://api.github.com/repos/ard-data/2020-rki-archive/contents/data/2_parsed', list => {
-	list = JSON.parse(list);
-	list = list.filter(e => /^data_202.*\.ndjson\.xz$/.test(e.name));
-	list.sort((a,b) => a.name < b.name ? -1 : 1);
+const folder = 'https://storage.googleapis.com/brdata-public-data/rki-corona-archiv/2_parsed/';
+
+download(folder+'index.txt', list => {
+	list = list.toString().split('\n');
+	list.sort();
 	let file = list.pop();
 
-	download(file.download_url, data => {
-		fs.writeFileSync(resolve(__dirname, '../data/', file.name), data);
+	download(folder+file, data => {
+		fs.writeFileSync(resolve(__dirname, '../data/', file), data);
 	})
 });
 
