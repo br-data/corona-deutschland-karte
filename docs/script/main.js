@@ -567,7 +567,7 @@ $(function () {
 			ctx.textBaseline = 'top';
 			ctx.textAlign = 'left';
 
-			let y = Math.round(projY.v2p(maxValue*0.8));
+			let y = Math.round(projY.v2p(maxValue*0.7));
 
 			features.forEach((f,index) => {
 				if (!f) return;
