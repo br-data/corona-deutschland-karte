@@ -565,15 +565,15 @@ $(function () {
 			// draw legend
 
 			ctx.textBaseline = 'top';
-			ctx.textAlign = 'right';
+			ctx.textAlign = 'left';
 
-			let y = Math.round(projY.v2p(20)) - 0*retina;
+			let y = Math.round(projY.v2p(maxValue*0.8));
 
 			features.forEach((f,index) => {
 				if (!f) return;
-				y -= 12*retina;
+				y += 13*retina;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
-				ctx.fillText(features[index].title, xMax, y);
+				ctx.fillText(features[index].title, (xMin*0.95+0.05*xMax), y);
 			})
 
 			ctx.fillStyle = baseColor;
