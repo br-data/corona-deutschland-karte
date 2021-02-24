@@ -45,5 +45,6 @@ console.log('write JavaScript');
 script = babelMinify(script.join('\n')).code;
 fs.writeFileSync(resolve(folderPub, 'script.js'), script, 'utf8');
 
-console.log('copy icon');
+console.log('copy images');
 fs.copyFileSync(resolve(folderSrc, 'icon.png'), resolve(folderPub, 'icon.png'));
+fs.copyFileSync(resolve(folderSrc, 'card.png'), resolve(folderPub, 'card.png'));
