@@ -539,7 +539,8 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
-			ctx.font = 12*opt.retina + 'px sans-serif';
+			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height)*0.03);
+			ctx.font = fontSize*opt.retina + 'px sans-serif';
 
 
 			// draw selection and hover
@@ -571,7 +572,7 @@ $(function () {
 
 			features.forEach((f,index) => {
 				if (!f) return;
-				y += 13*retina;
+				y += Math.round(fontSize*1.2)*retina;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
 				ctx.fillText(features[index].title, (xMin*0.95+0.05*xMax), y);
 			})
