@@ -448,6 +448,15 @@ $(function () {
 			[255,255,255].join(','),
 		]
 
+		function getPadding() {
+			return {
+				top:    paddingTop   /retina,
+				left:   paddingLeft  /retina,
+				right:  paddingRight /retina,
+				bottom: paddingBottom/retina,
+			}
+		}
+
 		function relayout(opt) {
 			retina = opt.retina;
 
@@ -651,6 +660,7 @@ $(function () {
 		return {
 			redraw: container.redrawFg,
 			updateLayout: container.updateLayout,
+			getPadding,
 		}
 	}
 
@@ -676,9 +686,11 @@ $(function () {
 
 			localStorage.setItem('animationrun', used+1);
 
+			let padding = chart.getPadding();
+
 			let xOffset = container.width()*0.4;
-			let x0 = 40-xOffset;
-			let x1 = $('#chartContainer').width()-40-xOffset;
+			let x0 = padding.left-xOffset;
+			let x1 = $('#chartContainer').width()-padding.right-xOffset;
 			let y0 = '35vw';
 			let y1 = '25vw';
 
