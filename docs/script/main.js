@@ -548,7 +548,7 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
-			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height)*0.03);
+			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, 600)*0.03);
 			ctx.font = fontSize*opt.retina + 'px sans-serif';
 
 
