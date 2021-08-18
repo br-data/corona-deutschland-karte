@@ -562,11 +562,20 @@ $(function () {
 				ctx.strokeStyle = 'rgb(' +colors[index]+')';
 				ctx.fillStyle   = 'rgba('+colors[index]+',0.2)';
 
+				// draw line and area
 				ctx.beginPath();
 				f.normalized.forEach((v,i) => (i ? ctx.lineTo : ctx.moveTo).call(ctx, projX.v2p(i), projY.v2p(v)));
 				ctx.stroke();
 				ctx.lineTo(xMax, yMax);
 				ctx.lineTo(xMin, yMax);
+				ctx.fill();
+
+				// draw dot
+				let x = projX.v2p(dayIndex);
+				let y = projY.v2p(f.normalized[dayIndex]);
+				ctx.fillStyle   = 'rgb('+colors[index]+')';
+				ctx.beginPath();
+				ctx.arc(x,y,3*opt.retina,0,2*Math.PI);
 				ctx.fill();
 
 				return true;
