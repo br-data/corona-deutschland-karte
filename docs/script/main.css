@@ -122,6 +122,7 @@ body {
 	pointer-events: none;
 	display: none;
 	position: absolute;
+	z-index: 1000;
 }
 
 #finger svg {
