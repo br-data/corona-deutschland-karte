@@ -589,9 +589,12 @@ $(function () {
 			let y = Math.round(projY.v2p(maxValue*0.7));
 
 			features.forEach((f,index) => {
+				let text = f.title;
+				text += ': '+f.normalized[dayIndex].toFixed(1)+'';
+
 				y += Math.round(fontSize*1.2)*retina;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
-				ctx.fillText(features[index].title, (xMin*0.95+0.05*xMax), y);
+				ctx.fillText(text, (xMin*0.95+0.05*xMax), y);
 			})
 
 			ctx.fillStyle = baseColor;
