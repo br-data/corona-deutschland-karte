@@ -1,6 +1,10 @@
 # Corona-Deutschlandkarte
 
-Interaktive Deutschlandkarte, die die COVID19-Infektionszahlen auf Landkreis-/Stadtebene zeigt.
+Interaktive Deutschlandkarte, die die COVID19-Infektionszahlen auf Landkreis-/Stadtebene zeigt:
+
+https://br-data.github.io/corona-deutschland-karte/publish/
+
+Kann auch als iOS-Webapp verwendet werden.
 
 ## Verwendung
 
