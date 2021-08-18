@@ -2,7 +2,7 @@
 
 Interaktive Deutschlandkarte, die die COVID19-Infektionszahlen auf Landkreis-/Stadtebene zeigt:
 
-https://br-data.github.io/corona-deutschland-karte/publish/
+https://interaktiv.br.de/corona-deutschland-karte/
 
 Kann auch als iOS-Webapp verwendet werden.
 
