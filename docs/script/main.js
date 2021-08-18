@@ -556,8 +556,8 @@ $(function () {
 			let features = selection.slice(0);
 			if (features[1] === features[2]) features[2] = false;
 
-			features.forEach((f,index) => {
-				if (!f) return;
+			features = features.filter((f,index) => {
+				if (!f) return false;
 
 				ctx.strokeStyle = 'rgb(' +colors[index]+')';
 				ctx.fillStyle   = 'rgba('+colors[index]+',0.2)';
@@ -568,9 +568,9 @@ $(function () {
 				ctx.lineTo(xMax, yMax);
 				ctx.lineTo(xMin, yMax);
 				ctx.fill();
+
+				return true;
 			})
-			
-			
 
 			// draw legend
 
@@ -580,7 +580,6 @@ $(function () {
 			let y = Math.round(projY.v2p(maxValue*0.7));
 
 			features.forEach((f,index) => {
-				if (!f) return;
 				y += Math.round(fontSize*1.2)*retina;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
 				ctx.fillText(features[index].title, (xMin*0.95+0.05*xMax), y);
