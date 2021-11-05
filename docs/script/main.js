@@ -556,9 +556,9 @@ $(function () {
 			let features = selection.slice(0);
 			if (features[1] === features[2]) features[2] = false;
 
-			features = features.filter((f,index) => {
-				if (!f) return false;
+			features = features.filter(f => f);
 
+			features.forEach((f,index) => {
 				ctx.strokeStyle = 'rgb(' +colors[index]+')';
 				ctx.fillStyle   = 'rgba('+colors[index]+',0.2)';
 
@@ -577,8 +577,6 @@ $(function () {
 				ctx.beginPath();
 				ctx.arc(x,y,3*opt.retina,0,2*Math.PI);
 				ctx.fill();
-
-				return true;
 			})
 
 			// draw legend
