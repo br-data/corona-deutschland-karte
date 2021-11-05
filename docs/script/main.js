@@ -548,7 +548,7 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
-			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, 600)*0.03);
+			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, 600)*0.028);
 			ctx.font = fontSize*opt.retina + 'px sans-serif';
 
 
@@ -584,7 +584,7 @@ $(function () {
 			ctx.textBaseline = 'top';
 			ctx.textAlign = 'left';
 
-			let y = Math.round(projY.v2p(maxValue*0.7));
+			let y = Math.round(projY.v2p(maxValue*0.85));
 
 			features.forEach((f,index) => {
 				let text = f.title;
@@ -592,7 +592,7 @@ $(function () {
 
 				y += Math.round(fontSize*1.2)*retina;
 				ctx.fillStyle = 'rgb('+colors[index]+')';
-				ctx.fillText(text, (xMin*0.95+0.05*xMax), y);
+				ctx.fillText(text, (xMin*0.98+0.02*xMax), y);
 			})
 
 			ctx.fillStyle = baseColor;
