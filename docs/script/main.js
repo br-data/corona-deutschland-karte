@@ -434,7 +434,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 400;
+		const maxValue = 500;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, xMin, xMax, yMin, yMax, retina;
 
