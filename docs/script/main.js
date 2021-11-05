@@ -1,6 +1,6 @@
 
 $(function () {
-	let dayIndex, animation, chart, map, slider, isLandscape, selection = [];
+	let dayIndex, animation, chart, map, slider, isLandscape, selection = [], lastWindowWidth, lastWindowHeight;
 	let data = window.fvOZwtTDlpiMFxSV;
 	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
@@ -30,10 +30,20 @@ $(function () {
 	});
 
 	function updateLayout() {
-		isLandscape = window.innerWidth > window.innerHeight;
-		$('body').toggleClass('landscape', isLandscape);
-		if (chart) chart.updateLayout();
-		if (map) map.updateLayout();
+		update();
+		setTimeout(update, 100);
+		setTimeout(update, 200);
+		setTimeout(update, 400);
+
+		function update() {
+			let { innerWidth, innerHeight } = window;
+			if ((lastWindowWidth === innerWidth) && (lastWindowHeight === innerHeight)) return;
+
+			isLandscape = innerWidth > innerHeight;
+			$('body').toggleClass('landscape', isLandscape);
+			if (chart) chart.updateLayout();
+			if (map) map.updateLayout();
+		}
 	}
 
 	function setDay(index) {
