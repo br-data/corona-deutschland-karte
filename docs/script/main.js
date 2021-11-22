@@ -4,7 +4,7 @@ $(function () {
 	let data = window.fvOZwtTDlpiMFxSV;
 	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
-	const circleSize = 17e-4;
+	const circleSize = 13e-4;
 
 	const useTouchEvents = (() => {
 		try { 
@@ -104,7 +104,7 @@ $(function () {
 	}
 
 	function initMap() {
-		const maxMapValue = 400;
+		const maxMapValue = 600;
 		let projX, projY, retina, zoom;
 		let timeoutHandler;
 		
@@ -391,7 +391,7 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			[0,50,100,200,300,400].forEach(v => {
+			[0,50,100,200,400,maxMapValue].forEach(v => {
 				let y = yPos - v*step;
 
 				ctx.beginPath();
@@ -409,11 +409,11 @@ $(function () {
 		}
 
 		function value2color(v) {
-			if (v <  35) return gradient[0];
-			if (v <  50) return gradient[1];
-			if (v < 100) return gradient[2];
-			if (v < 200) return gradient[3];
-			return linearInterpolation((v-200)/500, gradientRGB[4], gradientRGB[6]);
+			if (v <  50) return gradient[0];
+			if (v < 100) return gradient[1];
+			if (v < 200) return linearInterpolation((v-100)/100, gradientRGB[2], gradientRGB[3]);
+			if (v < 400) return linearInterpolation((v-200)/200, gradientRGB[3], gradientRGB[5]);
+			return linearInterpolation((v-400)/400, gradientRGB[5], gradientRGB[6]);
 		}
 
 		function linearInterpolation(a, c0, c1) {
@@ -444,7 +444,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 500;
+		const maxValue = 600;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, xMin, xMax, yMin, yMax, retina;
 
@@ -527,7 +527,7 @@ $(function () {
 				let y = projY.v2p(v);
 				if (v % 100 === 0) {
 					ctx.lineH(xMin, y, xMin - 4*opt.retina);
-					ctx.fillText(v, xMin - 5*opt.retina, y + 0.5*opt.retina);
+					if (v % 200 === 0) ctx.fillText(v, xMin - 5*opt.retina, y + 0.5*opt.retina);
 				} else {
 					ctx.lineH(xMin, y, xMin - 2*opt.retina);
 				}
