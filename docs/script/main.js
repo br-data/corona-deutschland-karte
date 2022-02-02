@@ -4,7 +4,7 @@ $(function () {
 	let data = window.fvOZwtTDlpiMFxSV;
 	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
 	const baseColor = 'rgba(255,255,255,1)';
-	const circleSize = 13e-4;
+	const circleSize = 6.5e-4;
 
 	const useTouchEvents = (() => {
 		try { 
@@ -198,7 +198,7 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 
 			data.landkreise.forEach(f => {
-				f.r = f.radius[dayIndex] / 2;
+				f.r = f.radius[dayIndex];
 				f.m = f.r*f.r;
 				f.xOld = f.x;
 				f.yOld = f.y;
