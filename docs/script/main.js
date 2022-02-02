@@ -104,7 +104,7 @@ $(function () {
 	}
 
 	function initMap() {
-		const maxMapValue = 2000;
+		const maxMapValue = 1500;
 		let projX, projY, retina, zoom;
 		let timeoutHandler;
 		
@@ -444,7 +444,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 2000;
+		const maxValue = 1500;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, xMin, xMax, yMin, yMax, retina;
 
@@ -558,7 +558,7 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
-			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, 2000)*0.028);
+			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, maxValue)*0.028);
 			ctx.font = fontSize*opt.retina + 'px sans-serif';
 
 
