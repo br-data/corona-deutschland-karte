@@ -104,7 +104,7 @@ $(function () {
 	}
 
 	function initMap() {
-		const maxMapValue = 600;
+		const maxMapValue = 2000;
 		let projX, projY, retina, zoom;
 		let timeoutHandler;
 		
@@ -198,7 +198,7 @@ $(function () {
 			ctx.clearRect(0,0,opt.width,opt.height);
 
 			data.landkreise.forEach(f => {
-				f.r = f.radius[dayIndex];
+				f.r = f.radius[dayIndex] / 2;
 				f.m = f.r*f.r;
 				f.xOld = f.x;
 				f.yOld = f.y;
@@ -391,7 +391,7 @@ $(function () {
 			ctx.fillStyle = baseColor;
 			ctx.textAlign = 'right';
 
-			[0,50,100,200,400,maxMapValue].forEach(v => {
+			[0,100,200,500,1000,maxMapValue].forEach(v => {
 				let y = yPos - v*step;
 
 				ctx.beginPath();
@@ -409,11 +409,11 @@ $(function () {
 		}
 
 		function value2color(v) {
-			if (v <  50) return gradient[0];
-			if (v < 100) return gradient[1];
-			if (v < 200) return linearInterpolation((v-100)/100, gradientRGB[2], gradientRGB[3]);
-			if (v < 400) return linearInterpolation((v-200)/200, gradientRGB[3], gradientRGB[5]);
-			return linearInterpolation((v-400)/400, gradientRGB[5], gradientRGB[6]);
+			if (v < 100) return gradient[0];
+			if (v < 200) return gradient[1];
+			if (v < 500) return linearInterpolation((v-200)/200, gradientRGB[2], gradientRGB[3]);
+			if (v < 1000) return linearInterpolation((v-500)/500, gradientRGB[3], gradientRGB[5]);
+			return linearInterpolation((v-1000)/1000, gradientRGB[5], gradientRGB[6]);
 		}
 
 		function linearInterpolation(a, c0, c1) {
@@ -444,7 +444,7 @@ $(function () {
 
 	function initChart() {
 		const dayMin = data.dayMin, dayMax = data.dayMax;
-		const maxValue = 600;
+		const maxValue = 2000;
 		let paddingTop, paddingLeft, paddingRight, paddingBottom;
 		let projX, projY, xMin, xMax, yMin, yMax, retina;
 
@@ -558,7 +558,7 @@ $(function () {
 
 			ctx.clearRect(0,0,opt.width,opt.height);
 			ctx.lineWidth = 1*opt.retina;
-			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, 600)*0.028);
+			let fontSize = Math.round(Math.min(opt.width*0.7,opt.height, 2000)*0.028);
 			ctx.font = fontSize*opt.retina + 'px sans-serif';
 
 
