@@ -2,7 +2,7 @@
 $(function () {
 	let dayIndex, animation, chart, map, slider, isLandscape, selection = [], lastWindowWidth, lastWindowHeight;
 	let data = window.fvOZwtTDlpiMFxSV;
-	const months = ',,März,,,Juni,,,Sep.,,,Dez.'.split(',')
+	const months = 'Jan,,,,,,Juli,,,,,'.split(',');
 	const baseColor = 'rgba(255,255,255,1)';
 	const circleSize = 6.5e-4;
 
@@ -540,10 +540,12 @@ $(function () {
 				let d = (new Date((v+0.5)*86400000));
 				
 				if (d.getDate() === 1) {
+					let month = d.getMonth();
 					let x = projX.v2p(v-dayMin);
-					ctx.lineV(x, yMax, yMax+6*opt.retina);
-					if (dayMax - v < 10) continue;
-					ctx.fillText(months[d.getMonth()], x+2*opt.retina, yMax+2*opt.retina);
+					let height = (month % 6 === 0) ? 6 : 3;
+					ctx.lineV(x, yMax, yMax+height*opt.retina);
+					if (dayMax - v < 30) continue;
+					ctx.fillText(months[month], x, yMax+5*opt.retina);
 				}
 			}
 
