@@ -106,7 +106,7 @@ let lookup = new Map();
 landkreise.sort((a,b) => a.id < b.id ? -1 : 1);
 landkreise.forEach((l,i) => {
 	l.index = i;
-	l.ids.forEach(id => lookup.set(id,l));
+	l.ids.forEach(id => lookup.set(parseInt(id,10),l));
 	delete l.id;
 	delete l.ids;
 });
@@ -144,8 +144,8 @@ file = resolve(folder, file);
 		let dayMelde = entry.MeldedatumISO;
 		dayMelde = parseDate(dayMelde);
 
-		let id = entry.IdLandkreis;
-		if (!lookup.has(id)) throw Error();
+		let id = parseInt(entry.IdLandkreis, 10);
+		if (!lookup.has(id)) throw Error(`landkreisId ${id} unknown`);
 		let index = lookup.get(id).index;
 
 		let i = dayMelde - dayMin;
