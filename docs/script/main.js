@@ -523,11 +523,11 @@ $(function () {
 			ctx.textBaseline = 'middle';
 			ctx.textAlign = 'right';
 			
-			for (let v = 0; v <= maxValue; v += 20) {
+			for (let v = 0; v <= maxValue; v += 100) {
 				let y = projY.v2p(v);
-				if (v % 100 === 0) {
+				if (v % 500 === 0) {
 					ctx.lineH(xMin, y, xMin - 4*opt.retina);
-					if (v % 200 === 0) ctx.fillText(v, xMin - 5*opt.retina, y + 0.5*opt.retina);
+					if (v % 500 === 0) ctx.fillText(v, xMin - 5*opt.retina, y + 0.5*opt.retina);
 				} else {
 					ctx.lineH(xMin, y, xMin - 2*opt.retina);
 				}
