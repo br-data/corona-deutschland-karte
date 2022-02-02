@@ -24,6 +24,7 @@ async function start() {
 
 function download(url) {
 	return new Promise(resolve => {
+		url = url+'?random='+Math.random();
 		https.get(url, { headers: { 'User-Agent':'curl/7.64.1', 'Accept':'*/*' }}, response => {
 			let data = [];
 			response.on('data', chunk => data.push(chunk));
